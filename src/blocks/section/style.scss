@@ -1,0 +1,82 @@
+/**
+ * Section Block Styles
+ *
+ * Minimal, performance-first CSS.
+ * No unnecessary declarations - only what's essential.
+ *
+ * @package GambolBuilder
+ */
+
+// Section base - minimal reset.
+.gb-section {
+	position: relative;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+// Inner container for content control.
+.gb-section__inner {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+// Content width modifiers.
+.gb-section--boxed > .gb-section__inner {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.gb-section--full > .gb-section__inner {
+	max-width: none;
+}
+
+// Vertical alignment utilities.
+// Only applied when explicitly set.
+.gb-valign-center {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.gb-valign-bottom {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+}
+
+.gb-valign-stretch {
+	display: flex;
+	flex-direction: column;
+
+	> .gb-section__inner {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+	}
+}
+
+// Editor-specific styles.
+// Scoped to editor context only.
+.block-editor-block-list__block.gb-section {
+	// Ensure proper spacing in editor.
+	margin-top: 0;
+	margin-bottom: 0;
+
+	// Visual feedback for section boundaries.
+	&::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		pointer-events: none;
+		border: 1px dashed transparent;
+		transition: border-color 0.15s ease;
+	}
+
+	&.is-selected::before,
+	&:hover::before {
+		border-color: rgba(0, 124, 186, 0.3);
+	}
+}
