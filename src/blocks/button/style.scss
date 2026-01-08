@@ -1,0 +1,55 @@
+/**
+ * Button Block Styles
+ *
+ * Minimal, performance-first CSS.
+ * Uses global CSS custom properties.
+ *
+ * @package GambolBuilder
+ */
+
+// Button wrapper - handles alignment.
+.wp-block-gambol-button__wrapper {
+	display: block;
+
+	&.has-text-align-left {
+		text-align: left;
+	}
+
+	&.has-text-align-center {
+		text-align: center;
+	}
+
+	&.has-text-align-right {
+		text-align: right;
+	}
+}
+
+// Button/link element.
+.wp-block-gambol-button__link {
+	display: inline-block;
+	padding: var(--gb-spacing-sm) var(--gb-spacing-lg);
+	background-color: var(--gb-colors-primary);
+	color: var(--gb-colors-background);
+	text-decoration: none;
+	cursor: pointer;
+	border: none;
+	border-radius: var(--gb-radius-base);
+	font-family: var(--gb-typography-font-family);
+	font-size: var(--gb-typography-font-size-base);
+	line-height: var(--gb-typography-line-height-base);
+	transition: background-color var(--gb-transition-base) var(--gb-transition-easing),
+		color var(--gb-transition-base) var(--gb-transition-easing);
+
+	// Hover styles using CSS custom properties.
+	&:hover,
+	&:focus {
+		background-color: var(--gb-button-hover-bg, var(--gb-colors-primary-hover));
+		color: var(--gb-button-hover-color, var(--gb-colors-background));
+	}
+
+	// Focus visible for accessibility.
+	&:focus-visible {
+		outline: 2px solid currentColor;
+		outline-offset: 2px;
+	}
+}

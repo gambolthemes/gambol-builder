@@ -1,0 +1,87 @@
+/**
+ * Global Style Variables
+ *
+ * SCSS reference for CSS custom properties.
+ * These map to values output by the Global_Styles PHP class.
+ *
+ * @package GambolBuilder
+ */
+
+// ==========================================================================
+// Colors
+// ==========================================================================
+
+$gb-color-primary: var(--gb-colors-primary);
+$gb-color-primary-hover: var(--gb-colors-primary-hover);
+$gb-color-secondary: var(--gb-colors-secondary);
+$gb-color-secondary-hover: var(--gb-colors-secondary-hover);
+$gb-color-text: var(--gb-colors-text);
+$gb-color-text-light: var(--gb-colors-text-light);
+$gb-color-background: var(--gb-colors-background);
+$gb-color-surface: var(--gb-colors-surface);
+$gb-color-border: var(--gb-colors-border);
+$gb-color-success: var(--gb-colors-success);
+$gb-color-warning: var(--gb-colors-warning);
+$gb-color-error: var(--gb-colors-error);
+
+// ==========================================================================
+// Typography
+// ==========================================================================
+
+$gb-font-family: var(--gb-typography-font-family);
+$gb-font-family-mono: var(--gb-typography-font-family-mono);
+
+// Font sizes.
+$gb-font-size-xs: var(--gb-typography-font-size-xs);
+$gb-font-size-sm: var(--gb-typography-font-size-sm);
+$gb-font-size-base: var(--gb-typography-font-size-base);
+$gb-font-size-lg: var(--gb-typography-font-size-lg);
+$gb-font-size-xl: var(--gb-typography-font-size-xl);
+$gb-font-size-2xl: var(--gb-typography-font-size-2xl);
+$gb-font-size-3xl: var(--gb-typography-font-size-3xl);
+$gb-font-size-4xl: var(--gb-typography-font-size-4xl);
+
+// Line heights.
+$gb-line-height-tight: var(--gb-typography-line-height-tight);
+$gb-line-height-base: var(--gb-typography-line-height-base);
+$gb-line-height-loose: var(--gb-typography-line-height-loose);
+
+// ==========================================================================
+// Spacing
+// ==========================================================================
+
+$gb-spacing-xs: var(--gb-spacing-xs);
+$gb-spacing-sm: var(--gb-spacing-sm);
+$gb-spacing-md: var(--gb-spacing-md);
+$gb-spacing-lg: var(--gb-spacing-lg);
+$gb-spacing-xl: var(--gb-spacing-xl);
+$gb-spacing-2xl: var(--gb-spacing-2xl);
+$gb-spacing-3xl: var(--gb-spacing-3xl);
+$gb-spacing-4xl: var(--gb-spacing-4xl);
+
+// ==========================================================================
+// Container
+// ==========================================================================
+
+$gb-container-max-width: var(--gb-container-max-width);
+$gb-container-padding: var(--gb-container-padding);
+
+// ==========================================================================
+// Border Radius
+// ==========================================================================
+
+$gb-radius-sm: var(--gb-radius-sm);
+$gb-radius-base: var(--gb-radius-base);
+$gb-radius-md: var(--gb-radius-md);
+$gb-radius-lg: var(--gb-radius-lg);
+$gb-radius-xl: var(--gb-radius-xl);
+$gb-radius-full: var(--gb-radius-full);
+
+// ==========================================================================
+// Transitions
+// ==========================================================================
+
+$gb-transition-fast: var(--gb-transition-fast);
+$gb-transition-base: var(--gb-transition-base);
+$gb-transition-slow: var(--gb-transition-slow);
+$gb-transition-easing: var(--gb-transition-easing);

@@ -2,81 +2,58 @@
  * Section Block Styles
  *
  * Minimal, performance-first CSS.
- * No unnecessary declarations - only what's essential.
+ * Uses global CSS custom properties.
  *
  * @package GambolBuilder
  */
 
-// Section base - minimal reset.
-.gb-section {
+// Section base.
+.wp-block-gambol-section {
 	position: relative;
 	width: 100%;
 	box-sizing: border-box;
+	background-color: var(--gb-colors-background);
 }
 
-// Inner container for content control.
-.gb-section__inner {
+// Inner container.
+.wp-block-gambol-section__inner {
 	width: 100%;
 	box-sizing: border-box;
 }
 
-// Content width modifiers.
-.gb-section--boxed > .gb-section__inner {
+// Boxed content - centered with max-width.
+.wp-block-gambol-section.is-content-boxed > .wp-block-gambol-section__inner {
 	margin-left: auto;
 	margin-right: auto;
 }
 
-.gb-section--full > .gb-section__inner {
+// Full width content.
+.wp-block-gambol-section.is-content-full > .wp-block-gambol-section__inner {
 	max-width: none;
 }
 
-// Vertical alignment utilities.
-// Only applied when explicitly set.
-.gb-valign-center {
+// Vertical alignment - center.
+.wp-block-gambol-section.is-vertically-aligned-center {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 }
 
-.gb-valign-bottom {
+// Vertical alignment - bottom.
+.wp-block-gambol-section.is-vertically-aligned-bottom {
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
 }
 
-.gb-valign-stretch {
+// Vertical alignment - stretch.
+.wp-block-gambol-section.is-vertically-aligned-stretch {
 	display: flex;
 	flex-direction: column;
 
-	> .gb-section__inner {
+	> .wp-block-gambol-section__inner {
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-	}
-}
-
-// Editor-specific styles.
-// Scoped to editor context only.
-.block-editor-block-list__block.gb-section {
-	// Ensure proper spacing in editor.
-	margin-top: 0;
-	margin-bottom: 0;
-
-	// Visual feedback for section boundaries.
-	&::before {
-		content: "";
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		pointer-events: none;
-		border: 1px dashed transparent;
-		transition: border-color 0.15s ease;
-	}
-
-	&.is-selected::before,
-	&:hover::before {
-		border-color: rgba(0, 124, 186, 0.3);
 	}
 }

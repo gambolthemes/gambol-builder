@@ -37,23 +37,23 @@ export default function save( { attributes } ) {
 	}
 
 	// Build class names - minimal and semantic.
-	const classNames = [ 'gb-section' ];
+	const classNames = [];
 	if ( contentWidth ) {
-		classNames.push( `gb-section--${ contentWidth }` );
+		classNames.push( `is-content-${ contentWidth }` );
 	}
 	if ( verticalAlign && verticalAlign !== 'top' ) {
-		classNames.push( `gb-valign-${ verticalAlign }` );
+		classNames.push( `is-vertically-aligned-${ verticalAlign }` );
 	}
 
 	// Block props with minimal output.
 	const blockProps = useBlockProps.save( {
-		className: classNames.join( ' ' ),
+		className: classNames.length > 0 ? classNames.join( ' ' ) : undefined,
 		style: Object.keys( wrapperStyle ).length > 0 ? wrapperStyle : undefined,
 	} );
 
 	// Inner blocks with minimal wrapper.
 	const innerBlocksProps = useInnerBlocksProps.save( {
-		className: 'gb-section__inner',
+		className: 'wp-block-gambol-section__inner',
 		style: Object.keys( innerStyle ).length > 0 ? innerStyle : undefined,
 	} );
 

@@ -1,0 +1,28 @@
+/**
+ * Container Block Styles
+ *
+ * Minimal, performance-first CSS.
+ * Uses global CSS custom properties.
+ *
+ * @package GambolBuilder
+ */
+
+// Container base - centered by default.
+.wp-block-gambol-container {
+	width: 100%;
+	max-width: var(--gb-container-max-width);
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: var(--gb-container-padding);
+	padding-right: var(--gb-container-padding);
+	box-sizing: border-box;
+}
+
+// Content alignment.
+.wp-block-gambol-container.has-text-align-center {
+	text-align: center;
+}
+
+.wp-block-gambol-container.has-text-align-right {
+	text-align: right;
+}

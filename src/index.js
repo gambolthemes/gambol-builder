@@ -1,10 +1,17 @@
 /**
- * Gambol Builder - Main Entry Point
+ * Gambol Builder - Block Loader
  *
- * Registers all builder blocks with WordPress.
+ * Imports and registers all builder blocks.
+ * Keep this file minimal - no business logic.
  *
  * @package GambolBuilder
  */
 
-// Import blocks.
+// Layout blocks.
 import './blocks/section';
+import './blocks/container';
+
+// Content blocks.
+import './blocks/heading';
+import './blocks/text';
+import './blocks/button';

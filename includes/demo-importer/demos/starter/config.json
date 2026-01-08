@@ -1,0 +1,13 @@
+{
+	"id": "starter",
+	"name": "Starter Demo",
+	"description": "A clean starter demo with essential pages and header/footer layouts.",
+	"preview_url": "",
+	"categories": ["business", "starter"],
+	"contents": {
+		"pages": true,
+		"headers": true,
+		"footers": true,
+		"global_styles": true
+	}
+}

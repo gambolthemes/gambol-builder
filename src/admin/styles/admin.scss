@@ -1,0 +1,552 @@
+/**
+ * Gambol Builder Admin Styles
+ *
+ * Premium, calm, developer-friendly admin UI.
+ * Uses the central design system tokens.
+ *
+ * @package GambolBuilder
+ */
+
+@use '../../styles/design-system' as ds;
+
+// ─────────────────────────────────────────────────────────────
+// VARIABLES (Light theme for admin)
+// ─────────────────────────────────────────────────────────────
+
+$gambol-accent: ds.$gb-accent;
+$gambol-accent-hover: ds.$gb-accent-hover;
+$gambol-bg: #f5f5f5;
+$gambol-surface: #ffffff;
+$gambol-surface-secondary: #fafafa;
+$gambol-text: ds.$gb-text-dark-primary;
+$gambol-text-light: ds.$gb-text-dark-muted;
+$gambol-text-secondary: ds.$gb-text-dark-secondary;
+$gambol-border: ds.$gb-border-light;
+$gambol-border-strong: ds.$gb-border-light-strong;
+$gambol-radius: ds.$gb-radius-md;
+$gambol-shadow: ds.$gb-shadow-sm;
+$gambol-shadow-lg: ds.$gb-shadow-default;
+
+// ─────────────────────────────────────────────────────────────
+// BASE LAYOUT
+// ─────────────────────────────────────────────────────────────
+
+.gambol-admin-wrap {
+	margin: 0;
+	padding: 0;
+	background: $gambol-bg;
+	min-height: 100vh;
+}
+
+.gambol-admin-page {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 24px;
+}
+
+// ─────────────────────────────────────────────────────────────
+// HEADER
+// ─────────────────────────────────────────────────────────────
+
+.gambol-admin-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: ds.$gb-space-6;
+	padding-bottom: ds.$gb-space-4;
+	border-bottom: 1px solid $gambol-border;
+
+	&__logo {
+		display: flex;
+		align-items: center;
+		gap: ds.$gb-space-3;
+
+		svg {
+			color: $gambol-accent;
+		}
+
+		h1 {
+			margin: 0;
+			font-size: ds.$gb-text-2xl;
+			font-weight: ds.$gb-weight-semibold;
+			color: $gambol-text;
+			letter-spacing: ds.$gb-tracking-tight;
+		}
+	}
+
+	&__version {
+		font-size: ds.$gb-text-sm;
+		color: $gambol-text-light;
+		background: $gambol-surface;
+		padding: ds.$gb-space-1 ds.$gb-space-3;
+		border-radius: ds.$gb-radius-full;
+		border: 1px solid $gambol-border;
+	}
+
+	&__actions {
+		display: flex;
+		gap: ds.$gb-space-2;
+
+		.components-button.is-primary {
+			background: $gambol-accent;
+			border-color: $gambol-accent;
+			border-radius: ds.$gb-radius-default;
+			font-weight: ds.$gb-weight-medium;
+			transition: ds.$gb-transition-colors;
+
+			&:hover:not(:disabled) {
+				background: $gambol-accent-hover;
+				border-color: $gambol-accent-hover;
+			}
+
+			&:focus:not(:disabled) {
+				box-shadow: ds.$gb-shadow-focus;
+			}
+		}
+	}
+}
+
+// ─────────────────────────────────────────────────────────────
+// LOADING STATE
+// ─────────────────────────────────────────────────────────────
+
+.gambol-loading {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 300px;
+	gap: ds.$gb-space-4;
+
+	p {
+		margin: 0;
+		color: $gambol-text-light;
+		font-size: ds.$gb-text-base;
+	}
+}
+
+// ─────────────────────────────────────────────────────────────
+// NOTICE
+// ─────────────────────────────────────────────────────────────
+
+.gambol-notice {
+	margin-bottom: ds.$gb-space-6;
+	border-radius: $gambol-radius;
+}
+
+// ─────────────────────────────────────────────────────────────
+// PAGE DESCRIPTION
+// ─────────────────────────────────────────────────────────────
+
+.gambol-page-description {
+	font-size: ds.$gb-text-base;
+	color: $gambol-text-secondary;
+	margin: 0 0 ds.$gb-space-6;
+	line-height: ds.$gb-leading-relaxed;
+}
+
+// ─────────────────────────────────────────────────────────────
+// TABS
+// ─────────────────────────────────────────────────────────────
+
+.gambol-settings-tabs {
+	background: $gambol-surface;
+	border-radius: ds.$gb-radius-lg;
+	box-shadow: $gambol-shadow;
+	overflow: hidden;
+}
+
+.gambol-tab-panel {
+	.components-tab-panel__tabs {
+		background: $gambol-surface-secondary;
+		border-bottom: 1px solid $gambol-border;
+		padding: 0 ds.$gb-space-4;
+		margin: 0;
+
+		.components-tab-panel__tabs-item {
+			padding: ds.$gb-space-4 ds.$gb-space-5;
+			font-size: ds.$gb-text-base;
+			font-weight: ds.$gb-weight-medium;
+			color: $gambol-text-light;
+			border-bottom: 2px solid transparent;
+			margin-bottom: -1px;
+			transition: ds.$gb-transition-colors;
+
+			&:hover {
+				color: $gambol-text;
+			}
+
+			&.is-active {
+				color: $gambol-accent;
+				border-bottom-color: $gambol-accent;
+				background: transparent;
+			}
+
+			&:focus:not(:disabled) {
+				box-shadow: none;
+				outline: 2px solid $gambol-accent;
+				outline-offset: -2px;
+				border-radius: ds.$gb-radius-sm;
+			}
+		}
+	}
+}
+
+.gambol-tab-content {
+	padding: ds.$gb-space-6;
+}
+
+// ─────────────────────────────────────────────────────────────
+// SETTINGS SECTIONS
+// ─────────────────────────────────────────────────────────────
+
+.gambol-settings-section {
+	margin-bottom: ds.$gb-space-8;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+
+	&__title {
+		font-size: ds.$gb-text-md;
+		font-weight: ds.$gb-weight-semibold;
+		color: $gambol-text;
+		margin: 0 0 ds.$gb-space-4;
+		padding-bottom: ds.$gb-space-2;
+		border-bottom: 1px solid $gambol-border;
+	}
+
+	&__content {
+		// Content container
+	}
+}
+
+.gambol-help-text {
+	font-size: ds.$gb-text-sm;
+	color: $gambol-text-light;
+	margin: 0 0 ds.$gb-space-4;
+	line-height: ds.$gb-leading-relaxed;
+}
+
+// ─────────────────────────────────────────────────────────────
+// CONTROLS GRID
+// ─────────────────────────────────────────────────────────────
+
+.gambol-controls-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: ds.$gb-space-5;
+
+	&--3 {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	&--2 {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	@media (max-width: ds.$gb-breakpoint-md) {
+		grid-template-columns: 1fr;
+	}
+
+	.components-base-control {
+		margin-bottom: 0;
+	}
+
+	.components-text-control__input {
+		border-radius: ds.$gb-radius-default;
+		transition: ds.$gb-transition-colors;
+
+		&:hover {
+			border-color: $gambol-border-strong;
+		}
+
+		&:focus {
+			border-color: $gambol-accent;
+			box-shadow: ds.$gb-shadow-focus;
+		}
+	}
+}
+
+// ─────────────────────────────────────────────────────────────
+// COLOR CONTROL
+// ─────────────────────────────────────────────────────────────
+
+.gambol-color-control {
+	&__label {
+		display: block;
+		font-size: ds.$gb-text-sm;
+		font-weight: ds.$gb-weight-medium;
+		color: $gambol-text;
+		margin-bottom: ds.$gb-space-2;
+	}
+
+	&__picker {
+		position: relative;
+	}
+
+	&__button {
+		display: flex;
+		align-items: center;
+		gap: ds.$gb-space-3;
+		width: 100%;
+		padding: ds.$gb-space-2 ds.$gb-space-3;
+		background: $gambol-surface;
+		border: 1px solid $gambol-border;
+		border-radius: ds.$gb-radius-default;
+		cursor: pointer;
+		transition: ds.$gb-transition-colors;
+
+		&:hover {
+			border-color: $gambol-border-strong;
+		}
+
+		&:focus {
+			outline: none;
+			border-color: $gambol-accent;
+			box-shadow: ds.$gb-shadow-focus;
+		}
+
+		.component-color-indicator {
+			width: 24px;
+			height: 24px;
+			border-radius: ds.$gb-radius-sm;
+			border: 1px solid rgba(0, 0, 0, 0.1);
+		}
+	}
+
+	&__value {
+		font-size: ds.$gb-text-sm;
+		color: $gambol-text;
+		font-family: ds.$gb-font-mono;
+	}
+}
+
+.gambol-color-popover {
+	.components-popover__content {
+		padding: ds.$gb-space-3;
+		border-radius: ds.$gb-radius-md;
+	}
+}
+
+// ─────────────────────────────────────────────────────────────
+// BUTTON PREVIEW
+// ─────────────────────────────────────────────────────────────
+
+.gambol-button-preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: ds.$gb-space-10;
+	background: $gambol-surface-secondary;
+	border-radius: $gambol-radius;
+	border: 1px dashed $gambol-border;
+}
+
+.gambol-preview-button {
+	transition: ds.$gb-transition-all;
+
+	&:hover {
+		opacity: 0.9;
+		transform: translateY(-1px);
+	}
+}
+
+// ─────────────────────────────────────────────────────────────
+// DASHBOARD PAGE
+// ─────────────────────────────────────────────────────────────
+
+.gambol-dashboard {
+	// Specific dashboard styles
+}
+
+.gambol-welcome-card {
+	margin-bottom: ds.$gb-space-8;
+	padding: ds.$gb-space-6;
+	background: $gambol-surface;
+	border-radius: ds.$gb-radius-lg;
+	box-shadow: $gambol-shadow;
+
+	h2 {
+		margin: 0 0 ds.$gb-space-2;
+		font-size: ds.$gb-text-xl;
+		font-weight: ds.$gb-weight-semibold;
+		color: $gambol-text;
+	}
+
+	p {
+		margin: 0;
+		color: $gambol-text-secondary;
+		font-size: ds.$gb-text-base;
+		line-height: ds.$gb-leading-relaxed;
+	}
+}
+
+// ─────────────────────────────────────────────────────────────
+// QUICK LINKS
+// ─────────────────────────────────────────────────────────────
+
+.gambol-quick-links {
+	margin-bottom: ds.$gb-space-8;
+
+	h2 {
+		font-size: ds.$gb-text-lg;
+		font-weight: ds.$gb-weight-semibold;
+		color: $gambol-text;
+		margin: 0 0 ds.$gb-space-4;
+	}
+
+	&__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+		gap: ds.$gb-space-4;
+	}
+}
+
+.gambol-quick-link {
+	display: flex;
+	align-items: flex-start;
+	gap: ds.$gb-space-4;
+	padding: ds.$gb-space-5;
+	background: $gambol-surface;
+	border-radius: ds.$gb-radius-lg;
+	box-shadow: $gambol-shadow;
+	text-decoration: none;
+	transition: ds.$gb-transition-all;
+
+	&:hover {
+		transform: translateY(-2px);
+		box-shadow: $gambol-shadow-lg;
+
+		.gambol-quick-link__icon {
+			background: $gambol-accent;
+			color: #fff;
+		}
+	}
+
+	&:focus {
+		outline: none;
+		box-shadow: ds.$gb-shadow-focus;
+	}
+
+	&__icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 48px;
+		height: 48px;
+		background: $gambol-bg;
+		border-radius: $gambol-radius;
+		color: $gambol-text;
+		transition: ds.$gb-transition-all;
+		flex-shrink: 0;
+	}
+
+	&__content {
+		flex: 1;
+		min-width: 0;
+
+		h3 {
+			margin: 0 0 ds.$gb-space-1;
+			font-size: ds.$gb-text-md;
+			font-weight: ds.$gb-weight-semibold;
+			color: $gambol-text;
+		}
+
+		p {
+			margin: 0;
+			font-size: ds.$gb-text-sm;
+			color: $gambol-text-light;
+			line-height: ds.$gb-leading-normal;
+		}
+	}
+}
+
+// ─────────────────────────────────────────────────────────────
+// FEATURES
+// ─────────────────────────────────────────────────────────────
+
+.gambol-features {
+	h2 {
+		font-size: ds.$gb-text-lg;
+		font-weight: ds.$gb-weight-semibold;
+		color: $gambol-text;
+		margin: 0 0 ds.$gb-space-4;
+	}
+
+	&__grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+		gap: ds.$gb-space-4;
+	}
+}
+
+.gambol-feature {
+	padding: ds.$gb-space-5;
+	background: $gambol-surface;
+	border-radius: ds.$gb-radius-lg;
+	box-shadow: $gambol-shadow;
+
+	h3 {
+		margin: 0 0 ds.$gb-space-2;
+		font-size: ds.$gb-text-base;
+		font-weight: ds.$gb-weight-semibold;
+		color: $gambol-text;
+	}
+
+	p {
+		margin: 0;
+		font-size: ds.$gb-text-sm;
+		color: $gambol-text-light;
+		line-height: ds.$gb-leading-relaxed;
+	}
+}
+
+// ─────────────────────────────────────────────────────────────
+// RESPONSIVE
+// ─────────────────────────────────────────────────────────────
+
+@media (max-width: ds.$gb-breakpoint-md) {
+	.gambol-admin-page {
+		padding: ds.$gb-space-4;
+	}
+
+	.gambol-admin-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: ds.$gb-space-4;
+
+		&__actions {
+			width: 100%;
+
+			.components-button {
+				width: 100%;
+				justify-content: center;
+			}
+		}
+	}
+
+	.gambol-tab-panel {
+		.components-tab-panel__tabs {
+			flex-wrap: wrap;
+			padding: 0 ds.$gb-space-2;
+
+			.components-tab-panel__tabs-item {
+				padding: ds.$gb-space-3 ds.$gb-space-4;
+				font-size: ds.$gb-text-sm;
+			}
+		}
+	}
+
+	.gambol-tab-content {
+		padding: ds.$gb-space-4;
+	}
+
+	.gambol-controls-grid {
+		grid-template-columns: 1fr;
+
+		&--3 {
+			grid-template-columns: 1fr;
+		}
+	}
+}

@@ -1,0 +1,81 @@
+# Directories to exclude from distribution
+/.git
+/.github
+/node_modules
+/tests
+/bin
+/.wordpress-org
+
+# Development files
+.gitignore
+.gitattributes
+.editorconfig
+.eslintrc
+.eslintrc.js
+.eslintrc.json
+.prettierrc
+.prettierrc.js
+.prettierrc.json
+.stylelintrc
+.stylelintrc.js
+.stylelintrc.json
+.babelrc
+.babelrc.js
+.babelrc.json
+.browserslistrc
+.npmrc
+.nvmrc
+.npmignore
+.distignore
+
+# Configuration files
+phpcs.xml
+phpcs.xml.dist
+phpunit.xml
+phpunit.xml.dist
+composer.json
+composer.lock
+webpack.config.js
+gulpfile.js
+Gruntfile.js
+rollup.config.js
+vite.config.js
+tsconfig.json
+jsconfig.json
+
+# Package files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build and test files
+*.map
+*.log
+Makefile
+Thumbs.db
+.DS_Store
+
+# Source files (built files are in /build)
+/src
+
+# Documentation
+/docs
+CONTRIBUTING.md
+CHANGELOG.md
+CODE_OF_CONDUCT.md
+
+# CI/CD
+.travis.yml
+.circleci
+.gitlab-ci.yml
+azure-pipelines.yml
+
+# IDE
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# Debug files
+debug.log
+error.log

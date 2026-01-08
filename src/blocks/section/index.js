@@ -67,32 +67,145 @@ registerBlockType( 'gambol/section', {
 		},
 	},
 	attributes: {
+		// Layout
 		align: {
 			type: 'string',
 			default: 'full',
 		},
-		contentWidth: {
+		layoutWidth: {
 			type: 'string',
 			default: 'boxed',
-			enum: [ 'boxed', 'full' ],
+			enum: [ 'auto', 'boxed', 'full' ],
 		},
 		maxWidth: {
+			type: 'number',
+			default: 1200,
+		},
+		maxWidthUnit: {
 			type: 'string',
-			default: '1200px',
+			default: 'px',
 		},
 		minHeight: {
+			type: 'number',
+			default: 0,
+		},
+		minHeightUnit: {
 			type: 'string',
-			default: '',
+			default: 'px',
 		},
 		verticalAlign: {
 			type: 'string',
 			default: 'top',
 			enum: [ 'top', 'center', 'bottom', 'stretch' ],
 		},
+		contentGap: {
+			type: 'number',
+			default: 0,
+		},
 		tagName: {
 			type: 'string',
 			default: 'section',
-			enum: [ 'section', 'div', 'article', 'header', 'footer' ],
+			enum: [ 'section', 'div', 'header', 'main', 'footer' ],
+		},
+
+		// Design - Background
+		backgroundType: {
+			type: 'string',
+			default: 'none',
+			enum: [ 'none', 'color', 'gradient', 'image' ],
+		},
+		backgroundColor: {
+			type: 'string',
+			default: '',
+		},
+		backgroundGradient: {
+			type: 'string',
+			default: '',
+		},
+		backgroundImage: {
+			type: 'object',
+			default: {},
+		},
+		backgroundPosition: {
+			type: 'string',
+			default: 'center center',
+		},
+		backgroundSize: {
+			type: 'string',
+			default: 'cover',
+		},
+		backgroundRepeat: {
+			type: 'string',
+			default: 'no-repeat',
+		},
+
+		// Design - Overlay
+		overlayEnabled: {
+			type: 'boolean',
+			default: false,
+		},
+		overlayColor: {
+			type: 'string',
+			default: '#000000',
+		},
+		overlayOpacity: {
+			type: 'number',
+			default: 50,
+		},
+
+		// Design - Border & Effects
+		borderRadius: {
+			type: 'number',
+			default: 0,
+		},
+		boxShadow: {
+			type: 'string',
+			default: 'none',
+			enum: [ 'none', 'soft', 'medium', 'strong' ],
+		},
+
+		// Advanced - Spacing
+		margin: {
+			type: 'object',
+			default: { top: 0, right: 0, bottom: 0, left: 0 },
+		},
+		marginLinked: {
+			type: 'boolean',
+			default: true,
+		},
+		padding: {
+			type: 'object',
+			default: { top: 40, right: 20, bottom: 40, left: 20 },
+		},
+		paddingLinked: {
+			type: 'boolean',
+			default: false,
+		},
+
+		// Advanced - Position
+		zIndex: {
+			type: 'number',
+			default: 0,
+		},
+
+		// Advanced - Visibility
+		hideOnDesktop: {
+			type: 'boolean',
+			default: false,
+		},
+		hideOnTablet: {
+			type: 'boolean',
+			default: false,
+		},
+		hideOnMobile: {
+			type: 'boolean',
+			default: false,
+		},
+
+		// Advanced - Custom
+		cssClasses: {
+			type: 'string',
+			default: '',
 		},
 	},
 	edit: Edit,
