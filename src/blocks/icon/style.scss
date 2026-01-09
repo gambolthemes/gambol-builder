@@ -1,0 +1,178 @@
+/**
+ * Gambol Icon Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+// =============================================
+// MAIN ICON STYLES
+// =============================================
+
+.gambol-icon {
+	display: block;
+
+	&__wrapper {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: var(--gambol-icon-size, 48px);
+		height: var(--gambol-icon-size, 48px);
+		padding: var(--gambol-icon-padding, 0);
+		color: var(--gambol-icon-color, #00d4aa);
+		background: var(--gambol-icon-bg, transparent);
+		border-radius: var(--gambol-icon-radius, 0);
+		transform: rotate(var(--gambol-icon-rotation, 0deg));
+		transition: all 0.3s ease;
+	}
+
+	&__svg {
+		width: 100%;
+		height: 100%;
+	}
+
+	&__link {
+		display: inline-flex;
+		text-decoration: none;
+		color: inherit;
+
+		&:hover,
+		&:focus {
+			text-decoration: none;
+		}
+	}
+
+	// Hover state
+	&:hover &__wrapper {
+		color: var(--gambol-icon-hover-color, var(--gambol-icon-color));
+		background: var(--gambol-icon-hover-bg, var(--gambol-icon-bg));
+	}
+}
+
+// =============================================
+// HOVER ANIMATIONS
+// =============================================
+
+.gambol-icon--hover-bounce {
+	&:hover .gambol-icon__wrapper {
+		animation: gambol-icon-bounce 0.5s ease;
+	}
+}
+
+.gambol-icon--hover-pulse {
+	&:hover .gambol-icon__wrapper {
+		animation: gambol-icon-pulse 0.5s ease;
+	}
+}
+
+.gambol-icon--hover-shake {
+	&:hover .gambol-icon__wrapper {
+		animation: gambol-icon-shake 0.5s ease;
+	}
+}
+
+.gambol-icon--hover-spin {
+	&:hover .gambol-icon__wrapper {
+		animation: gambol-icon-spin 0.6s ease;
+	}
+}
+
+// =============================================
+// KEYFRAME ANIMATIONS
+// =============================================
+
+@keyframes gambol-icon-bounce {
+	0%, 100% {
+		transform: rotate(var(--gambol-icon-rotation, 0deg)) translateY(0);
+	}
+	50% {
+		transform: rotate(var(--gambol-icon-rotation, 0deg)) translateY(-8px);
+	}
+}
+
+@keyframes gambol-icon-pulse {
+	0%, 100% {
+		transform: rotate(var(--gambol-icon-rotation, 0deg)) scale(1);
+	}
+	50% {
+		transform: rotate(var(--gambol-icon-rotation, 0deg)) scale(1.15);
+	}
+}
+
+@keyframes gambol-icon-shake {
+	0%, 100% {
+		transform: rotate(var(--gambol-icon-rotation, 0deg)) translateX(0);
+	}
+	25% {
+		transform: rotate(var(--gambol-icon-rotation, 0deg)) translateX(-4px);
+	}
+	75% {
+		transform: rotate(var(--gambol-icon-rotation, 0deg)) translateX(4px);
+	}
+}
+
+@keyframes gambol-icon-spin {
+	0% {
+		transform: rotate(var(--gambol-icon-rotation, 0deg));
+	}
+	100% {
+		transform: rotate(calc(var(--gambol-icon-rotation, 0deg) + 360deg));
+	}
+}
+
+// =============================================
+// RESPONSIVE
+// =============================================
+
+@media (max-width: 1024px) {
+	.gambol-icon__wrapper {
+		width: var(--gambol-icon-size-tablet, var(--gambol-icon-size, 48px));
+		height: var(--gambol-icon-size-tablet, var(--gambol-icon-size, 48px));
+	}
+}
+
+@media (max-width: 767px) {
+	.gambol-icon__wrapper {
+		width: var(--gambol-icon-size-mobile, var(--gambol-icon-size-tablet, var(--gambol-icon-size, 48px)));
+		height: var(--gambol-icon-size-mobile, var(--gambol-icon-size-tablet, var(--gambol-icon-size, 48px)));
+	}
+}
+
+// =============================================
+// EDITOR ICON PREVIEW GRID
+// =============================================
+
+.gambol-icon-preview-grid {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 8px;
+	margin-top: 12px;
+}
+
+.gambol-icon-preview-item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 12px;
+	background: rgba(255, 255, 255, 0.05);
+	border: 2px solid transparent;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	color: rgba(255, 255, 255, 0.7);
+
+	&:hover {
+		background: rgba(255, 255, 255, 0.1);
+		color: #fff;
+	}
+
+	&.is-selected {
+		border-color: #00d4aa;
+		background: rgba(0, 212, 170, 0.15);
+		color: #00d4aa;
+	}
+
+	svg {
+		width: 24px;
+		height: 24px;
+	}
+}

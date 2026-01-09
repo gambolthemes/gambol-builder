@@ -1,0 +1,275 @@
+/**
+ * Gambol Tabs Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+// =============================================
+// TABS CONTAINER
+// =============================================
+
+.gambol-tabs {
+	position: relative;
+
+	// Position modifiers
+	&--position-top {
+		display: flex;
+		flex-direction: column;
+	}
+
+	&--position-bottom {
+		display: flex;
+		flex-direction: column-reverse;
+	}
+
+	&--position-left {
+		display: flex;
+		flex-direction: row;
+
+		.gambol-tabs__nav {
+			flex-direction: column;
+			border-bottom: none;
+			border-right: var(--gambol-content-border);
+		}
+
+		.gambol-tabs__tab {
+			text-align: left;
+		}
+	}
+
+	&--position-right {
+		display: flex;
+		flex-direction: row-reverse;
+
+		.gambol-tabs__nav {
+			flex-direction: column;
+			border-bottom: none;
+			border-left: var(--gambol-content-border);
+		}
+
+		.gambol-tabs__tab {
+			text-align: left;
+		}
+	}
+}
+
+// =============================================
+// TAB NAVIGATION
+// =============================================
+
+.gambol-tabs__nav {
+	display: flex;
+	gap: var(--gambol-tab-gap, 4px);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	// Alignment modifiers
+	.gambol-tabs--align-center & {
+		justify-content: center;
+	}
+
+	.gambol-tabs--align-right & {
+		justify-content: flex-end;
+	}
+
+	// Full width tabs
+	.gambol-tabs--full-width & {
+		.gambol-tabs__tab {
+			flex: 1;
+			text-align: center;
+		}
+	}
+}
+
+.gambol-tabs__tab {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--gambol-tab-padding, 12px 24px);
+	font-size: 14px;
+	font-weight: 500;
+	color: var(--gambol-tab-color, #666);
+	background: var(--gambol-tab-bg, transparent);
+	border: none;
+	border-radius: var(--gambol-tab-radius, 4px 4px 0 0);
+	cursor: pointer;
+	transition: all 0.2s ease;
+	white-space: nowrap;
+
+	&:hover {
+		color: var(--gambol-tab-active-color, #fff);
+		background: color-mix(in srgb, var(--gambol-tab-active-bg) 50%, transparent);
+	}
+
+	&.is-active,
+	&[aria-selected="true"] {
+		color: var(--gambol-tab-active-color, #fff);
+		background: var(--gambol-tab-active-bg, #00d4aa);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--gambol-tab-active-bg, #00d4aa);
+		outline-offset: 2px;
+	}
+}
+
+// =============================================
+// TAB CONTENT
+// =============================================
+
+.gambol-tabs__content {
+	position: relative;
+	background: var(--gambol-content-bg, #fff);
+	border: var(--gambol-content-border, 1px solid #e0e0e0);
+	border-radius: var(--gambol-content-radius, 0 4px 4px 4px);
+	overflow: hidden;
+}
+
+.gambol-tabs__panel,
+.gambol-tab-panel {
+	padding: var(--gambol-content-padding, 24px);
+
+	&:not(.is-active):not([hidden="false"]) {
+		display: none;
+	}
+
+	&.is-active,
+	&[hidden="false"] {
+		display: block;
+	}
+}
+
+// =============================================
+// ANIMATIONS
+// =============================================
+
+.gambol-tabs--animation-fade {
+	.gambol-tabs__panel,
+	.gambol-tab-panel {
+		animation: gambol-tab-fade-in var(--gambol-tab-animation, 300ms) ease;
+	}
+}
+
+.gambol-tabs--animation-slide {
+	.gambol-tabs__panel,
+	.gambol-tab-panel {
+		animation: gambol-tab-slide-in var(--gambol-tab-animation, 300ms) ease;
+	}
+}
+
+@keyframes gambol-tab-fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes gambol-tab-slide-in {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+// =============================================
+// EDITOR STYLES
+// =============================================
+
+.gambol-tabs-editor {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.gambol-tab-editor-item {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	background: rgba(255, 255, 255, 0.05);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 4px;
+}
+
+.gambol-tab-title {
+	flex: 1;
+	font-size: 13px;
+	color: rgba(255, 255, 255, 0.9);
+	cursor: pointer;
+
+	&:hover {
+		color: #00d4aa;
+	}
+}
+
+.gambol-tab-title-input {
+	flex: 1;
+	padding: 4px 8px;
+	font-size: 13px;
+	color: #fff;
+	background: rgba(0, 0, 0, 0.3);
+	border: 1px solid #00d4aa;
+	border-radius: 3px;
+	outline: none;
+}
+
+.gambol-tab-actions {
+	display: flex;
+	gap: 4px;
+
+	button {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 24px;
+		height: 24px;
+		font-size: 14px;
+		color: rgba(255, 255, 255, 0.5);
+		background: transparent;
+		border: none;
+		border-radius: 3px;
+		cursor: pointer;
+		transition: all 0.15s ease;
+
+		&:hover:not(:disabled) {
+			color: #fff;
+			background: rgba(255, 255, 255, 0.1);
+		}
+
+		&:disabled {
+			opacity: 0.3;
+			cursor: not-allowed;
+		}
+
+		&.gambol-tab-remove:hover:not(:disabled) {
+			color: #ff6b6b;
+			background: rgba(255, 107, 107, 0.1);
+		}
+	}
+}
+
+// =============================================
+// RESPONSIVE
+// =============================================
+
+@media (max-width: 767px) {
+	.gambol-tabs--position-left,
+	.gambol-tabs--position-right {
+		flex-direction: column;
+
+		.gambol-tabs__nav {
+			flex-direction: row;
+			flex-wrap: wrap;
+			border-right: none;
+			border-left: none;
+			border-bottom: var(--gambol-content-border);
+		}
+	}
+}

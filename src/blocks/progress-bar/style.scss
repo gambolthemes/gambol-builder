@@ -1,0 +1,143 @@
+/**
+ * Progress Bar Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-progress-bar {
+	margin-bottom: var(--gb-spacing-md);
+}
+
+.wp-block-gambol-progress-bar__header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: var(--gb-spacing-xs);
+}
+
+.wp-block-gambol-progress-bar__title {
+	font-weight: 600;
+	font-size: var(--gb-typography-font-size-base);
+	color: var(--gb-colors-text);
+}
+
+.wp-block-gambol-progress-bar__track {
+	position: relative;
+	background-color: var(--gb-colors-background-secondary);
+	overflow: hidden;
+}
+
+.wp-block-gambol-progress-bar__bar {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 0 var(--gb-spacing-sm);
+	background-color: var(--gb-colors-primary);
+	transition: width 0.3s ease;
+}
+
+.wp-block-gambol-progress-bar__percentage {
+	font-weight: 600;
+	font-size: var(--gb-typography-font-size-sm);
+	white-space: nowrap;
+}
+
+.wp-block-gambol-progress-bar__bar .wp-block-gambol-progress-bar__percentage {
+	color: #fff;
+}
+
+.wp-block-gambol-progress-bar__percentage--outside {
+	display: block;
+	text-align: right;
+	margin-top: var(--gb-spacing-xs);
+	color: var(--gb-colors-text);
+}
+
+// Striped style
+.wp-block-gambol-progress-bar--striped {
+	.wp-block-gambol-progress-bar__bar {
+		background-image: linear-gradient(
+			45deg,
+			rgba(255, 255, 255, 0.15) 25%,
+			transparent 25%,
+			transparent 50%,
+			rgba(255, 255, 255, 0.15) 50%,
+			rgba(255, 255, 255, 0.15) 75%,
+			transparent 75%,
+			transparent
+		);
+		background-size: 1rem 1rem;
+		animation: gambol-progress-stripes 1s linear infinite;
+	}
+}
+
+@keyframes gambol-progress-stripes {
+	from {
+		background-position: 1rem 0;
+	}
+	to {
+		background-position: 0 0;
+	}
+}
+
+// Gradient style
+.wp-block-gambol-progress-bar--gradient {
+	.wp-block-gambol-progress-bar__bar {
+		background: linear-gradient(
+			90deg,
+			var(--gb-colors-primary) 0%,
+			var(--gb-colors-secondary, #6366f1) 100%
+		);
+	}
+}
+
+// Animation on scroll
+.wp-block-gambol-progress-bar[data-animate="true"] {
+	.wp-block-gambol-progress-bar__bar {
+		width: 0%;
+		transition-property: width;
+		transition-timing-function: ease-out;
+	}
+	
+	&.is-animated .wp-block-gambol-progress-bar__bar {
+		width: attr(data-percentage percentage);
+	}
+}
+
+// Counter animation for percentage
+.wp-block-gambol-progress-bar__percentage {
+	transition: opacity var(--gb-transition-base);
+}
+
+// Thin/thick variations
+.wp-block-gambol-progress-bar--thin {
+	.wp-block-gambol-progress-bar__track {
+		height: 8px;
+	}
+}
+
+.wp-block-gambol-progress-bar--thick {
+	.wp-block-gambol-progress-bar__track {
+		height: 40px;
+	}
+}
+
+// Hover effect
+.wp-block-gambol-progress-bar:hover {
+	.wp-block-gambol-progress-bar__bar {
+		filter: brightness(1.1);
+	}
+}
+
+// Multiple progress bars in sequence
+.wp-block-gambol-progress-bar + .wp-block-gambol-progress-bar {
+	margin-top: var(--gb-spacing-md);
+}
+
+// Editor styles
+.editor-styles-wrapper .wp-block-gambol-progress-bar {
+	.wp-block-gambol-progress-bar__title {
+		min-width: 100px;
+	}
+}

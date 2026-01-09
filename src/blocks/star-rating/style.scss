@@ -1,0 +1,93 @@
+/**
+ * Star Rating Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-star-rating {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--gb-spacing-sm);
+}
+
+.wp-block-gambol-star-rating__stars {
+	display: flex;
+	align-items: center;
+}
+
+.wp-block-gambol-star-rating__star {
+	display: inline-flex;
+	line-height: 1;
+	cursor: default;
+	
+	svg {
+		display: block;
+	}
+}
+
+.wp-block-gambol-star-rating__label {
+	font-weight: 600;
+	font-size: var(--gb-typography-font-size-base);
+	color: var(--gb-colors-text);
+}
+
+// Label positions
+.wp-block-gambol-star-rating--label-left {
+	flex-direction: row;
+}
+
+.wp-block-gambol-star-rating--label-right {
+	flex-direction: row;
+}
+
+// Alignment
+.wp-block-gambol-star-rating.has-text-align-center {
+	justify-content: center;
+	text-align: center;
+	display: flex;
+}
+
+.wp-block-gambol-star-rating.has-text-align-right {
+	justify-content: flex-end;
+	display: flex;
+}
+
+.wp-block-gambol-star-rating.has-text-align-left {
+	justify-content: flex-start;
+	display: flex;
+}
+
+// Editor styles
+.editor-styles-wrapper .wp-block-gambol-star-rating {
+	.wp-block-gambol-star-rating__star {
+		cursor: pointer;
+		transition: transform var(--gb-transition-base);
+		
+		&:hover {
+			transform: scale(1.2);
+		}
+	}
+}
+
+// Hover animation for frontend (optional)
+.wp-block-gambol-star-rating--animated {
+	.wp-block-gambol-star-rating__star {
+		transition: transform var(--gb-transition-base);
+		
+		&:hover {
+			transform: scale(1.1);
+		}
+	}
+}
+
+// Large rating display
+.wp-block-gambol-star-rating--large {
+	.wp-block-gambol-star-rating__label {
+		font-size: var(--gb-typography-font-size-2xl);
+	}
+}
+
+// Half-star gradient fix for dynamic IDs
+.wp-block-gambol-star-rating__star svg {
+	overflow: visible;
+}

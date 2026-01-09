@@ -1,0 +1,135 @@
+/**
+ * Icon Box Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-icon-box {
+	display: flex;
+	flex-direction: column;
+	
+	&.layout-top {
+		flex-direction: column;
+		align-items: center;
+	}
+	
+	&.layout-left {
+		flex-direction: row;
+		align-items: flex-start;
+		
+		.wp-block-gambol-icon-box__icon {
+			margin-right: var(--gb-spacing-lg);
+		}
+	}
+	
+	&.layout-right {
+		flex-direction: row-reverse;
+		align-items: flex-start;
+		
+		.wp-block-gambol-icon-box__icon {
+			margin-left: var(--gb-spacing-lg);
+		}
+	}
+	
+	&.align-left {
+		.wp-block-gambol-icon-box__content {
+			text-align: left;
+		}
+		
+		&.layout-top {
+			align-items: flex-start;
+		}
+	}
+	
+	&.align-center {
+		.wp-block-gambol-icon-box__content {
+			text-align: center;
+		}
+		
+		&.layout-top {
+			align-items: center;
+		}
+	}
+	
+	&.align-right {
+		.wp-block-gambol-icon-box__content {
+			text-align: right;
+		}
+		
+		&.layout-top {
+			align-items: flex-end;
+		}
+	}
+	
+	// Hover animations
+	&.hover-float {
+		.wp-block-gambol-icon-box__icon {
+			transition: transform 0.3s ease;
+		}
+		
+		&:hover .wp-block-gambol-icon-box__icon {
+			transform: translateY(-5px);
+		}
+	}
+	
+	&.hover-pulse {
+		.wp-block-gambol-icon-box__icon {
+			animation: none;
+		}
+		
+		&:hover .wp-block-gambol-icon-box__icon {
+			animation: gambol-pulse 1s infinite;
+		}
+	}
+	
+	&.hover-rotate {
+		.wp-block-gambol-icon-box__icon {
+			transition: transform 0.3s ease;
+		}
+		
+		&:hover .wp-block-gambol-icon-box__icon {
+			transform: rotate(360deg);
+		}
+	}
+}
+
+@keyframes gambol-pulse {
+	0%, 100% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(1.1);
+	}
+}
+
+.wp-block-gambol-icon-box__link {
+	text-decoration: none;
+	color: inherit;
+	display: flex;
+	flex-direction: inherit;
+	align-items: inherit;
+}
+
+.wp-block-gambol-icon-box__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	line-height: 1;
+	margin-bottom: var(--gb-spacing-md);
+}
+
+.wp-block-gambol-icon-box__content {
+	flex: 1;
+}
+
+.wp-block-gambol-icon-box__title {
+	margin: 0 0 var(--gb-spacing-sm);
+	font-size: var(--gb-typography-font-size-lg);
+	font-weight: 600;
+}
+
+.wp-block-gambol-icon-box__description {
+	margin: 0;
+	color: var(--gb-colors-text-secondary);
+}

@@ -92,9 +92,9 @@ class Loader {
 	 */
 	public function add_submenu() {
 		add_submenu_page(
-			'edit.php?post_type=' . Post_Type::POST_TYPE,
-			__( 'Settings', 'gambol-builder' ),
-			__( 'Settings', 'gambol-builder' ),
+			'gambol-builder',
+			__( 'Header/Footer Settings', 'gambol-builder' ),
+			__( 'HF Settings', 'gambol-builder' ),
 			'manage_options',
 			'gambol-hf-settings',
 			array( $this, 'render_settings_page' )

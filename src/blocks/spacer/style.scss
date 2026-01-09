@@ -1,0 +1,193 @@
+/**
+ * Gambol Spacer Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+// =============================================
+// EDITOR STYLES
+// =============================================
+
+.gambol-spacer {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: var(--gambol-spacer-height, 50px);
+	background: repeating-linear-gradient(
+		-45deg,
+		transparent,
+		transparent 5px,
+		rgba(0, 212, 170, 0.05) 5px,
+		rgba(0, 212, 170, 0.05) 10px
+	);
+	border: 1px dashed rgba(0, 212, 170, 0.3);
+	transition: all 0.2s ease;
+
+	// Editor-only label
+	&__label {
+		display: inline-block;
+		padding: 4px 12px;
+		font-size: 12px;
+		font-weight: 500;
+		color: #00d4aa;
+		background: rgba(0, 212, 170, 0.1);
+		border-radius: 4px;
+	}
+
+	// Hover state
+	&:hover {
+		border-color: rgba(0, 212, 170, 0.6);
+		background: repeating-linear-gradient(
+			-45deg,
+			transparent,
+			transparent 5px,
+			rgba(0, 212, 170, 0.1) 5px,
+			rgba(0, 212, 170, 0.1) 10px
+		);
+	}
+
+	// Selected state
+	&.is-selected {
+		border-color: #00d4aa;
+	}
+}
+
+// =============================================
+// FRONTEND STYLES
+// =============================================
+
+// Remove editor-only styles on frontend
+.gambol-spacer:not(.wp-block-gambol-spacer) {
+	background: none;
+	border: none;
+}
+
+// Frontend spacer
+.wp-block-gambol-spacer.gambol-spacer {
+	display: block;
+	background: transparent;
+	border: none;
+	height: var(--gambol-spacer-height, 50px);
+
+	.gambol-spacer__label {
+		display: none;
+	}
+}
+
+// =============================================
+// DIVIDER
+// =============================================
+
+.gambol-spacer__divider {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	margin: 0;
+	padding: 0;
+	border: none;
+	height: 0;
+}
+
+// Alignment modifiers
+.gambol-spacer--align-left .gambol-spacer__divider {
+	left: 0;
+}
+
+.gambol-spacer--align-center .gambol-spacer__divider {
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+}
+
+.gambol-spacer--align-right .gambol-spacer__divider {
+	right: 0;
+}
+
+// =============================================
+// RESPONSIVE
+// =============================================
+
+@media (max-width: 1024px) {
+	.wp-block-gambol-spacer.gambol-spacer {
+		height: var(--gambol-spacer-height-tablet, var(--gambol-spacer-height, 50px));
+	}
+}
+
+@media (max-width: 767px) {
+	.wp-block-gambol-spacer.gambol-spacer {
+		height: var(--gambol-spacer-height-mobile, var(--gambol-spacer-height-tablet, var(--gambol-spacer-height, 50px)));
+	}
+}
+
+// =============================================
+// DEVICE SWITCHER (Editor)
+// =============================================
+
+.gambol-device-switcher {
+	display: flex;
+	gap: 4px;
+	margin-bottom: 16px;
+	padding: 4px;
+	background: rgba(255, 255, 255, 0.05);
+	border-radius: 6px;
+}
+
+.gambol-device-btn {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px;
+	background: transparent;
+	border: none;
+	border-radius: 4px;
+	color: rgba(255, 255, 255, 0.5);
+	cursor: pointer;
+	transition: all 0.2s ease;
+
+	&:hover {
+		color: rgba(255, 255, 255, 0.8);
+		background: rgba(255, 255, 255, 0.05);
+	}
+
+	&.is-active {
+		color: #00d4aa;
+		background: rgba(0, 212, 170, 0.15);
+	}
+
+	svg {
+		width: 18px;
+		height: 18px;
+	}
+}
+
+// =============================================
+// HELP TEXT
+// =============================================
+
+.gambol-help-text {
+	margin: 0 0 8px;
+	font-size: 12px;
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.gambol-values-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	font-size: 12px;
+	color: rgba(255, 255, 255, 0.7);
+
+	li {
+		padding: 4px 0;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+		&:last-child {
+			border-bottom: none;
+		}
+
+		strong {
+			color: rgba(255, 255, 255, 0.9);
+		}
+	}
+}

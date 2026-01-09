@@ -1,0 +1,168 @@
+/**
+ * Gambol Counter Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+// =============================================
+// COUNTER CONTAINER
+// =============================================
+
+.gambol-counter {
+	display: flex;
+	flex-direction: column;
+	padding: var(--gambol-counter-padding, 30px);
+	background: var(--gambol-counter-bg, transparent);
+	border-radius: var(--gambol-counter-radius, 8px);
+}
+
+// =============================================
+// ALIGNMENT
+// =============================================
+
+.gambol-counter--align-left {
+	align-items: flex-start;
+	text-align: left;
+}
+
+.gambol-counter--align-center {
+	align-items: center;
+	text-align: center;
+}
+
+.gambol-counter--align-right {
+	align-items: flex-end;
+	text-align: right;
+}
+
+// =============================================
+// ICON POSITIONS
+// =============================================
+
+.gambol-counter--icon-left {
+	flex-direction: row;
+	gap: 20px;
+
+	.gambol-counter__content {
+		flex: 1;
+	}
+}
+
+.gambol-counter--icon-right {
+	flex-direction: row-reverse;
+	gap: 20px;
+
+	.gambol-counter__content {
+		flex: 1;
+	}
+}
+
+.gambol-counter--icon-top {
+	flex-direction: column;
+	gap: 16px;
+}
+
+// =============================================
+// ICON
+// =============================================
+
+.gambol-counter__icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: calc(var(--gambol-counter-icon-size, 40px) * 1.5);
+	height: calc(var(--gambol-counter-icon-size, 40px) * 1.5);
+	background: var(--gambol-counter-icon-bg, rgba(0, 212, 170, 0.1));
+	border-radius: 50%;
+	flex-shrink: 0;
+
+	svg {
+		width: var(--gambol-counter-icon-size, 40px);
+		height: var(--gambol-counter-icon-size, 40px);
+		color: var(--gambol-counter-icon-color, #00d4aa);
+		fill: currentColor;
+	}
+}
+
+// =============================================
+// CONTENT
+// =============================================
+
+.gambol-counter__content {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+// =============================================
+// NUMBER
+// =============================================
+
+.gambol-counter__number {
+	display: flex;
+	align-items: baseline;
+	gap: 4px;
+	font-size: var(--gambol-counter-number-size, 48px);
+	font-weight: 700;
+	color: var(--gambol-counter-number-color, #00d4aa);
+	line-height: 1.1;
+
+	.gambol-counter--align-center & {
+		justify-content: center;
+	}
+
+	.gambol-counter--align-right & {
+		justify-content: flex-end;
+	}
+}
+
+.gambol-counter__prefix,
+.gambol-counter__suffix {
+	font-size: 0.6em;
+	font-weight: 600;
+}
+
+.gambol-counter__value {
+	font-variant-numeric: tabular-nums;
+}
+
+// =============================================
+// TITLE
+// =============================================
+
+.gambol-counter__title {
+	font-size: var(--gambol-counter-title-size, 16px);
+	color: var(--gambol-counter-title-color, #333);
+	line-height: 1.4;
+}
+
+// =============================================
+// ANIMATION (handled by JS)
+// =============================================
+
+.gambol-counter[data-animated="true"] .gambol-counter__value {
+	transition: none;
+}
+
+// =============================================
+// RESPONSIVE
+// =============================================
+
+@media (max-width: 768px) {
+	.gambol-counter {
+		padding: 20px;
+	}
+
+	.gambol-counter__number {
+		font-size: calc(var(--gambol-counter-number-size, 48px) * 0.75);
+	}
+
+	.gambol-counter--icon-left,
+	.gambol-counter--icon-right {
+		flex-direction: column;
+
+		.gambol-counter__icon {
+			order: -1;
+		}
+	}
+}

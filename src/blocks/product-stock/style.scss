@@ -1,0 +1,46 @@
+/**
+ * Product Stock Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-product-stock {
+	margin-bottom: var(--gb-spacing-md);
+}
+
+.product-stock__status {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--gb-spacing-xs);
+	font-weight: 500;
+	
+	svg {
+		flex-shrink: 0;
+	}
+}
+
+// Status variants
+.product-stock__status--in-stock {
+	color: #28a745;
+}
+
+.product-stock__status--low-stock {
+	color: #ffc107;
+}
+
+.product-stock__status--out-of-stock {
+	color: #dc3545;
+}
+
+// Badge style variant
+.wp-block-gambol-product-stock.style-badge {
+	.product-stock__status {
+		padding: var(--gb-spacing-xs) var(--gb-spacing-sm);
+		border-radius: var(--gb-radius-sm);
+		background-color: currentColor;
+		
+		span {
+			color: #fff;
+		}
+	}
+}

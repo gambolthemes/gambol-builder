@@ -1,0 +1,157 @@
+/**
+ * Form Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-form {
+	display: flex;
+	flex-direction: column;
+	max-width: 600px;
+}
+
+.form-field {
+	display: flex;
+	flex-direction: column;
+	
+	label {
+		display: block;
+		margin-bottom: var(--gb-spacing-xs);
+		font-weight: 500;
+		font-size: 14px;
+	}
+	
+	input,
+	textarea,
+	select {
+		width: 100%;
+		padding: var(--gb-spacing-sm) var(--gb-spacing-md);
+		border: 1px solid var(--gb-colors-gray-300);
+		font-size: 16px;
+		transition: border-color 0.2s ease, box-shadow 0.2s ease;
+		
+		&:focus {
+			outline: none;
+			border-color: var(--gb-colors-primary);
+			box-shadow: 0 0 0 3px rgba(var(--gb-colors-primary-rgb), 0.1);
+		}
+		
+		&::placeholder {
+			color: var(--gb-colors-gray-400);
+		}
+	}
+	
+	textarea {
+		resize: vertical;
+		min-height: 120px;
+	}
+}
+
+.form-submit {
+	margin-top: var(--gb-spacing-sm);
+	
+	button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: var(--gb-spacing-md) var(--gb-spacing-xl);
+		border: none;
+		font-size: 16px;
+		font-weight: 600;
+		cursor: pointer;
+		transition: all 0.3s ease;
+		
+		&:hover {
+			opacity: 0.9;
+			transform: translateY(-2px);
+		}
+		
+		&:active {
+			transform: translateY(0);
+		}
+	}
+}
+
+// Full width button
+.wp-block-gambol-form.button-full-width {
+	.form-submit button {
+		width: 100%;
+	}
+}
+
+// Two column layout
+.wp-block-gambol-form.layout-two-columns {
+	.form-field:not(.form-submit):not(.full-width) {
+		width: calc(50% - var(--gb-spacing-sm));
+	}
+	
+	flex-direction: row;
+	flex-wrap: wrap;
+	
+	.form-field.full-width,
+	.form-submit {
+		width: 100%;
+	}
+}
+
+// Inline form
+.wp-block-gambol-form.layout-inline {
+	flex-direction: row;
+	align-items: flex-end;
+	max-width: 100%;
+	
+	.form-field {
+		flex: 1;
+		min-width: 150px;
+	}
+	
+	.form-submit {
+		margin-top: 0;
+		flex-shrink: 0;
+	}
+}
+
+// Success message
+.form-success-message {
+	padding: var(--gb-spacing-md);
+	background-color: #d4edda;
+	border: 1px solid #c3e6cb;
+	border-radius: var(--gb-radius-base);
+	color: #155724;
+	text-align: center;
+}
+
+// Error message
+.form-error-message {
+	padding: var(--gb-spacing-md);
+	background-color: #f8d7da;
+	border: 1px solid #f5c6cb;
+	border-radius: var(--gb-radius-base);
+	color: #721c24;
+	text-align: center;
+}
+
+// Loading state
+.wp-block-gambol-form.is-loading {
+	.form-submit button {
+		opacity: 0.7;
+		pointer-events: none;
+		
+		&::after {
+			content: '';
+			width: 16px;
+			height: 16px;
+			margin-left: var(--gb-spacing-sm);
+			border: 2px solid transparent;
+			border-top-color: currentColor;
+			border-radius: 50%;
+			animation: spin 0.8s linear infinite;
+		}
+	}
+}
+
+@keyframes spin {
+	to {
+		transform: rotate(360deg);
+	}
+}

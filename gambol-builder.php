@@ -90,6 +90,7 @@ function init() {
 	add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\enqueue_editor_assets' );
 	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_frontend_assets' );
 	add_filter( 'block_categories_all', __NAMESPACE__ . '\register_block_category', 10, 2 );
+	add_filter( 'allowed_block_types_all', __NAMESPACE__ . '\filter_allowed_block_types', 10, 2 );
 
 	/**
 	 * Fires after Gambol Builder core is initialized.
@@ -143,23 +144,84 @@ function deactivate() {
 register_deactivation_hook( __FILE__, __NAMESPACE__ . '\deactivate' );
 
 /**
- * Register custom block category.
+ * Register custom block categories (replaces default categories).
  *
  * @param array                   $categories Block categories.
  * @param WP_Block_Editor_Context $context    Block editor context.
  * @return array Modified block categories.
  */
 function register_block_category( $categories, $context ) {
-	return array_merge(
+	// Gambol Builder custom categories only
+	$gambol_categories = array(
 		array(
-			array(
-				'slug'  => 'gambol-builder',
-				'title' => __( 'Gambol Builder', 'gambol-builder' ),
-				'icon'  => 'layout',
-			),
+			'slug'  => 'gambol-layout',
+			'title' => __( 'Layout', 'gambol-builder' ),
+			'icon'  => 'layout',
 		),
-		$categories
+		array(
+			'slug'  => 'gambol-content',
+			'title' => __( 'Content', 'gambol-builder' ),
+			'icon'  => 'text',
+		),
+		array(
+			'slug'  => 'gambol-media',
+			'title' => __( 'Media', 'gambol-builder' ),
+			'icon'  => 'format-image',
+		),
+		array(
+			'slug'  => 'gambol-utilities',
+			'title' => __( 'Utilities', 'gambol-builder' ),
+			'icon'  => 'admin-settings',
+		),
 	);
+
+	// Return only Gambol categories, completely replacing defaults
+	return $gambol_categories;
+}
+
+/**
+ * Get the list of allowed block types.
+ *
+ * @return array List of allowed block names.
+ */
+function get_allowed_block_types() {
+	return array(
+		// Gambol Layout blocks
+		'gambol/section',
+		'gambol/container',
+		// Gambol Content blocks
+		'gambol/heading',
+		'gambol/text',
+		'gambol/button',
+		'gambol/icon',
+		'gambol/spacer',
+		// Gambol Media blocks
+		'gambol/image',
+		'gambol/video',
+		'gambol/gallery',
+		// Gambol UI Components
+		'gambol/tabs',
+		'gambol/tab-panel',
+		'gambol/accordion',
+		'gambol/accordion-item',
+		'gambol/testimonial',
+		'gambol/counter',
+		// Core blocks we need to keep
+		'core/paragraph', // Needed for default typing
+		'core/list',
+		'core/list-item',
+	);
+}
+
+/**
+ * Filter allowed block types in the editor.
+ *
+ * @param bool|array              $allowed_block_types Array of allowed block types or true for all.
+ * @param WP_Block_Editor_Context $context             Block editor context.
+ * @return array Filtered block types.
+ */
+function filter_allowed_block_types( $allowed_block_types, $context ) {
+	return get_allowed_block_types();
 }
 
 /**
@@ -224,18 +286,78 @@ function register_blocks() {
  * @return void
  */
 function enqueue_editor_assets() {
-	// Additional editor-only assets can be enqueued here.
+	// Check if editor script exists.
+	$editor_asset_file = GAMBOL_BUILDER_PATH . 'build/editor.asset.php';
+	if ( ! file_exists( $editor_asset_file ) ) {
+		return;
+	}
+
+	$editor_asset = require $editor_asset_file;
+
+	// Enqueue editor panel script.
+	wp_enqueue_script(
+		'gambol-builder-editor-panel',
+		GAMBOL_BUILDER_URL . 'build/editor.js',
+		$editor_asset['dependencies'],
+		$editor_asset['version'],
+		true
+	);
+
+	// Enqueue editor panel styles.
+	if ( file_exists( GAMBOL_BUILDER_PATH . 'build/editor.css' ) ) {
+		wp_enqueue_style(
+			'gambol-builder-editor-panel',
+			GAMBOL_BUILDER_URL . 'build/editor.css',
+			array(),
+			$editor_asset['version']
+		);
+	}
 }
 
 /**
  * Enqueue frontend assets.
- * Only loads assets when builder blocks are used.
+ * Loads interactivity scripts when builder blocks are used.
  *
  * @return void
  */
 function enqueue_frontend_assets() {
-	// Assets are conditionally loaded via block registration.
-	// Additional frontend scripts can be added here if needed.
+	// Check if frontend script exists.
+	$frontend_asset_file = GAMBOL_BUILDER_PATH . 'build/frontend.asset.php';
+	if ( ! file_exists( $frontend_asset_file ) ) {
+		return;
+	}
+
+	// Only load if post has Gambol blocks.
+	if ( ! has_gambol_blocks() ) {
+		return;
+	}
+
+	$frontend_asset = require $frontend_asset_file;
+
+	// Enqueue frontend interactivity script.
+	wp_enqueue_script(
+		'gambol-builder-frontend',
+		GAMBOL_BUILDER_URL . 'build/frontend.js',
+		array(), // No dependencies, vanilla JS
+		$frontend_asset['version'],
+		true // Load in footer
+	);
+}
+
+/**
+ * Check if current post/page has Gambol Builder blocks.
+ *
+ * @return bool True if Gambol blocks are present.
+ */
+function has_gambol_blocks() {
+	global $post;
+
+	if ( ! $post || ! isset( $post->post_content ) ) {
+		return false;
+	}
+
+	// Check for any Gambol block.
+	return strpos( $post->post_content, '<!-- wp:gambol/' ) !== false;
 }
 
 /**

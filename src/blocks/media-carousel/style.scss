@@ -1,0 +1,217 @@
+/**
+ * Media Carousel Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-media-carousel {
+	position: relative;
+	width: 100%;
+}
+
+.wp-block-gambol-media-carousel__viewport {
+	overflow: hidden;
+	width: 100%;
+}
+
+.wp-block-gambol-media-carousel__track {
+	display: flex;
+	transition: transform 0.5s ease;
+}
+
+.wp-block-gambol-media-carousel__slide {
+	flex-shrink: 0;
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+	border-radius: var(--gb-radius-base);
+	background-color: #000;
+	
+	img,
+	video {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+}
+
+.wp-block-gambol-media-carousel__poster {
+	position: absolute;
+	inset: 0;
+}
+
+.wp-block-gambol-media-carousel__play {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 80px;
+	height: 80px;
+	border: none;
+	border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.9);
+	color: var(--gb-colors-primary);
+	font-size: 28px;
+	cursor: pointer;
+	transition: background-color var(--gb-transition-base), transform var(--gb-transition-base);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding-left: 5px;
+	
+	&:hover {
+		background-color: #fff;
+		transform: translate(-50%, -50%) scale(1.1);
+	}
+}
+
+// Arrows
+.wp-block-gambol-media-carousel__arrow {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 10;
+	width: 50px;
+	height: 50px;
+	border: none;
+	border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.9);
+	color: var(--gb-colors-text);
+	font-size: 28px;
+	cursor: pointer;
+	transition: background-color var(--gb-transition-base), transform var(--gb-transition-base);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	&:hover {
+		background-color: #fff;
+		transform: translateY(-50%) scale(1.1);
+	}
+	
+	&--prev {
+		left: 15px;
+	}
+	
+	&--next {
+		right: 15px;
+	}
+}
+
+// Dots
+.wp-block-gambol-media-carousel__dots {
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	margin-top: var(--gb-spacing-md);
+}
+
+.wp-block-gambol-media-carousel__dot {
+	width: 12px;
+	height: 12px;
+	padding: 0;
+	border: none;
+	border-radius: 50%;
+	background-color: var(--gb-colors-border);
+	cursor: pointer;
+	transition: background-color var(--gb-transition-base), transform var(--gb-transition-base);
+	
+	&:hover,
+	&.is-active {
+		background-color: var(--gb-colors-primary);
+	}
+	
+	&.is-active {
+		transform: scale(1.2);
+	}
+}
+
+// Thumbnails
+.wp-block-gambol-media-carousel__thumbnails {
+	display: flex;
+	justify-content: center;
+	gap: var(--gb-spacing-sm);
+	margin-top: var(--gb-spacing-md);
+	flex-wrap: wrap;
+}
+
+.wp-block-gambol-media-carousel__thumbnail {
+	width: 80px;
+	height: 60px;
+	padding: 0;
+	border: 2px solid transparent;
+	border-radius: var(--gb-radius-sm);
+	overflow: hidden;
+	cursor: pointer;
+	transition: border-color var(--gb-transition-base);
+	position: relative;
+	
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	
+	&:hover,
+	&.is-active {
+		border-color: var(--gb-colors-primary);
+	}
+}
+
+.wp-block-gambol-media-carousel__thumbnail-play {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(0, 0, 0, 0.3);
+	color: #fff;
+	font-size: 16px;
+}
+
+// Type indicator (editor)
+.wp-block-gambol-media-carousel__type {
+	position: absolute;
+	top: var(--gb-spacing-xs);
+	left: var(--gb-spacing-xs);
+	width: 24px;
+	height: 24px;
+	background-color: rgba(0, 0, 0, 0.5);
+	color: #fff;
+	border-radius: 4px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 12px;
+}
+
+// Editor styles
+.wp-block-gambol-media-carousel__upload {
+	width: 100%;
+	min-height: 200px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 2px dashed var(--gb-colors-border);
+	border-radius: var(--gb-radius-base);
+	background-color: var(--gb-colors-background-secondary);
+}
+
+.wp-block-gambol-media-carousel__controls {
+	display: flex;
+	justify-content: center;
+	margin-top: var(--gb-spacing-md);
+}
+
+.wp-block-gambol-media-carousel__remove {
+	position: absolute;
+	top: var(--gb-spacing-xs);
+	right: var(--gb-spacing-xs);
+	opacity: 0;
+	transition: opacity 0.2s ease;
+}
+
+.wp-block-gambol-media-carousel__slide:hover .wp-block-gambol-media-carousel__remove {
+	opacity: 1;
+}

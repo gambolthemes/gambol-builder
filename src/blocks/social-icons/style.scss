@@ -1,0 +1,104 @@
+/**
+ * Social Icons Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-social-icons {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+.wp-block-gambol-social-icons__icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+	transition: transform var(--gb-transition-base), box-shadow var(--gb-transition-base), opacity var(--gb-transition-base);
+	
+	svg {
+		display: block;
+	}
+}
+
+// Shapes
+.wp-block-gambol-social-icons--square {
+	.wp-block-gambol-social-icons__icon {
+		border-radius: 0;
+	}
+}
+
+.wp-block-gambol-social-icons--rounded {
+	.wp-block-gambol-social-icons__icon {
+		border-radius: var(--gb-radius-base);
+	}
+}
+
+.wp-block-gambol-social-icons--circle {
+	.wp-block-gambol-social-icons__icon {
+		border-radius: 50%;
+	}
+}
+
+// Hover animations
+.wp-block-gambol-social-icons__icon--scale:hover {
+	transform: scale(1.15);
+}
+
+.wp-block-gambol-social-icons__icon--rotate:hover {
+	transform: rotate(360deg);
+}
+
+.wp-block-gambol-social-icons__icon--float:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+// Focus state
+.wp-block-gambol-social-icons__icon:focus {
+	outline: 2px solid var(--gb-colors-primary);
+	outline-offset: 2px;
+}
+
+// Alignment
+.wp-block-gambol-social-icons.has-text-align-center {
+	justify-content: center;
+}
+
+.wp-block-gambol-social-icons.has-text-align-right {
+	justify-content: flex-end;
+}
+
+.wp-block-gambol-social-icons.has-text-align-left {
+	justify-content: flex-start;
+}
+
+// Editor styles
+.editor-styles-wrapper .wp-block-gambol-social-icons {
+	.gambol-social-icon-item {
+		display: flex;
+		align-items: flex-start;
+		gap: var(--gb-spacing-xs);
+		margin-bottom: var(--gb-spacing-sm);
+		
+		.components-select-control {
+			flex: 0 0 120px;
+		}
+		
+		.components-text-control {
+			flex: 1;
+		}
+		
+		.components-button {
+			margin-top: 22px;
+		}
+	}
+}
+
+// Responsive
+@media (max-width: 480px) {
+	.wp-block-gambol-social-icons {
+		justify-content: center;
+	}
+}

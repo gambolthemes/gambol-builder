@@ -1,0 +1,107 @@
+/**
+ * Alert Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-alert {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--gb-spacing-md);
+	padding: var(--gb-spacing-md) var(--gb-spacing-lg);
+	border-radius: var(--gb-radius-base);
+	border-left: 4px solid;
+	
+	// Type: Info
+	&.alert-info {
+		background-color: var(--alert-bg, #e7f3ff);
+		border-color: var(--alert-border, #2196f3);
+		color: var(--alert-text, #0d47a1);
+		
+		.wp-block-gambol-alert__icon {
+			color: var(--alert-icon, #2196f3);
+		}
+	}
+	
+	// Type: Success
+	&.alert-success {
+		background-color: var(--alert-bg, #e8f5e9);
+		border-color: var(--alert-border, #4caf50);
+		color: var(--alert-text, #1b5e20);
+		
+		.wp-block-gambol-alert__icon {
+			color: var(--alert-icon, #4caf50);
+		}
+	}
+	
+	// Type: Warning
+	&.alert-warning {
+		background-color: var(--alert-bg, #fff3e0);
+		border-color: var(--alert-border, #ff9800);
+		color: var(--alert-text, #e65100);
+		
+		.wp-block-gambol-alert__icon {
+			color: var(--alert-icon, #ff9800);
+		}
+	}
+	
+	// Type: Danger
+	&.alert-danger {
+		background-color: var(--alert-bg, #ffebee);
+		border-color: var(--alert-border, #f44336);
+		color: var(--alert-text, #b71c1c);
+		
+		.wp-block-gambol-alert__icon {
+			color: var(--alert-icon, #f44336);
+		}
+	}
+}
+
+.wp-block-gambol-alert__icon {
+	flex-shrink: 0;
+	font-size: 1.25em;
+	line-height: 1;
+}
+
+.wp-block-gambol-alert__content {
+	flex: 1;
+	min-width: 0;
+}
+
+.wp-block-gambol-alert__title {
+	display: block;
+	margin-bottom: var(--gb-spacing-xs);
+	font-weight: 600;
+}
+
+.wp-block-gambol-alert__message {
+	margin: 0;
+	line-height: var(--gb-typography-line-height-base);
+}
+
+.wp-block-gambol-alert__dismiss {
+	flex-shrink: 0;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	font-size: 1.25em;
+	line-height: 1;
+	padding: 0;
+	opacity: 0.5;
+	transition: opacity var(--gb-transition-base);
+	
+	&:hover {
+		opacity: 1;
+	}
+}
+
+// Dismissible animation
+.wp-block-gambol-alert.is-dismissible {
+	transition: opacity 0.3s ease, transform 0.3s ease;
+	
+	&.is-dismissed {
+		opacity: 0;
+		transform: translateX(20px);
+		pointer-events: none;
+	}
+}

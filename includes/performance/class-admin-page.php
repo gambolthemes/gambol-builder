@@ -63,7 +63,7 @@ class Admin_Page {
 	 */
 	public function add_menu_page() {
 		$this->page_hook = add_submenu_page(
-			'edit.php?post_type=gambol_hf',
+			'gambol-builder',
 			__( 'Performance', 'gambol-builder' ),
 			__( 'Performance', 'gambol-builder' ),
 			'manage_options',

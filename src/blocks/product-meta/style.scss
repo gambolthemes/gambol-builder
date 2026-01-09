@@ -1,0 +1,58 @@
+/**
+ * Product Meta Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-product-meta {
+	display: flex;
+	margin-bottom: var(--gb-spacing-lg);
+	
+	// Stacked layout
+	&.layout-stacked {
+		flex-direction: column;
+	}
+	
+	// Inline layout
+	&.layout-inline {
+		flex-direction: row;
+		flex-wrap: wrap;
+		
+		.product-meta__item {
+			&::after {
+				content: '|';
+				margin: 0 var(--gb-spacing-sm);
+				color: var(--gb-colors-gray-400);
+			}
+			
+			&:last-child::after {
+				display: none;
+			}
+		}
+	}
+}
+
+.product-meta__item {
+	display: flex;
+	align-items: baseline;
+	gap: var(--gb-spacing-xs);
+}
+
+.product-meta__label {
+	font-weight: 600;
+	color: var(--gb-colors-gray-700);
+}
+
+.product-meta__value {
+	color: var(--gb-colors-gray-600);
+	
+	a {
+		color: var(--gb-colors-primary);
+		text-decoration: none;
+		transition: color 0.2s ease;
+		
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}

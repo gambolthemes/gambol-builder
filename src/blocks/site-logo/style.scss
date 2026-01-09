@@ -1,0 +1,52 @@
+/**
+ * Site Logo Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-site-logo {
+	display: inline-block;
+}
+
+.wp-block-gambol-site-logo__link {
+	display: block;
+	text-decoration: none;
+	
+	&:focus {
+		outline: 2px solid var(--gb-colors-primary);
+		outline-offset: 2px;
+	}
+}
+
+.wp-block-gambol-site-logo__image {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	transition: opacity var(--gb-transition-base);
+}
+
+.wp-block-gambol-site-logo__link:hover .wp-block-gambol-site-logo__image {
+	opacity: 0.85;
+}
+
+// Alignment
+.wp-block-gambol-site-logo.has-text-align-center {
+	text-align: center;
+}
+
+.wp-block-gambol-site-logo.has-text-align-right {
+	text-align: right;
+}
+
+.wp-block-gambol-site-logo.has-text-align-left {
+	text-align: left;
+}
+
+// Editor styles
+.editor-styles-wrapper .wp-block-gambol-site-logo {
+	.gambol-help-text {
+		margin-top: var(--gb-spacing-xs);
+		font-size: var(--gb-typography-font-size-xs);
+		color: var(--gb-colors-text-secondary);
+	}
+}

@@ -1,0 +1,40 @@
+/**
+ * Grid Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-grid {
+	display: grid;
+	width: 100%;
+	
+	// Ensure grid items don't overflow
+	> * {
+		min-width: 0;
+	}
+}
+
+// Editor specific
+.editor-styles-wrapper .wp-block-gambol-grid {
+	> .block-editor-inner-blocks {
+		display: contents;
+		
+		> .block-editor-block-list__layout {
+			display: contents;
+		}
+	}
+}
+
+// Responsive - Tablet
+@media (max-width: 1024px) {
+	.wp-block-gambol-grid {
+		grid-template-columns: repeat(var(--grid-columns-tablet, 2), 1fr) !important;
+	}
+}
+
+// Responsive - Mobile
+@media (max-width: 768px) {
+	.wp-block-gambol-grid {
+		grid-template-columns: repeat(var(--grid-columns-mobile, 1), 1fr) !important;
+	}
+}

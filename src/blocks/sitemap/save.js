@@ -1,0 +1,15 @@
+/**
+ * Sitemap Block - Save Component
+ *
+ * This is a dynamic block - rendered via PHP.
+ *
+ * @package GambolBuilder
+ */
+
+/**
+ * Sitemap Save Component.
+ * Returns null for server-side rendering.
+ */
+export default function save() {
+	return null;
+}

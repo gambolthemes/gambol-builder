@@ -1,0 +1,763 @@
+/**
+ * Gambol Builder - Left Sidebar Styles
+ * 
+ * Complete styling for the custom left sidebar block panel.
+ * Features a premium dark theme with the Gambol teal accent.
+ *
+ * @package GambolBuilder
+ */
+
+// =============================================================================
+// DESIGN TOKENS
+// =============================================================================
+
+// Brand Colors
+$gb-accent: #00d4aa;
+$gb-accent-hover: #00eabb;
+$gb-accent-active: #00b894;
+$gb-accent-muted: rgba(#00d4aa, 0.15);
+$gb-accent-subtle: rgba(#00d4aa, 0.08);
+
+// Surface Colors
+$gb-surface-base: #121212;
+$gb-surface-elevated: #1c1c1c;
+$gb-surface-card: #232323;
+$gb-surface-hover: #2a2a2a;
+$gb-surface-active: #333333;
+
+// Text Colors
+$gb-text-primary: #ffffff;
+$gb-text-secondary: #b0b0b0;
+$gb-text-muted: #6b6b6b;
+$gb-text-disabled: #4a4a4a;
+
+// Border Colors
+$gb-border-subtle: rgba(255, 255, 255, 0.06);
+$gb-border-default: rgba(255, 255, 255, 0.10);
+$gb-border-strong: rgba(255, 255, 255, 0.16);
+
+// Spacing
+$gb-space-1: 4px;
+$gb-space-2: 8px;
+$gb-space-3: 12px;
+$gb-space-4: 16px;
+$gb-space-5: 20px;
+$gb-space-6: 24px;
+
+// Typography
+$gb-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
+               Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+$gb-text-xs: 11px;
+$gb-text-sm: 12px;
+$gb-text-md: 13px;
+$gb-text-lg: 14px;
+
+// Sizing
+$sidebar-width: 280px;
+$sidebar-collapsed-width: 56px;
+$header-height: 56px;
+
+// Border Radius
+$gb-radius-sm: 4px;
+$gb-radius-md: 6px;
+$gb-radius-lg: 8px;
+$gb-radius-xl: 10px;
+
+// Transitions
+$gb-transition-fast: 0.1s ease;
+$gb-transition-default: 0.15s ease;
+$gb-transition-slow: 0.25s ease;
+
+// Shadows
+$gb-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+$gb-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+$gb-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+$gb-shadow-focus: 0 0 0 2px rgba($gb-accent, 0.4);
+
+// =============================================================================
+// LEFT SIDEBAR CONTAINER
+// =============================================================================
+
+.gambol-left-sidebar {
+	position: fixed;
+	top: 32px; // WordPress admin bar height
+	left: 0;
+	bottom: 0;
+	width: $sidebar-width;
+	background: $gb-surface-base;
+	border-right: 1px solid $gb-border-default;
+	display: flex;
+	flex-direction: column;
+	z-index: 99999;
+	font-family: $gb-font-sans;
+	transition: width $gb-transition-slow;
+	box-shadow: $gb-shadow-lg;
+
+	// Collapsed state
+	&--collapsed {
+		width: $sidebar-collapsed-width;
+
+		.gambol-sidebar__search,
+		.gambol-sidebar__content,
+		.gambol-sidebar__footer {
+			display: none;
+		}
+
+		.gambol-sidebar__title {
+			display: none;
+		}
+	}
+
+	// All text
+	* {
+		box-sizing: border-box;
+	}
+}
+
+// =============================================================================
+// HEADER
+// =============================================================================
+
+.gambol-sidebar__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: $header-height;
+	padding: 0 $gb-space-3;
+	background: $gb-surface-elevated;
+	border-bottom: 1px solid $gb-border-default;
+	flex-shrink: 0;
+}
+
+.gambol-sidebar__brand {
+	display: flex;
+	align-items: center;
+	gap: $gb-space-2;
+}
+
+.gambol-sidebar__logo {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: $gb-accent;
+	flex-shrink: 0;
+}
+
+.gambol-sidebar__title {
+	font-size: $gb-text-lg;
+	font-weight: 600;
+	color: $gb-text-primary;
+	letter-spacing: -0.02em;
+}
+
+.gambol-sidebar__collapse-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	background: transparent;
+	border: none;
+	border-radius: $gb-radius-md;
+	color: $gb-text-secondary;
+	cursor: pointer;
+	transition: all $gb-transition-fast;
+
+	&:hover {
+		background: $gb-surface-hover;
+		color: $gb-text-primary;
+	}
+
+	&:focus {
+		outline: none;
+		box-shadow: $gb-shadow-focus;
+	}
+}
+
+// =============================================================================
+// SEARCH BAR
+// =============================================================================
+
+.gambol-sidebar__search {
+	padding: $gb-space-3;
+	background: $gb-surface-elevated;
+	border-bottom: 1px solid $gb-border-subtle;
+	flex-shrink: 0;
+}
+
+.gambol-search-bar {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.gambol-search-bar__icon {
+	position: absolute;
+	left: $gb-space-3;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: $gb-text-muted;
+	pointer-events: none;
+	transition: color $gb-transition-fast;
+
+	.gambol-search-bar--focused & {
+		color: $gb-accent;
+	}
+}
+
+.gambol-search-bar__input {
+	width: 100%;
+	height: 40px;
+	padding: 0 $gb-space-5 0 40px;
+	background: $gb-surface-base;
+	border: 1px solid $gb-border-default;
+	border-radius: $gb-radius-lg;
+	color: $gb-text-primary;
+	font-size: $gb-text-md;
+	font-family: $gb-font-sans;
+	transition: all $gb-transition-fast;
+
+	&::placeholder {
+		color: $gb-text-muted;
+	}
+
+	&:hover {
+		border-color: $gb-border-strong;
+	}
+
+	&:focus {
+		outline: none;
+		border-color: $gb-accent;
+		box-shadow: $gb-shadow-focus;
+	}
+
+	.gambol-search-bar--has-value & {
+		padding-right: 40px;
+	}
+}
+
+.gambol-search-bar__clear {
+	position: absolute;
+	right: $gb-space-2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	background: $gb-surface-hover;
+	border: none;
+	border-radius: $gb-radius-sm;
+	color: $gb-text-secondary;
+	cursor: pointer;
+	transition: all $gb-transition-fast;
+
+	&:hover {
+		background: $gb-surface-active;
+		color: $gb-text-primary;
+	}
+
+	&:focus {
+		outline: none;
+		box-shadow: $gb-shadow-focus;
+	}
+}
+
+// =============================================================================
+// CONTENT AREA
+// =============================================================================
+
+.gambol-sidebar__content {
+	flex: 1;
+	overflow-y: auto;
+	overflow-x: hidden;
+	scrollbar-width: thin;
+	scrollbar-color: $gb-surface-active transparent;
+
+	&::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	&::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background: $gb-surface-active;
+		border-radius: 3px;
+
+		&:hover {
+			background: $gb-text-muted;
+		}
+	}
+}
+
+.gambol-sidebar__blocks {
+	padding: $gb-space-2 0;
+}
+
+// =============================================================================
+// BLOCK GROUP
+// =============================================================================
+
+.gambol-block-group {
+	margin-bottom: $gb-space-1;
+}
+
+.gambol-block-group__header {
+	display: flex;
+	align-items: center;
+	gap: $gb-space-2;
+	width: 100%;
+	padding: $gb-space-3 $gb-space-4;
+	background: transparent;
+	border: none;
+	color: $gb-text-secondary;
+	font-size: $gb-text-sm;
+	font-weight: 600;
+	font-family: $gb-font-sans;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	cursor: pointer;
+	transition: all $gb-transition-fast;
+
+	&:hover {
+		background: $gb-surface-hover;
+		color: $gb-text-primary;
+	}
+
+	&:focus {
+		outline: none;
+		background: $gb-surface-hover;
+		box-shadow: inset 0 0 0 2px rgba($gb-accent, 0.3);
+	}
+}
+
+.gambol-block-group__icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: $gb-accent;
+	flex-shrink: 0;
+
+	svg {
+		width: 16px;
+		height: 16px;
+	}
+}
+
+.gambol-block-group__label {
+	flex: 1;
+	text-align: left;
+}
+
+.gambol-block-group__count {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 20px;
+	height: 18px;
+	padding: 0 $gb-space-1;
+	background: $gb-surface-card;
+	border-radius: 9px;
+	font-size: $gb-text-xs;
+	font-weight: 500;
+	color: $gb-text-muted;
+}
+
+.gambol-block-group__chevron {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: $gb-text-muted;
+	transition: transform $gb-transition-default;
+
+	.gambol-block-group--expanded & {
+		transform: rotate(180deg);
+	}
+}
+
+.gambol-block-group__content {
+	overflow: hidden;
+}
+
+.gambol-block-group__grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: $gb-space-2;
+	padding: $gb-space-2 $gb-space-3;
+}
+
+// =============================================================================
+// BLOCK ITEM
+// =============================================================================
+
+.gambol-block-item {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: $gb-space-2;
+	padding: $gb-space-4 $gb-space-2;
+	background: $gb-surface-card;
+	border: 1px solid transparent;
+	border-radius: $gb-radius-lg;
+	cursor: pointer;
+	transition: all $gb-transition-default;
+
+	&:hover {
+		background: $gb-surface-hover;
+		border-color: $gb-border-default;
+		transform: translateY(-1px);
+		box-shadow: $gb-shadow-md;
+
+		.gambol-block-item__icon {
+			color: $gb-accent;
+			transform: scale(1.05);
+		}
+	}
+
+	&:active {
+		transform: translateY(0);
+		box-shadow: none;
+	}
+
+	&:focus {
+		outline: none;
+		border-color: $gb-accent;
+		box-shadow: $gb-shadow-focus;
+	}
+
+	// Dragging state
+	&--dragging {
+		opacity: 0.6;
+		transform: scale(0.95);
+		cursor: grabbing;
+	}
+
+	// Disabled state
+	&--disabled {
+		cursor: not-allowed;
+		opacity: 0.5;
+
+		&:hover {
+			transform: none;
+			box-shadow: none;
+			border-color: transparent;
+
+			.gambol-block-item__icon {
+				color: $gb-text-muted;
+				transform: none;
+			}
+		}
+	}
+
+	// Draggable cursor
+	&[draggable="true"] {
+		cursor: grab;
+
+		&:active {
+			cursor: grabbing;
+		}
+	}
+}
+
+.gambol-block-item__icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: $gb-text-secondary;
+	transition: all $gb-transition-default;
+
+	svg {
+		width: 24px;
+		height: 24px;
+	}
+}
+
+.gambol-block-item__title {
+	font-size: $gb-text-xs;
+	font-weight: 500;
+	color: $gb-text-secondary;
+	text-align: center;
+	line-height: 1.3;
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+
+	.gambol-block-item:hover & {
+		color: $gb-text-primary;
+	}
+}
+
+.gambol-block-item__badge {
+	position: absolute;
+	top: $gb-space-1;
+	right: $gb-space-1;
+	padding: 2px 6px;
+	background: $gb-accent-muted;
+	border-radius: $gb-radius-sm;
+	font-size: 9px;
+	font-weight: 600;
+	color: $gb-accent;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+// Inserting state (click feedback)
+.gambol-block-item--inserting {
+	background: $gb-accent-muted;
+	border-color: $gb-accent;
+	
+	.gambol-block-item__icon {
+		color: $gb-accent;
+	}
+}
+
+.gambol-block-item__inserting {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba($gb-accent, 0.15);
+	border-radius: inherit;
+	animation: gambol-insert-flash 0.3s ease-out;
+}
+
+.gambol-block-item__check {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	background: $gb-accent;
+	color: $gb-surface-base;
+	border-radius: 50%;
+	font-size: 14px;
+	font-weight: 700;
+	animation: gambol-check-pop 0.3s ease-out;
+}
+
+@keyframes gambol-insert-flash {
+	0% { opacity: 0; }
+	50% { opacity: 1; }
+	100% { opacity: 0; }
+}
+
+@keyframes gambol-check-pop {
+	0% { transform: scale(0); opacity: 0; }
+	60% { transform: scale(1.2); opacity: 1; }
+	100% { transform: scale(1); opacity: 1; }
+}
+
+// Global drag state
+body.gambol-is-dragging-block {
+	cursor: grabbing !important;
+	
+	* {
+		cursor: grabbing !important;
+	}
+}
+
+// =============================================================================
+// BLOCK ICON
+// =============================================================================
+
+.gambol-block-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+
+	svg {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+// =============================================================================
+// EMPTY STATE
+// =============================================================================
+
+.gambol-sidebar__empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding: $gb-space-6;
+	text-align: center;
+}
+
+.gambol-sidebar__empty-icon {
+	color: $gb-text-muted;
+	margin-bottom: $gb-space-4;
+	opacity: 0.5;
+}
+
+.gambol-sidebar__empty-text {
+	margin: 0 0 $gb-space-2;
+	font-size: $gb-text-md;
+	color: $gb-text-secondary;
+	line-height: 1.4;
+}
+
+.gambol-sidebar__empty-hint {
+	margin: 0;
+	font-size: $gb-text-sm;
+	color: $gb-text-muted;
+}
+
+// =============================================================================
+// FOOTER
+// =============================================================================
+
+.gambol-sidebar__footer {
+	padding: $gb-space-3 $gb-space-4;
+	background: $gb-surface-elevated;
+	border-top: 1px solid $gb-border-subtle;
+	flex-shrink: 0;
+}
+
+.gambol-sidebar__help {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.gambol-sidebar__help-text {
+	font-size: $gb-text-xs;
+	color: $gb-text-muted;
+}
+
+// =============================================================================
+// GUTENBERG CANVAS OFFSET
+// =============================================================================
+
+// Push the editor canvas to the right when sidebar is visible
+.gambol-editor-active {
+	.interface-interface-skeleton__content {
+		margin-left: $sidebar-width;
+		transition: margin-left $gb-transition-slow;
+	}
+
+	&.gambol-sidebar-collapsed {
+		.interface-interface-skeleton__content {
+			margin-left: $sidebar-collapsed-width;
+		}
+	}
+}
+
+// =============================================================================
+// HIDE DEFAULT GUTENBERG INSERTER
+// =============================================================================
+
+// Hide the default block inserter button when Gambol sidebar is active
+.gambol-editor-active {
+	// Primary inserter
+	.block-editor-inserter .block-editor-inserter__toggle,
+	.edit-post-header-toolbar__inserter-toggle {
+		display: none !important;
+	}
+
+	// Appender between blocks
+	// Note: We keep the appender but style it to work with our system
+	.block-list-appender {
+		.block-editor-inserter {
+			// Keep functional but less prominent
+		}
+	}
+}
+
+// =============================================================================
+// RESPONSIVE
+// =============================================================================
+
+@media (max-width: 782px) {
+	.gambol-left-sidebar {
+		top: 46px; // Mobile admin bar height
+		width: 100%;
+		height: auto;
+		max-height: 50vh;
+		border-right: none;
+		border-bottom: 1px solid $gb-border-default;
+
+		&--collapsed {
+			max-height: $header-height;
+		}
+	}
+
+	.gambol-block-group__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	.gambol-editor-active {
+		.interface-interface-skeleton__content {
+			margin-left: 0;
+			margin-top: 50vh;
+		}
+
+		&.gambol-sidebar-collapsed {
+			.interface-interface-skeleton__content {
+				margin-top: $header-height;
+			}
+		}
+	}
+}
+
+// =============================================================================
+// ANIMATIONS
+// =============================================================================
+
+@keyframes gambol-fade-in {
+	from {
+		opacity: 0;
+		transform: translateY(-4px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.gambol-block-group__content {
+	animation: gambol-fade-in 0.2s ease;
+}
+
+// =============================================================================
+// ACCESSIBILITY
+// =============================================================================
+
+// High contrast mode support
+@media (prefers-contrast: high) {
+	.gambol-left-sidebar {
+		border-right-width: 2px;
+	}
+
+	.gambol-block-item {
+		border-width: 2px;
+
+		&:focus {
+			outline: 2px solid $gb-accent;
+			outline-offset: 2px;
+		}
+	}
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+	.gambol-left-sidebar,
+	.gambol-block-item,
+	.gambol-search-bar__input,
+	.gambol-block-group__header,
+	.gambol-sidebar__collapse-btn {
+		transition: none;
+	}
+
+	.gambol-block-group__content {
+		animation: none;
+	}
+}

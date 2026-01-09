@@ -1,0 +1,55 @@
+/**
+ * Column Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-column {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 0%;
+	min-width: 0;
+	word-break: break-word;
+	overflow-wrap: break-word;
+	
+	// Ensure inner blocks fill width
+	> * {
+		width: 100%;
+	}
+}
+
+// Editor specific
+.editor-styles-wrapper .wp-block-gambol-column {
+	min-height: 50px;
+	
+	> .block-editor-inner-blocks {
+		width: 100%;
+		
+		> .block-editor-block-list__layout {
+			display: flex;
+			flex-direction: column;
+		}
+	}
+	
+	// Empty state
+	&:empty::before,
+	> .block-editor-inner-blocks:empty::before {
+		content: '+';
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 100px;
+		color: var(--gb-colors-text-secondary);
+		font-size: 24px;
+		border: 2px dashed var(--gb-colors-border);
+		border-radius: var(--gb-radius-base);
+	}
+}
+
+// Responsive
+@media (max-width: 768px) {
+	.wp-block-gambol-column {
+		flex: 1 1 100% !important;
+		max-width: 100% !important;
+	}
+}

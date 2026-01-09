@@ -1,0 +1,161 @@
+/**
+ * Table Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-table {
+	width: 100%;
+	overflow-x: auto;
+}
+
+.wp-block-gambol-table table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	border: 1px solid var(--gb-colors-gray-200);
+	overflow: hidden;
+}
+
+// Text alignment
+.align-left {
+	th,
+	td {
+		text-align: left;
+	}
+}
+
+.align-center {
+	th,
+	td {
+		text-align: center;
+	}
+}
+
+.align-right {
+	th,
+	td {
+		text-align: right;
+	}
+}
+
+// Header
+thead {
+	background-color: var(--gb-colors-gray-100);
+	
+	th {
+		font-weight: 600;
+		border-bottom: 2px solid var(--gb-colors-gray-200);
+	}
+}
+
+// Footer
+tfoot {
+	background-color: var(--gb-colors-gray-50);
+	
+	td {
+		font-weight: 500;
+		border-top: 2px solid var(--gb-colors-gray-200);
+	}
+}
+
+// Body cells
+tbody {
+	td {
+		border-bottom: 1px solid var(--gb-colors-gray-100);
+	}
+	
+	tr:last-child td {
+		border-bottom: none;
+	}
+}
+
+// Striped rows
+.has-striped-rows tbody tr:nth-child(even) {
+	background-color: var(--gb-colors-gray-50);
+}
+
+// Hover effect
+.has-hover-effect tbody tr:hover {
+	background-color: var(--gb-colors-gray-100);
+}
+
+// Border radius for first/last cells
+thead tr:first-child {
+	th:first-child {
+		border-top-left-radius: inherit;
+	}
+	
+	th:last-child {
+		border-top-right-radius: inherit;
+	}
+}
+
+tbody:last-child tr:last-child,
+tfoot tr:last-child {
+	td:first-child {
+		border-bottom-left-radius: inherit;
+	}
+	
+	td:last-child {
+		border-bottom-right-radius: inherit;
+	}
+}
+
+// Responsive table
+@media (max-width: 768px) {
+	.wp-block-gambol-table {
+		display: block;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+	
+	.wp-block-gambol-table table {
+		min-width: 500px;
+	}
+	
+	th,
+	td {
+		padding: 8px !important;
+		font-size: 14px;
+	}
+}
+
+// Compact variant
+.wp-block-gambol-table.is-compact {
+	th,
+	td {
+		padding: 6px 10px;
+		font-size: 14px;
+	}
+}
+
+// Bordered variant
+.wp-block-gambol-table.has-borders {
+	th,
+	td {
+		border: 1px solid var(--gb-colors-gray-200);
+	}
+}
+
+// Borderless variant
+.wp-block-gambol-table.is-borderless {
+	table {
+		border: none;
+	}
+	
+	th,
+	td {
+		border: none;
+	}
+}
+
+// Editor specific styles
+.editor-styles-wrapper {
+	.wp-block-gambol-table {
+		th .block-editor-rich-text__editable,
+		td .block-editor-rich-text__editable {
+			min-width: 50px;
+		}
+	}
+}

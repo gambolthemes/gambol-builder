@@ -1,0 +1,251 @@
+/**
+ * Share Buttons Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-share-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	
+	// Alignment
+	&.align-left {
+		justify-content: flex-start;
+	}
+	
+	&.align-center {
+		justify-content: center;
+	}
+	
+	&.align-right {
+		justify-content: flex-end;
+	}
+}
+
+.share-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--gb-spacing-xs);
+	text-decoration: none;
+	transition: all 0.2s ease;
+	border: none;
+	cursor: pointer;
+	
+	&:hover {
+		opacity: 0.85;
+		transform: translateY(-2px);
+	}
+	
+	&:active {
+		transform: translateY(0);
+	}
+}
+
+.share-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	
+	svg {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.share-label {
+	font-size: 14px;
+	font-weight: 500;
+	white-space: nowrap;
+}
+
+// Shapes
+.shape-square {
+	.share-button {
+		border-radius: 0;
+	}
+}
+
+.shape-rounded {
+	.share-button {
+		border-radius: var(--gb-radius-base);
+	}
+}
+
+.shape-circle {
+	.share-button {
+		border-radius: 50%;
+	}
+	
+	// Icon text style with circle shape
+	&.style-icon-text {
+		.share-button {
+			border-radius: 50px;
+		}
+	}
+}
+
+// Default network colors (when not using custom colors)
+.share-facebook {
+	background-color: #1877F2;
+}
+
+.share-twitter {
+	background-color: #000000;
+}
+
+.share-linkedin {
+	background-color: #0A66C2;
+}
+
+.share-pinterest {
+	background-color: #E60023;
+}
+
+.share-whatsapp {
+	background-color: #25D366;
+}
+
+.share-email {
+	background-color: #757575;
+}
+
+.share-reddit {
+	background-color: #FF4500;
+}
+
+.share-telegram {
+	background-color: #0088CC;
+}
+
+// Hover effects for individual networks
+.share-facebook:hover {
+	background-color: darken(#1877F2, 10%) !important;
+}
+
+.share-twitter:hover {
+	background-color: #333333 !important;
+}
+
+.share-linkedin:hover {
+	background-color: darken(#0A66C2, 10%) !important;
+}
+
+.share-pinterest:hover {
+	background-color: darken(#E60023, 10%) !important;
+}
+
+.share-whatsapp:hover {
+	background-color: darken(#25D366, 10%) !important;
+}
+
+.share-email:hover {
+	background-color: darken(#757575, 10%) !important;
+}
+
+.share-reddit:hover {
+	background-color: darken(#FF4500, 10%) !important;
+}
+
+.share-telegram:hover {
+	background-color: darken(#0088CC, 10%) !important;
+}
+
+// Icon-text style
+.style-icon-text {
+	.share-button {
+		padding: var(--gb-spacing-sm) var(--gb-spacing-md);
+	}
+}
+
+// Outline variant (can be added as an attribute later)
+.style-outline {
+	.share-button {
+		background-color: transparent !important;
+		border: 2px solid currentColor;
+		
+		&.share-facebook {
+			color: #1877F2;
+			border-color: #1877F2;
+		}
+		
+		&.share-twitter {
+			color: #000000;
+			border-color: #000000;
+		}
+		
+		&.share-linkedin {
+			color: #0A66C2;
+			border-color: #0A66C2;
+		}
+		
+		&.share-pinterest {
+			color: #E60023;
+			border-color: #E60023;
+		}
+		
+		&.share-whatsapp {
+			color: #25D366;
+			border-color: #25D366;
+		}
+		
+		&.share-email {
+			color: #757575;
+			border-color: #757575;
+		}
+		
+		&.share-reddit {
+			color: #FF4500;
+			border-color: #FF4500;
+		}
+		
+		&.share-telegram {
+			color: #0088CC;
+			border-color: #0088CC;
+		}
+	}
+}
+
+// Vertical layout
+.layout-vertical {
+	flex-direction: column;
+	align-items: flex-start;
+	
+	&.align-center {
+		align-items: center;
+	}
+	
+	&.align-right {
+		align-items: flex-end;
+	}
+}
+
+// Responsive
+@media (max-width: 768px) {
+	.wp-block-gambol-share-buttons {
+		gap: 8px !important;
+		
+		.share-button {
+			width: 36px !important;
+			height: 36px !important;
+		}
+		
+		.share-icon {
+			width: 16px !important;
+			height: 16px !important;
+		}
+		
+		.share-label {
+			display: none;
+		}
+	}
+	
+	// Always show icon only on mobile
+	.style-icon-text {
+		.share-button {
+			width: 36px !important;
+			padding: 0 !important;
+		}
+	}
+}

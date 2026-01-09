@@ -1,0 +1,41 @@
+/**
+ * Page Title Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-page-title {
+	margin: 0;
+}
+
+.wp-block-gambol-page-title__heading {
+	margin: 0;
+	line-height: 1.2;
+}
+
+.wp-block-gambol-page-title__link {
+	text-decoration: none;
+	color: inherit;
+	
+	&:hover {
+		text-decoration: underline;
+	}
+	
+	&:focus {
+		outline: 2px solid var(--gb-colors-primary);
+		outline-offset: 2px;
+	}
+}
+
+// Alignment
+.wp-block-gambol-page-title.has-text-align-center {
+	text-align: center;
+}
+
+.wp-block-gambol-page-title.has-text-align-right {
+	text-align: right;
+}
+
+.wp-block-gambol-page-title.has-text-align-left {
+	text-align: left;
+}

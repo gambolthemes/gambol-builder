@@ -16,5 +16,9 @@ module.exports = {
 		index: path.resolve( process.cwd(), 'src', 'index.js' ),
 		// Admin pages entry
 		admin: path.resolve( process.cwd(), 'src', 'admin', 'index.js' ),
+		// Editor sidebar/panel entry
+		editor: path.resolve( process.cwd(), 'src', 'editor', 'index.js' ),
+		// Frontend interactivity (no React, vanilla JS)
+		frontend: path.resolve( process.cwd(), 'src', 'frontend', 'index.js' ),
 	},
 };

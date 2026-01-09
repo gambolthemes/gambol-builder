@@ -1,0 +1,125 @@
+/**
+ * Subscribe Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-subscribe {
+	max-width: 500px;
+	
+	// Inline layout
+	&.layout-inline {
+		display: flex;
+		
+		.subscribe-email,
+		.subscribe-name {
+			flex: 1;
+			min-width: 0;
+			border-right: none;
+		}
+		
+		.subscribe-button {
+			flex-shrink: 0;
+		}
+	}
+	
+	// Stacked layout
+	&.layout-stacked {
+		display: flex;
+		flex-direction: column;
+		
+		.subscribe-button {
+			width: 100%;
+		}
+	}
+}
+
+.subscribe-email,
+.subscribe-name {
+	border: 1px solid var(--gb-colors-gray-300);
+	font-size: 16px;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+	
+	&:focus {
+		outline: none;
+		border-color: var(--gb-colors-primary);
+		box-shadow: 0 0 0 3px rgba(var(--gb-colors-primary-rgb), 0.1);
+		z-index: 1;
+	}
+	
+	&::placeholder {
+		color: var(--gb-colors-gray-400);
+	}
+}
+
+.subscribe-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--gb-spacing-xs);
+	background-color: var(--gb-colors-primary);
+	color: #fff;
+	border: none;
+	font-size: 16px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	white-space: nowrap;
+	
+	svg {
+		flex-shrink: 0;
+	}
+	
+	&:hover {
+		opacity: 0.9;
+	}
+}
+
+// Full width
+.wp-block-gambol-subscribe.full-width {
+	max-width: 100%;
+}
+
+// Center aligned
+.wp-block-gambol-subscribe.align-center {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+// Success message
+.subscribe-success {
+	padding: var(--gb-spacing-md);
+	background-color: #d4edda;
+	border: 1px solid #c3e6cb;
+	border-radius: var(--gb-radius-base);
+	color: #155724;
+	text-align: center;
+}
+
+// Error message
+.subscribe-error {
+	padding: var(--gb-spacing-md);
+	background-color: #f8d7da;
+	border: 1px solid #f5c6cb;
+	border-radius: var(--gb-radius-base);
+	color: #721c24;
+	text-align: center;
+}
+
+// Responsive
+@media (max-width: 480px) {
+	.wp-block-gambol-subscribe.layout-inline {
+		flex-direction: column;
+		
+		.subscribe-email,
+		.subscribe-name {
+			border-right: 1px solid var(--gb-colors-gray-300);
+			border-radius: inherit !important;
+		}
+		
+		.subscribe-button {
+			border-radius: inherit !important;
+			margin-top: var(--gb-spacing-sm);
+		}
+	}
+}

@@ -1,0 +1,187 @@
+/**
+ * Gambol Image Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+// =============================================
+// EDITOR PLACEHOLDER
+// =============================================
+
+.gambol-image-placeholder {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 200px;
+	padding: 40px;
+	background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+	border: 2px dashed #ccc;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+
+	&:hover {
+		border-color: #00d4aa;
+		background: linear-gradient(135deg, #f5f5f5 0%, #ececec 100%);
+
+		.gambol-image-placeholder__icon {
+			color: #00d4aa;
+		}
+	}
+
+	&__icon {
+		color: #999;
+		margin-bottom: 12px;
+		transition: color 0.2s ease;
+	}
+
+	&__text {
+		font-size: 14px;
+		color: #666;
+	}
+}
+
+// =============================================
+// EDITOR IMAGE CONTROL
+// =============================================
+
+.gambol-image-control {
+	.gambol-image-preview {
+		display: block;
+		width: 100%;
+		max-width: 200px;
+		height: auto;
+		border-radius: 4px;
+		margin-bottom: 12px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.gambol-image-actions {
+		display: flex;
+		gap: 8px;
+	}
+}
+
+// =============================================
+// FRONTEND STYLES
+// =============================================
+
+.gambol-image {
+	position: relative;
+	line-height: 0;
+
+	&__figure {
+		position: relative;
+		margin: 0;
+		display: inline-block;
+		width: 100%;
+	}
+
+	&__wrapper {
+		position: relative;
+		display: inline-block;
+		overflow: hidden;
+	}
+
+	&__img {
+		display: block;
+		max-width: 100%;
+		height: auto;
+		transition: transform 0.4s ease, filter 0.4s ease, opacity 0.4s ease;
+	}
+
+	&__link {
+		display: inline-block;
+		position: relative;
+		overflow: hidden;
+		text-decoration: none;
+	}
+
+	&__overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		pointer-events: none;
+		transition: opacity 0.3s ease;
+	}
+
+	&__caption {
+		margin-top: 12px;
+		padding: 8px 0;
+		font-size: 14px;
+		color: #666;
+		text-align: center;
+		line-height: 1.5;
+	}
+
+	// Alignment
+	&[style*="text-align: left"] {
+		.gambol-image__figure,
+		.gambol-image__wrapper {
+			display: block;
+		}
+	}
+
+	&[style*="text-align: center"] {
+		.gambol-image__figure,
+		.gambol-image__wrapper {
+			margin: 0 auto;
+		}
+	}
+
+	&[style*="text-align: right"] {
+		.gambol-image__figure,
+		.gambol-image__wrapper {
+			margin-left: auto;
+		}
+	}
+}
+
+// =============================================
+// HOVER EFFECTS
+// =============================================
+
+.gambol-image--hover-zoom {
+	.gambol-image__wrapper {
+		overflow: hidden;
+	}
+
+	&:hover .gambol-image__img {
+		transform: scale(var(--gambol-hover-scale, 1.05));
+	}
+}
+
+.gambol-image--hover-brightness {
+	&:hover .gambol-image__img {
+		filter: brightness(1.1);
+	}
+}
+
+.gambol-image--hover-grayscale {
+	.gambol-image__img {
+		filter: grayscale(100%);
+	}
+
+	&:hover .gambol-image__img {
+		filter: grayscale(0%);
+	}
+}
+
+.gambol-image--hover-blur {
+	&:hover .gambol-image__img {
+		filter: blur(2px);
+	}
+}
+
+// =============================================
+// OVERLAY MODIFIER
+// =============================================
+
+.gambol-image--has-overlay {
+	&:hover .gambol-image__overlay {
+		opacity: 0.7;
+	}
+}

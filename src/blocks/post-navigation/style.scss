@@ -1,0 +1,130 @@
+/**
+ * Post Navigation Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-post-navigation {
+	display: flex;
+	justify-content: space-between;
+	gap: var(--gb-spacing-lg);
+}
+
+.wp-block-gambol-post-navigation__prev,
+.wp-block-gambol-post-navigation__next {
+	flex: 1;
+	min-width: 0;
+}
+
+.wp-block-gambol-post-navigation__next {
+	text-align: right;
+	
+	.wp-block-gambol-post-navigation__link {
+		justify-content: flex-end;
+	}
+	
+	.wp-block-gambol-post-navigation__content {
+		align-items: flex-end;
+	}
+}
+
+.wp-block-gambol-post-navigation__link {
+	display: flex;
+	align-items: center;
+	gap: var(--gb-spacing-md);
+	text-decoration: none;
+	color: inherit;
+	transition: opacity 0.2s ease;
+	
+	&:hover {
+		.wp-block-gambol-post-navigation__title {
+			color: var(--title-hover-color, var(--gb-colors-primary));
+		}
+		
+		.wp-block-gambol-post-navigation__arrow {
+			opacity: 0.7;
+		}
+	}
+}
+
+.wp-block-gambol-post-navigation__arrow {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: opacity 0.2s ease;
+}
+
+.wp-block-gambol-post-navigation__thumbnail {
+	flex-shrink: 0;
+	background-color: var(--gb-colors-gray-200);
+	border-radius: var(--gb-radius-base);
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	
+	svg {
+		width: 50%;
+		height: 50%;
+		color: var(--gb-colors-gray-400);
+	}
+}
+
+.wp-block-gambol-post-navigation__content {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 0;
+}
+
+.wp-block-gambol-post-navigation__label {
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+}
+
+.wp-block-gambol-post-navigation__title {
+	font-weight: 600;
+	font-size: 1rem;
+	line-height: 1.4;
+	transition: color 0.2s ease;
+	
+	// Truncate long titles
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+
+// With background
+.wp-block-gambol-post-navigation__prev[style*="background"],
+.wp-block-gambol-post-navigation__next[style*="background"] {
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+// Mobile
+@media (max-width: 768px) {
+	.wp-block-gambol-post-navigation {
+		flex-direction: column;
+	}
+	
+	.wp-block-gambol-post-navigation__next {
+		text-align: left;
+		
+		.wp-block-gambol-post-navigation__link {
+			justify-content: flex-start;
+		}
+		
+		.wp-block-gambol-post-navigation__content {
+			align-items: flex-start;
+		}
+	}
+}

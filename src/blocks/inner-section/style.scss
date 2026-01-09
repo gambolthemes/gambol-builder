@@ -1,0 +1,49 @@
+/**
+ * Inner Section Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-inner-section {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--row-gap, 20px) var(--column-gap, 20px);
+	width: 100%;
+	
+	> .wp-block-gambol-column,
+	> .block-editor-inner-blocks > .block-editor-block-list__layout {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--row-gap, 20px) var(--column-gap, 20px);
+		width: 100%;
+	}
+	
+	> .wp-block-gambol-column {
+		flex: 1 1 calc((100% - (var(--columns, 2) - 1) * var(--column-gap, 20px)) / var(--columns, 2));
+		min-width: 0;
+	}
+}
+
+// Editor specific
+.editor-styles-wrapper .wp-block-gambol-inner-section {
+	> .block-editor-inner-blocks {
+		width: 100%;
+		
+		> .block-editor-block-list__layout {
+			display: flex;
+			flex-wrap: wrap;
+			gap: var(--row-gap, 20px) var(--column-gap, 20px);
+		}
+	}
+}
+
+// Responsive
+@media (max-width: 768px) {
+	.wp-block-gambol-inner-section {
+		flex-direction: column !important;
+		
+		> .wp-block-gambol-column {
+			flex: 1 1 100%;
+		}
+	}
+}
