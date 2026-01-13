@@ -1,0 +1,25 @@
+[
+	{
+		"title": "Home",
+		"content": "<!-- wp:gambol/section {\"backgroundColor\":\"#ffffff\",\"paddingTop\":80,\"paddingBottom\":80} -->\n<section class=\"wp-block-gambol-section\" style=\"background-color:#ffffff;padding-top:80px;padding-bottom:80px\">\n<!-- wp:gambol/container {\"maxWidth\":1200} -->\n<div class=\"wp-block-gambol-container\" style=\"max-width:1200px\">\n<!-- wp:gambol/heading {\"level\":1,\"textAlign\":\"center\"} -->\n<h1 class=\"wp-block-gambol-heading has-text-align-center\">Welcome to Your Website</h1>\n<!-- /wp:gambol/heading -->\n\n<!-- wp:gambol/text {\"textAlign\":\"center\"} -->\n<p class=\"wp-block-gambol-text has-text-align-center\">This is your homepage. Edit this content using the Gambol Builder blocks to create your perfect website.</p>\n<!-- /wp:gambol/text -->\n\n<!-- wp:gambol/button {\"text\":\"Get Started\",\"align\":\"center\"} -->\n<div class=\"wp-block-gambol-button has-text-align-center\"><a class=\"gambol-button\">Get Started</a></div>\n<!-- /wp:gambol/button -->\n</div>\n<!-- /wp:gambol/container -->\n</section>\n<!-- /wp:gambol/section -->\n\n<!-- wp:gambol/section {\"backgroundColor\":\"#f5f5f5\",\"paddingTop\":60,\"paddingBottom\":60} -->\n<section class=\"wp-block-gambol-section\" style=\"background-color:#f5f5f5;padding-top:60px;padding-bottom:60px\">\n<!-- wp:gambol/container {\"maxWidth\":1200} -->\n<div class=\"wp-block-gambol-container\" style=\"max-width:1200px\">\n<!-- wp:gambol/heading {\"level\":2,\"textAlign\":\"center\"} -->\n<h2 class=\"wp-block-gambol-heading has-text-align-center\">Our Features</h2>\n<!-- /wp:gambol/heading -->\n\n<!-- wp:gambol/text {\"textAlign\":\"center\"} -->\n<p class=\"wp-block-gambol-text has-text-align-center\">Discover what makes us different and why you should choose us.</p>\n<!-- /wp:gambol/text -->\n</div>\n<!-- /wp:gambol/container -->\n</section>\n<!-- /wp:gambol/section -->",
+		"excerpt": "The main homepage of your website.",
+		"menu_order": 0,
+		"meta": {
+			"_wp_page_template": "default"
+		}
+	},
+	{
+		"title": "About Us",
+		"content": "<!-- wp:gambol/section {\"backgroundColor\":\"#ffffff\",\"paddingTop\":80,\"paddingBottom\":80} -->\n<section class=\"wp-block-gambol-section\" style=\"background-color:#ffffff;padding-top:80px;padding-bottom:80px\">\n<!-- wp:gambol/container {\"maxWidth\":1200} -->\n<div class=\"wp-block-gambol-container\" style=\"max-width:1200px\">\n<!-- wp:gambol/heading {\"level\":1} -->\n<h1 class=\"wp-block-gambol-heading\">About Us</h1>\n<!-- /wp:gambol/heading -->\n\n<!-- wp:gambol/text -->\n<p class=\"wp-block-gambol-text\">Welcome to our company. We are dedicated to providing the best services and products to our customers. Our team of experts works tirelessly to ensure your satisfaction.</p>\n<!-- /wp:gambol/text -->\n\n<!-- wp:gambol/text -->\n<p class=\"wp-block-gambol-text\">Founded with a vision to make a difference, we have grown to become a trusted name in the industry. Our commitment to quality and innovation sets us apart from the competition.</p>\n<!-- /wp:gambol/text -->\n</div>\n<!-- /wp:gambol/container -->\n</section>\n<!-- /wp:gambol/section -->",
+		"excerpt": "Learn more about our company and team.",
+		"menu_order": 1,
+		"meta": {}
+	},
+	{
+		"title": "Contact",
+		"content": "<!-- wp:gambol/section {\"backgroundColor\":\"#ffffff\",\"paddingTop\":80,\"paddingBottom\":80} -->\n<section class=\"wp-block-gambol-section\" style=\"background-color:#ffffff;padding-top:80px;padding-bottom:80px\">\n<!-- wp:gambol/container {\"maxWidth\":800} -->\n<div class=\"wp-block-gambol-container\" style=\"max-width:800px\">\n<!-- wp:gambol/heading {\"level\":1,\"textAlign\":\"center\"} -->\n<h1 class=\"wp-block-gambol-heading has-text-align-center\">Contact Us</h1>\n<!-- /wp:gambol/heading -->\n\n<!-- wp:gambol/text {\"textAlign\":\"center\"} -->\n<p class=\"wp-block-gambol-text has-text-align-center\">Have questions? We would love to hear from you. Send us a message and we will respond as soon as possible.</p>\n<!-- /wp:gambol/text -->\n\n<!-- wp:gambol/text -->\n<p class=\"wp-block-gambol-text\"><strong>Email:</strong> contact@example.com</p>\n<!-- /wp:gambol/text -->\n\n<!-- wp:gambol/text -->\n<p class=\"wp-block-gambol-text\"><strong>Phone:</strong> +1 (555) 123-4567</p>\n<!-- /wp:gambol/text -->\n\n<!-- wp:gambol/text -->\n<p class=\"wp-block-gambol-text\"><strong>Address:</strong> 123 Main Street, City, Country</p>\n<!-- /wp:gambol/text -->\n</div>\n<!-- /wp:gambol/container -->\n</section>\n<!-- /wp:gambol/section -->",
+		"excerpt": "Get in touch with us.",
+		"menu_order": 2,
+		"meta": {}
+	}
+]

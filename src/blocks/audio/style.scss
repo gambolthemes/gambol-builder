@@ -1,0 +1,134 @@
+/**
+ * Audio Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-audio {
+	margin: 0;
+	width: 100%;
+}
+
+.wp-block-gambol-audio__wrapper {
+	padding: var(--gb-spacing-sm);
+	overflow: hidden;
+	
+	audio {
+		display: block;
+		width: 100%;
+		border-radius: var(--gb-radius-sm);
+		
+		&::-webkit-media-controls-panel {
+			background-color: var(--gb-colors-background);
+		}
+	}
+}
+
+.wp-block-gambol-audio__placeholder {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100px;
+	padding: var(--gb-spacing-lg);
+	background-color: var(--gb-colors-background-secondary);
+	border-radius: var(--gb-radius-base);
+	text-align: center;
+	
+	p {
+		margin: 0 0 var(--gb-spacing-md);
+		color: var(--gb-colors-text-secondary);
+		font-size: var(--gb-typography-font-size-sm);
+	}
+}
+
+.wp-block-gambol-audio__soundcloud {
+	iframe {
+		display: block;
+		width: 100%;
+		border: none;
+	}
+}
+
+.wp-block-gambol-audio__caption {
+	margin-top: var(--gb-spacing-xs);
+	color: var(--gb-colors-text-secondary);
+	font-size: var(--gb-typography-font-size-sm);
+	text-align: center;
+}
+
+// Custom audio player styling (for browsers that support it)
+.wp-block-gambol-audio audio {
+	height: 50px;
+	
+	&::-webkit-media-controls-play-button {
+		background-color: var(--gb-colors-primary);
+		border-radius: 50%;
+	}
+	
+	&::-webkit-media-controls-current-time-display,
+	&::-webkit-media-controls-time-remaining-display {
+		color: var(--gb-colors-text);
+	}
+}
+
+// Spotify/SoundCloud embed responsive
+.wp-block-gambol-audio__soundcloud {
+	position: relative;
+	
+	iframe[src*="soundcloud"] {
+		height: 166px;
+		
+		&[height="400"],
+		&[height="450"],
+		&[height="600"] {
+			height: 450px;
+		}
+	}
+}
+
+// Editor-specific
+.editor-styles-wrapper .wp-block-gambol-audio {
+	.wp-block-gambol-audio__placeholder {
+		border: 2px dashed var(--gb-colors-border);
+	}
+	
+	.gambol-audio-upload__file {
+		display: flex;
+		align-items: center;
+		gap: var(--gb-spacing-sm);
+		margin: var(--gb-spacing-sm) 0;
+		padding: var(--gb-spacing-sm);
+		background: var(--gb-colors-background-secondary);
+		border-radius: var(--gb-radius-sm);
+		
+		span {
+			flex: 1;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			font-size: var(--gb-typography-font-size-sm);
+		}
+	}
+}
+
+// Waveform style player (optional visual enhancement)
+.wp-block-gambol-audio--visual {
+	.wp-block-gambol-audio__wrapper {
+		position: relative;
+		
+		&::before {
+			content: '';
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(
+				90deg,
+				transparent 0%,
+				var(--gb-colors-primary) 50%,
+				transparent 100%
+			);
+			opacity: 0.1;
+			pointer-events: none;
+		}
+	}
+}

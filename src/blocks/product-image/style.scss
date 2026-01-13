@@ -1,0 +1,97 @@
+/**
+ * Product Image Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-product-image {
+	margin-bottom: var(--gb-spacing-lg);
+}
+
+.wp-block-gambol-product-image__main {
+	position: relative;
+	overflow: hidden;
+	aspect-ratio: 1/1;
+	background-color: var(--gb-colors-gray-100);
+}
+
+.wp-block-gambol-product-image__placeholder {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	svg {
+		width: 30%;
+		height: 30%;
+		color: var(--gb-colors-gray-300);
+	}
+}
+
+.wp-block-gambol-product-image__badge {
+	position: absolute;
+	top: var(--gb-spacing-md);
+	left: var(--gb-spacing-md);
+	padding: 6px 16px;
+	font-size: 0.875rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	border-radius: 4px;
+	z-index: 1;
+}
+
+.wp-block-gambol-product-image__lightbox-btn {
+	position: absolute;
+	top: var(--gb-spacing-md);
+	right: var(--gb-spacing-md);
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(255, 255, 255, 0.9);
+	border: none;
+	border-radius: 50%;
+	cursor: pointer;
+	opacity: 0;
+	transition: opacity 0.3s ease;
+	
+	svg {
+		width: 20px;
+		height: 20px;
+		color: var(--gb-colors-gray-700);
+	}
+	
+	.wp-block-gambol-product-image__main:hover & {
+		opacity: 1;
+	}
+}
+
+.wp-block-gambol-product-image__gallery {
+	display: flex;
+	gap: var(--gb-spacing-sm);
+	margin-top: var(--gb-spacing-sm);
+}
+
+.wp-block-gambol-product-image__thumb {
+	flex: 1;
+	aspect-ratio: 1/1;
+	background-color: var(--gb-colors-gray-100);
+	overflow: hidden;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: opacity 0.3s ease;
+	
+	svg {
+		width: 40%;
+		height: 40%;
+		color: var(--gb-colors-gray-300);
+	}
+	
+	&:hover {
+		opacity: 0.8;
+	}
+}

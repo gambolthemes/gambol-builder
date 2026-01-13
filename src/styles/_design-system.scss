@@ -1,0 +1,460 @@
+/**
+ * Gambol Builder Design System
+ *
+ * Complete design token system for a premium, calm, developer-friendly UI.
+ * This file defines the foundational tokens used across all components.
+ *
+ * DESIGN PRINCIPLES:
+ * - Fast, not flashy
+ * - Familiar but original
+ * - Developer-friendly
+ * - Commercial SaaS quality
+ *
+ * @package GambolBuilder
+ * @version 1.0.0
+ */
+
+// =============================================================================
+// COLOR SYSTEM
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// Brand Accent: Teal/Mint (Unique, NOT blue)
+// A calm, professional accent that stands out without being aggressive.
+// -----------------------------------------------------------------------------
+
+$gb-accent-50: #e6fff9;
+$gb-accent-100: #b3ffee;
+$gb-accent-200: #80ffe3;
+$gb-accent-300: #4dffd8;
+$gb-accent-400: #1affcc;
+$gb-accent-500: #00d4aa;  // Primary accent
+$gb-accent-600: #00b894;  // Hover state
+$gb-accent-700: #009977;
+$gb-accent-800: #007a5e;
+$gb-accent-900: #005c47;
+
+// Accent utilities
+$gb-accent: $gb-accent-500;
+$gb-accent-hover: $gb-accent-600;
+$gb-accent-active: $gb-accent-700;
+$gb-accent-muted: rgba($gb-accent-500, 0.15);
+$gb-accent-subtle: rgba($gb-accent-500, 0.08);
+$gb-accent-ghost: rgba($gb-accent-500, 0.04);
+
+// -----------------------------------------------------------------------------
+// Dark UI Base: #121212 – #1c1c1c
+// Premium dark theme optimized for long editing sessions.
+// -----------------------------------------------------------------------------
+
+$gb-dark-50: #f5f5f5;
+$gb-dark-100: #e0e0e0;
+$gb-dark-200: #bdbdbd;
+$gb-dark-300: #9e9e9e;
+$gb-dark-400: #757575;
+$gb-dark-500: #616161;
+$gb-dark-600: #424242;
+$gb-dark-700: #2d2d2d;  // Elevated surface
+$gb-dark-800: #1c1c1c;  // Secondary surface
+$gb-dark-900: #121212;  // Primary background
+
+// Dark UI surfaces
+$gb-surface-base: $gb-dark-900;       // #121212 - Main background
+$gb-surface-elevated: $gb-dark-800;   // #1c1c1c - Cards, panels
+$gb-surface-overlay: $gb-dark-700;    // #2d2d2d - Modals, dropdowns
+$gb-surface-hover: rgba(255, 255, 255, 0.04);
+$gb-surface-active: rgba(255, 255, 255, 0.08);
+$gb-surface-selected: rgba($gb-accent-500, 0.12);
+
+// -----------------------------------------------------------------------------
+// Light Canvas (for content editing area)
+// Clean, neutral canvas that doesn't distract from content.
+// -----------------------------------------------------------------------------
+
+$gb-canvas-white: #ffffff;
+$gb-canvas-off-white: #fafafa;
+$gb-canvas-light: #f5f5f5;
+$gb-canvas-muted: #eeeeee;
+
+// -----------------------------------------------------------------------------
+// Text Colors
+// Clear hierarchy with accessible contrast ratios.
+// -----------------------------------------------------------------------------
+
+// Dark theme text (on dark backgrounds)
+$gb-text-primary: #ffffff;            // Primary text - WCAG AAA
+$gb-text-secondary: #b0b0b0;          // Secondary text - WCAG AA
+$gb-text-muted: #707070;              // Muted/disabled - decorative only
+$gb-text-disabled: #4a4a4a;           // Disabled state
+
+// Light theme text (on light backgrounds)
+$gb-text-dark-primary: #1a1a1a;       // Primary on light
+$gb-text-dark-secondary: #4a4a4a;     // Secondary on light
+$gb-text-dark-muted: #757575;         // Muted on light
+
+// -----------------------------------------------------------------------------
+// Border & Separator Colors
+// Muted, subtle separation without harsh lines.
+// -----------------------------------------------------------------------------
+
+$gb-border-subtle: rgba(255, 255, 255, 0.06);   // Barely visible
+$gb-border-default: rgba(255, 255, 255, 0.10);  // Standard
+$gb-border-strong: rgba(255, 255, 255, 0.16);   // Emphasized
+$gb-border-focus: $gb-accent-500;               // Focus state
+
+// Light theme borders
+$gb-border-light: #e0e0e0;
+$gb-border-light-strong: #c0c0c0;
+
+// -----------------------------------------------------------------------------
+// Semantic Colors
+// Consistent meaning across the application.
+// -----------------------------------------------------------------------------
+
+$gb-success: #22c55e;
+$gb-success-muted: rgba(#22c55e, 0.15);
+$gb-warning: #eab308;
+$gb-warning-muted: rgba(#eab308, 0.15);
+$gb-error: #ef4444;
+$gb-error-muted: rgba(#ef4444, 0.15);
+$gb-info: #3b82f6;
+$gb-info-muted: rgba(#3b82f6, 0.15);
+
+// =============================================================================
+// SPACING SYSTEM
+// =============================================================================
+
+// Base unit: 4px
+// Scale: 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64
+
+$gb-space-0: 0;
+$gb-space-1: 4px;    // xs - Tight spacing
+$gb-space-2: 8px;    // sm - Default gap
+$gb-space-3: 12px;   // md - Comfortable padding
+$gb-space-4: 16px;   // lg - Section padding
+$gb-space-5: 20px;   // Intermediate
+$gb-space-6: 24px;   // xl - Large sections
+$gb-space-8: 32px;   // 2xl - Major sections
+$gb-space-10: 40px;  // Intermediate
+$gb-space-12: 48px;  // 3xl - Page sections
+$gb-space-16: 64px;  // 4xl - Hero spacing
+
+// =============================================================================
+// TYPOGRAPHY
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// Font Stacks
+// System fonts for maximum performance and native feel.
+// -----------------------------------------------------------------------------
+
+$gb-font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
+               Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+
+$gb-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, 
+               Consolas, "Liberation Mono", monospace;
+
+// -----------------------------------------------------------------------------
+// Font Sizes
+// Clear hierarchy for UI elements.
+// -----------------------------------------------------------------------------
+
+$gb-text-2xs: 10px;   // Labels, badges
+$gb-text-xs: 11px;    // Secondary labels
+$gb-text-sm: 12px;    // Default UI text
+$gb-text-base: 13px;  // Body text
+$gb-text-md: 14px;    // Emphasized text
+$gb-text-lg: 16px;    // Subheadings
+$gb-text-xl: 18px;    // Section titles
+$gb-text-2xl: 20px;   // Page titles
+$gb-text-3xl: 24px;   // Major headings
+
+// -----------------------------------------------------------------------------
+// Font Weights
+// -----------------------------------------------------------------------------
+
+$gb-weight-normal: 400;
+$gb-weight-medium: 500;
+$gb-weight-semibold: 600;
+$gb-weight-bold: 700;
+
+// -----------------------------------------------------------------------------
+// Line Heights
+// -----------------------------------------------------------------------------
+
+$gb-leading-none: 1;
+$gb-leading-tight: 1.25;
+$gb-leading-snug: 1.375;
+$gb-leading-normal: 1.5;
+$gb-leading-relaxed: 1.625;
+$gb-leading-loose: 2;
+
+// -----------------------------------------------------------------------------
+// Letter Spacing
+// -----------------------------------------------------------------------------
+
+$gb-tracking-tighter: -0.05em;
+$gb-tracking-tight: -0.025em;
+$gb-tracking-normal: 0;
+$gb-tracking-wide: 0.025em;
+$gb-tracking-wider: 0.05em;
+$gb-tracking-widest: 0.1em;
+
+// =============================================================================
+// COMPONENT STYLES
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// Border Radius: 6–10px
+// Soft, modern corners without being overly round.
+// -----------------------------------------------------------------------------
+
+$gb-radius-none: 0;
+$gb-radius-sm: 4px;     // Small elements, badges
+$gb-radius-default: 6px; // Buttons, inputs
+$gb-radius-md: 8px;     // Cards, panels
+$gb-radius-lg: 10px;    // Modals, large cards
+$gb-radius-xl: 12px;    // Hero sections
+$gb-radius-2xl: 16px;   // Special emphasis
+$gb-radius-full: 9999px; // Pills, avatars
+
+// -----------------------------------------------------------------------------
+// Shadows
+// Subtle shadows only - avoid heavy drop shadows.
+// -----------------------------------------------------------------------------
+
+$gb-shadow-none: none;
+$gb-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+$gb-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 
+               0 1px 2px rgba(0, 0, 0, 0.06);
+$gb-shadow-default: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+                    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$gb-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 
+               0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$gb-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 
+               0 10px 10px -5px rgba(0, 0, 0, 0.04);
+$gb-shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+// Dark theme shadows (more pronounced for depth)
+$gb-shadow-dark-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+$gb-shadow-dark-default: 0 4px 12px rgba(0, 0, 0, 0.4);
+$gb-shadow-dark-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+$gb-shadow-dark-lg: 0 16px 48px rgba(0, 0, 0, 0.6);
+
+// Inner shadows
+$gb-shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+$gb-shadow-inner-dark: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+
+// Focus ring
+$gb-shadow-focus: 0 0 0 3px rgba($gb-accent-500, 0.4);
+$gb-shadow-focus-error: 0 0 0 3px rgba($gb-error, 0.4);
+
+// -----------------------------------------------------------------------------
+// Transitions
+// Smooth, subtle animations - never flashy.
+// -----------------------------------------------------------------------------
+
+$gb-duration-instant: 50ms;
+$gb-duration-fast: 100ms;
+$gb-duration-default: 150ms;
+$gb-duration-moderate: 200ms;
+$gb-duration-slow: 300ms;
+$gb-duration-slower: 400ms;
+
+// Easing functions
+$gb-ease-linear: linear;
+$gb-ease-in: cubic-bezier(0.4, 0, 1, 1);
+$gb-ease-out: cubic-bezier(0, 0, 0.2, 1);
+$gb-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+$gb-ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+// Composed transitions
+$gb-transition-fast: $gb-duration-fast $gb-ease-out;
+$gb-transition-default: $gb-duration-default $gb-ease-out;
+$gb-transition-moderate: $gb-duration-moderate $gb-ease-in-out;
+$gb-transition-slow: $gb-duration-slow $gb-ease-in-out;
+
+// Specific transitions
+$gb-transition-colors: color $gb-duration-fast $gb-ease-out,
+                       background-color $gb-duration-fast $gb-ease-out,
+                       border-color $gb-duration-fast $gb-ease-out;
+$gb-transition-transform: transform $gb-duration-default $gb-ease-out;
+$gb-transition-opacity: opacity $gb-duration-default $gb-ease-out;
+$gb-transition-shadow: box-shadow $gb-duration-default $gb-ease-out;
+$gb-transition-all: all $gb-duration-default $gb-ease-out;
+
+// =============================================================================
+// LAYOUT
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// Component Sizes
+// -----------------------------------------------------------------------------
+
+$gb-control-height-sm: 28px;
+$gb-control-height-default: 32px;
+$gb-control-height-lg: 36px;
+$gb-control-height-xl: 40px;
+
+$gb-sidebar-width: 320px;
+$gb-sidebar-width-collapsed: 48px;
+$gb-header-height: 56px;
+$gb-toolbar-height: 48px;
+
+// -----------------------------------------------------------------------------
+// Icon Sizes
+// Consistent with Lucide-style icons (24px base, 1.5px stroke)
+// -----------------------------------------------------------------------------
+
+$gb-icon-xs: 14px;
+$gb-icon-sm: 16px;
+$gb-icon-default: 20px;
+$gb-icon-md: 24px;
+$gb-icon-lg: 28px;
+$gb-icon-xl: 32px;
+
+// Icon stroke width for custom SVGs
+$gb-icon-stroke: 1.5px;
+$gb-icon-stroke-thin: 1px;
+$gb-icon-stroke-thick: 2px;
+
+// =============================================================================
+// Z-INDEX SCALE
+// =============================================================================
+
+$gb-z-base: 0;
+$gb-z-dropdown: 100;
+$gb-z-sticky: 200;
+$gb-z-overlay: 300;
+$gb-z-modal: 400;
+$gb-z-popover: 500;
+$gb-z-tooltip: 600;
+$gb-z-toast: 700;
+
+// =============================================================================
+// BREAKPOINTS
+// =============================================================================
+
+$gb-breakpoint-sm: 640px;
+$gb-breakpoint-md: 768px;
+$gb-breakpoint-lg: 1024px;
+$gb-breakpoint-xl: 1280px;
+$gb-breakpoint-2xl: 1536px;
+
+// =============================================================================
+// COMPONENT TOKENS
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// Buttons
+// -----------------------------------------------------------------------------
+
+$gb-btn-padding-sm: $gb-space-1 $gb-space-2;
+$gb-btn-padding-default: $gb-space-2 $gb-space-4;
+$gb-btn-padding-lg: $gb-space-3 $gb-space-6;
+
+$gb-btn-radius: $gb-radius-default;
+$gb-btn-font-size: $gb-text-sm;
+$gb-btn-font-weight: $gb-weight-medium;
+
+// Primary button
+$gb-btn-primary-bg: $gb-accent;
+$gb-btn-primary-bg-hover: $gb-accent-hover;
+$gb-btn-primary-text: #ffffff;
+
+// Secondary button
+$gb-btn-secondary-bg: $gb-surface-elevated;
+$gb-btn-secondary-bg-hover: $gb-surface-overlay;
+$gb-btn-secondary-text: $gb-text-primary;
+$gb-btn-secondary-border: $gb-border-default;
+
+// Ghost button
+$gb-btn-ghost-bg: transparent;
+$gb-btn-ghost-bg-hover: $gb-surface-hover;
+$gb-btn-ghost-text: $gb-text-secondary;
+
+// -----------------------------------------------------------------------------
+// Inputs
+// -----------------------------------------------------------------------------
+
+$gb-input-bg: $gb-surface-base;
+$gb-input-bg-hover: $gb-surface-elevated;
+$gb-input-border: $gb-border-default;
+$gb-input-border-hover: $gb-border-strong;
+$gb-input-border-focus: $gb-accent;
+$gb-input-text: $gb-text-primary;
+$gb-input-placeholder: $gb-text-muted;
+$gb-input-radius: $gb-radius-default;
+$gb-input-padding: $gb-space-2 $gb-space-3;
+
+// -----------------------------------------------------------------------------
+// Cards & Panels
+// -----------------------------------------------------------------------------
+
+$gb-card-bg: $gb-surface-elevated;
+$gb-card-border: $gb-border-subtle;
+$gb-card-radius: $gb-radius-md;
+$gb-card-padding: $gb-space-4;
+$gb-card-shadow: $gb-shadow-dark-sm;
+
+$gb-panel-bg: $gb-surface-base;
+$gb-panel-border: $gb-border-default;
+$gb-panel-radius: $gb-radius-lg;
+$gb-panel-padding: $gb-space-5;
+
+// -----------------------------------------------------------------------------
+// Tabs
+// -----------------------------------------------------------------------------
+
+$gb-tab-height: 40px;
+$gb-tab-padding: $gb-space-3 $gb-space-4;
+$gb-tab-font-size: $gb-text-sm;
+$gb-tab-border-width: 2px;
+$gb-tab-text: $gb-text-muted;
+$gb-tab-text-hover: $gb-text-secondary;
+$gb-tab-text-active: $gb-accent;
+
+// =============================================================================
+// UTILITY MIXINS
+// =============================================================================
+
+// Focus ring mixin
+@mixin gb-focus-ring {
+	outline: none;
+	box-shadow: $gb-shadow-focus;
+}
+
+// Truncate text
+@mixin gb-truncate {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+// Smooth transition
+@mixin gb-transition($properties: all) {
+	transition: $properties $gb-duration-default $gb-ease-out;
+}
+
+// Hover lift effect
+@mixin gb-hover-lift {
+	transition: transform $gb-transition-default, box-shadow $gb-transition-default;
+	
+	&:hover {
+		transform: translateY(-1px);
+		box-shadow: $gb-shadow-dark-default;
+	}
+}
+
+// Accessible hide (screen reader only)
+@mixin gb-sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}

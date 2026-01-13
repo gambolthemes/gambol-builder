@@ -1,0 +1,76 @@
+/**
+ * Button Block Styles
+ *
+ * Minimal, performance-first CSS.
+ * Uses global CSS custom properties with fallbacks.
+ *
+ * @package GambolBuilder
+ */
+
+// Button wrapper - handles alignment.
+.wp-block-gambol-button__wrapper {
+	display: block;
+	margin: 0;
+	padding: 0;
+
+	&.has-text-align-left {
+		text-align: left;
+	}
+
+	&.has-text-align-center {
+		text-align: center;
+	}
+
+	&.has-text-align-right {
+		text-align: right;
+	}
+}
+
+// Button/link element.
+.wp-block-gambol-button__link {
+	display: inline-block;
+	padding: var(--gb-spacing-sm, 12px) var(--gb-spacing-lg, 24px);
+	background-color: var(--gb-colors-primary, #00d4aa);
+	color: var(--gb-colors-background, #ffffff);
+	text-decoration: none;
+	cursor: pointer;
+	border: none;
+	border-radius: var(--gb-radius-base, 6px);
+	font-family: var(--gb-typography-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+	font-size: var(--gb-typography-font-size-base, 16px);
+	font-weight: 600;
+	line-height: var(--gb-typography-line-height-base, 1.5);
+	transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+	box-sizing: border-box;
+
+	// Hover styles using CSS custom properties with fallbacks.
+	&:hover,
+	&:focus {
+		background-color: var(--gb-button-hover-bg, var(--gb-colors-primary-hover, #00b894));
+		color: var(--gb-button-hover-color, var(--gb-colors-background, #ffffff));
+		transform: translateY(-2px);
+	}
+
+	// Focus visible for accessibility.
+	&:focus-visible {
+		outline: 2px solid currentColor;
+		outline-offset: 2px;
+	}
+
+	// Active state
+	&:active {
+		transform: translateY(0);
+	}
+}
+
+// Editor-specific styles
+.block-editor-block-list__block .wp-block-gambol-button__link {
+	display: inline-block;
+	padding: 12px 24px;
+	background-color: var(--gb-colors-primary, #00d4aa);
+	color: var(--gb-colors-background, #ffffff);
+	border-radius: 6px;
+	font-weight: 600;
+	min-width: 100px;
+	text-align: center;
+}

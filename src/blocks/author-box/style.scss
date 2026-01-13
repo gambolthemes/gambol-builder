@@ -1,0 +1,83 @@
+/**
+ * Author Box Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-author-box {
+	display: flex;
+	gap: var(--gb-spacing-lg);
+}
+
+// Horizontal layout
+.wp-block-gambol-author-box--horizontal {
+	flex-direction: row;
+	align-items: flex-start;
+}
+
+// Vertical layout
+.wp-block-gambol-author-box--vertical {
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+}
+
+.wp-block-gambol-author-box__avatar {
+	flex-shrink: 0;
+	overflow: hidden;
+	background-color: var(--gb-colors-gray-200);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+	
+	svg {
+		width: 60%;
+		height: 60%;
+		color: var(--gb-colors-gray-400);
+	}
+}
+
+.wp-block-gambol-author-box__content {
+	flex: 1;
+	min-width: 0;
+}
+
+.wp-block-gambol-author-box__name {
+	margin: 0 0 var(--gb-spacing-xs);
+	font-size: 1.25rem;
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+.wp-block-gambol-author-box__bio {
+	margin: 0 0 var(--gb-spacing-sm);
+	line-height: 1.6;
+	color: var(--gb-colors-gray-600);
+}
+
+.wp-block-gambol-author-box__link {
+	display: inline-block;
+	text-decoration: none;
+	font-weight: 500;
+	transition: color 0.2s ease;
+	
+	&:hover {
+		text-decoration: underline;
+	}
+	
+	&:focus {
+		outline: 2px solid var(--gb-colors-primary);
+		outline-offset: 2px;
+	}
+}
+
+// With background
+.wp-block-gambol-author-box[style*="background"] {
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}

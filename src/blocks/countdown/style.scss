@@ -1,0 +1,146 @@
+/**
+ * Countdown Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-countdown {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+}
+
+.countdown-unit {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	
+	// Boxes layout
+	.layout-boxes & {
+		padding: var(--gb-spacing-lg);
+		min-width: 100px;
+		border: 1px solid transparent;
+	}
+}
+
+.countdown-number {
+	font-weight: 700;
+	line-height: 1;
+	font-variant-numeric: tabular-nums;
+}
+
+.countdown-label {
+	text-transform: uppercase;
+	font-weight: 500;
+	letter-spacing: 0.05em;
+	
+	.label-bottom & {
+		margin-top: var(--gb-spacing-xs);
+	}
+	
+	.label-top & {
+		margin-bottom: var(--gb-spacing-xs);
+	}
+}
+
+.countdown-separator {
+	font-weight: 700;
+	line-height: 1;
+	
+	.label-bottom & {
+		align-self: flex-start;
+	}
+	
+	.label-top & {
+		align-self: flex-end;
+	}
+}
+
+// Inline layout
+.layout-inline {
+	.countdown-unit {
+		flex-direction: row;
+		gap: var(--gb-spacing-xs);
+	}
+	
+	.countdown-label {
+		font-size: 0.6em;
+		text-transform: none;
+		letter-spacing: 0;
+	}
+}
+
+// Expired state
+.wp-block-gambol-countdown.is-expired {
+	.countdown-number {
+		color: var(--gb-colors-gray-400);
+	}
+}
+
+// Urgent state (less than 1 hour)
+.wp-block-gambol-countdown.is-urgent {
+	.countdown-number {
+		color: #dc3545;
+		animation: pulse 1s ease infinite;
+	}
+}
+
+@keyframes pulse {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.7;
+	}
+}
+
+// Circular style variant
+.wp-block-gambol-countdown.style-circles {
+	.countdown-unit {
+		width: 120px;
+		height: 120px;
+		border-radius: 50%;
+		justify-content: center;
+	}
+}
+
+// Flip style variant (placeholder for JS animation)
+.wp-block-gambol-countdown.style-flip {
+	.countdown-number {
+		position: relative;
+		overflow: hidden;
+	}
+}
+
+// Responsive
+@media (max-width: 768px) {
+	.wp-block-gambol-countdown {
+		.countdown-unit {
+			min-width: 70px;
+			padding: var(--gb-spacing-md);
+		}
+		
+		.countdown-number {
+			font-size: 32px !important;
+		}
+		
+		.countdown-label {
+			font-size: 12px !important;
+		}
+	}
+}
+
+@media (max-width: 480px) {
+	.wp-block-gambol-countdown {
+		.countdown-unit {
+			min-width: 60px;
+		}
+		
+		.countdown-number {
+			font-size: 24px !important;
+		}
+	}
+}

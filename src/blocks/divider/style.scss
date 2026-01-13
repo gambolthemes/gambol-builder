@@ -1,0 +1,62 @@
+/**
+ * Divider Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-divider {
+	width: 100%;
+	
+	&.align-left {
+		text-align: left;
+		
+		.wp-block-gambol-divider__line {
+			margin-left: 0;
+			margin-right: auto;
+		}
+	}
+	
+	&.align-center {
+		text-align: center;
+		
+		.wp-block-gambol-divider__line {
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+	
+	&.align-right {
+		text-align: right;
+		
+		.wp-block-gambol-divider__line {
+			margin-left: auto;
+			margin-right: 0;
+		}
+	}
+}
+
+.wp-block-gambol-divider__line {
+	border: none;
+	border-top-style: solid;
+	border-top-width: 2px;
+	border-top-color: var(--gb-colors-border, currentColor);
+}
+
+.wp-block-gambol-divider__wrapper {
+	display: flex;
+	align-items: center;
+	gap: var(--gb-spacing-md);
+}
+
+.wp-block-gambol-divider__line--before,
+.wp-block-gambol-divider__line--after {
+	flex: 1;
+	height: 0;
+	border: none;
+}
+
+.wp-block-gambol-divider__element {
+	flex-shrink: 0;
+	font-size: var(--gb-typography-font-size-lg);
+	color: var(--gb-colors-primary);
+}

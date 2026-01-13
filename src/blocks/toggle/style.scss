@@ -1,0 +1,164 @@
+/**
+ * Toggle Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-toggle {
+	border-style: solid;
+	border-color: var(--gb-colors-border);
+	overflow: hidden;
+	margin-bottom: var(--gb-spacing-sm);
+}
+
+.wp-block-gambol-toggle__header {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	background: var(--gb-colors-background);
+	border: none;
+	cursor: pointer;
+	font-family: inherit;
+	font-size: inherit;
+	text-align: left;
+	transition: background-color var(--gb-transition-base);
+	
+	&:hover {
+		background-color: var(--gb-colors-background-secondary);
+	}
+	
+	&:focus {
+		outline: 2px solid var(--gb-colors-primary);
+		outline-offset: -2px;
+	}
+}
+
+.wp-block-gambol-toggle__header--icon-left {
+	flex-direction: row;
+	
+	.wp-block-gambol-toggle__icon {
+		margin-right: var(--gb-spacing-sm);
+	}
+}
+
+.wp-block-gambol-toggle__header--icon-right {
+	flex-direction: row;
+	
+	.wp-block-gambol-toggle__title {
+		flex: 1;
+	}
+	
+	.wp-block-gambol-toggle__icon {
+		margin-left: var(--gb-spacing-sm);
+	}
+}
+
+.wp-block-gambol-toggle__title {
+	font-weight: 600;
+}
+
+.wp-block-gambol-toggle__icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	transition: transform var(--gb-transition-base);
+	
+	svg {
+		display: block;
+	}
+}
+
+.wp-block-gambol-toggle__content {
+	display: none;
+	border-top: 1px solid var(--gb-colors-border);
+	
+	> div {
+		line-height: 1.7;
+	}
+}
+
+// Open state
+.wp-block-gambol-toggle.is-open {
+	.wp-block-gambol-toggle__icon {
+		transform: rotate(180deg);
+	}
+	
+	.wp-block-gambol-toggle__content {
+		display: block;
+	}
+}
+
+// Plus icon rotates to X
+.wp-block-gambol-toggle.is-open .wp-block-gambol-toggle__header--icon-right,
+.wp-block-gambol-toggle.is-open .wp-block-gambol-toggle__header--icon-left {
+	.wp-block-gambol-toggle__icon svg[viewBox] path[d*="19 13h-6"] {
+		// Plus becomes minus when open
+		transform: rotate(45deg);
+		transform-origin: center;
+	}
+}
+
+// Arrow rotates 90 degrees
+.wp-block-gambol-toggle__header .wp-block-gambol-toggle__icon svg path[d*="8.59 16.59"] {
+	transform-origin: center;
+}
+
+.wp-block-gambol-toggle.is-open {
+	.wp-block-gambol-toggle__icon svg path[d*="8.59 16.59"] {
+		// Arrow rotates down
+	}
+}
+
+// Animation for content
+@keyframes gambol-toggle-open {
+	from {
+		opacity: 0;
+		max-height: 0;
+	}
+	to {
+		opacity: 1;
+		max-height: 1000px;
+	}
+}
+
+.wp-block-gambol-toggle.is-open .wp-block-gambol-toggle__content {
+	animation: gambol-toggle-open 0.3s ease;
+}
+
+// Grouped toggles (FAQ style)
+.wp-block-gambol-toggle + .wp-block-gambol-toggle {
+	margin-top: -1px; // Collapse borders
+	border-radius: 0;
+	
+	&:last-child {
+		border-bottom-left-radius: inherit;
+		border-bottom-right-radius: inherit;
+	}
+}
+
+// First toggle in a group
+.wp-block-gambol-toggle:first-of-type {
+	border-top-left-radius: inherit;
+	border-top-right-radius: inherit;
+}
+
+// Editor styles
+.editor-styles-wrapper .wp-block-gambol-toggle {
+	.wp-block-gambol-toggle__content {
+		display: block; // Always show in editor
+		opacity: 1;
+	}
+	
+	&:not(.is-open) .wp-block-gambol-toggle__content {
+		opacity: 0.5;
+		background: repeating-linear-gradient(
+			45deg,
+			transparent,
+			transparent 10px,
+			rgba(0, 0, 0, 0.02) 10px,
+			rgba(0, 0, 0, 0.02) 20px
+		);
+	}
+}

@@ -1,0 +1,94 @@
+/**
+ * Add to Cart Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-add-to-cart {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--gb-spacing-md);
+	margin-bottom: var(--gb-spacing-lg);
+}
+
+.wp-block-gambol-add-to-cart__quantity {
+	display: flex;
+	align-items: center;
+	border: 1px solid var(--gb-colors-gray-300);
+	overflow: hidden;
+	
+	.qty-btn {
+		width: 40px;
+		height: 48px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: transparent;
+		border: none;
+		font-size: 18px;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+		
+		&:hover {
+			background-color: var(--gb-colors-gray-100);
+		}
+	}
+	
+	input {
+		width: 50px;
+		height: 48px;
+		text-align: center;
+		border: none;
+		border-left: 1px solid var(--gb-colors-gray-200);
+		border-right: 1px solid var(--gb-colors-gray-200);
+		font-size: 16px;
+		font-weight: 500;
+		
+		&::-webkit-inner-spin-button,
+		&::-webkit-outer-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+	}
+}
+
+.wp-block-gambol-add-to-cart__button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--gb-spacing-sm);
+	font-weight: 600;
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	
+	svg {
+		flex-shrink: 0;
+	}
+	
+	&:hover {
+		opacity: 0.9;
+		transform: translateY(-2px);
+	}
+}
+
+// Full width
+.wp-block-gambol-add-to-cart__button[style*="width: 100%"] {
+	flex: 1;
+}
+
+// Responsive
+@media (max-width: 480px) {
+	.wp-block-gambol-add-to-cart {
+		flex-direction: column;
+	}
+	
+	.wp-block-gambol-add-to-cart__quantity {
+		width: 100%;
+		justify-content: center;
+	}
+	
+	.wp-block-gambol-add-to-cart__button {
+		width: 100% !important;
+	}
+}

@@ -1,0 +1,195 @@
+/**
+ * Call to Action Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-call-to-action {
+	position: relative;
+	background-size: cover;
+	background-position: center;
+	overflow: hidden;
+}
+
+.cta-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	pointer-events: none;
+}
+
+.cta-content {
+	position: relative;
+	z-index: 1;
+}
+
+// Layout: Horizontal
+.layout-horizontal {
+	.cta-content {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--gb-spacing-lg);
+	}
+	
+	.cta-text {
+		flex: 1;
+	}
+	
+	.cta-button-wrapper {
+		flex-shrink: 0;
+	}
+}
+
+// Layout: Vertical
+.layout-vertical {
+	.cta-content {
+		display: flex;
+		flex-direction: column;
+		gap: var(--gb-spacing-lg);
+	}
+}
+
+// Alignment
+.align-left {
+	text-align: left;
+	
+	&.layout-vertical {
+		.cta-button-wrapper {
+			align-self: flex-start;
+		}
+	}
+}
+
+.align-center {
+	text-align: center;
+	
+	&.layout-horizontal {
+		.cta-content {
+			justify-content: center;
+		}
+	}
+	
+	&.layout-vertical {
+		.cta-button-wrapper {
+			align-self: center;
+		}
+	}
+}
+
+.align-right {
+	text-align: right;
+	
+	&.layout-horizontal {
+		.cta-content {
+			flex-direction: row-reverse;
+		}
+	}
+	
+	&.layout-vertical {
+		.cta-button-wrapper {
+			align-self: flex-end;
+		}
+	}
+}
+
+.cta-title {
+	margin: 0 0 var(--gb-spacing-sm) 0;
+	font-weight: 700;
+	line-height: 1.3;
+}
+
+.cta-description {
+	margin: 0;
+	line-height: 1.6;
+	opacity: 0.9;
+}
+
+.cta-button {
+	display: inline-block;
+	padding: var(--gb-spacing-sm) var(--gb-spacing-xl);
+	font-size: 16px;
+	font-weight: 600;
+	text-decoration: none;
+	border-radius: var(--gb-radius-base);
+	transition: all 0.2s ease;
+	cursor: pointer;
+	border: none;
+	
+	&:hover {
+		opacity: 0.9;
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	}
+}
+
+// Default styling when no custom colors
+.wp-block-gambol-call-to-action:not([style*="background-color"]) {
+	background-color: var(--gb-colors-primary);
+}
+
+.cta-title:not([style*="color"]) {
+	color: #ffffff;
+}
+
+.cta-description:not([style*="color"]) {
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.cta-button:not([style*="background-color"]) {
+	background-color: #ffffff;
+	color: var(--gb-colors-primary);
+}
+
+// Gradient variants
+.wp-block-gambol-call-to-action.has-gradient {
+	background: linear-gradient(135deg, var(--gb-colors-primary) 0%, var(--gb-colors-secondary, #6366f1) 100%);
+}
+
+// Outlined variant
+.wp-block-gambol-call-to-action.style-outlined {
+	background-color: transparent;
+	border: 2px solid var(--gb-colors-primary);
+	
+	.cta-title {
+		color: var(--gb-colors-gray-900);
+	}
+	
+	.cta-description {
+		color: var(--gb-colors-gray-600);
+	}
+	
+	.cta-button {
+		background-color: var(--gb-colors-primary);
+		color: #ffffff;
+	}
+}
+
+// Responsive
+@media (max-width: 768px) {
+	.layout-horizontal {
+		.cta-content {
+			flex-direction: column;
+			text-align: center;
+		}
+		
+		.cta-button-wrapper {
+			width: 100%;
+		}
+		
+		.cta-button {
+			width: 100%;
+			text-align: center;
+		}
+	}
+	
+	.wp-block-gambol-call-to-action {
+		padding: 30px !important;
+	}
+	
+	.cta-title {
+		font-size: 22px !important;
+	}
+}

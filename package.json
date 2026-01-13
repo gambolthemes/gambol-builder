@@ -8,6 +8,7 @@
 	"scripts": {
 		"build": "wp-scripts build",
 		"start": "wp-scripts start",
+		"zip": "wp-scripts plugin-zip",
 		"lint:js": "wp-scripts lint-js",
 		"lint:css": "wp-scripts lint-style",
 		"lint": "npm run lint:js && npm run lint:css",

@@ -1,0 +1,37 @@
+/**
+ * Product Short Description Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-product-short-description {
+	margin-bottom: var(--gb-spacing-lg);
+	
+	p {
+		margin: 0 0 var(--gb-spacing-md);
+		
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+	
+	ul,
+	ol {
+		margin: var(--gb-spacing-sm) 0;
+		padding-left: var(--gb-spacing-lg);
+		
+		li {
+			margin-bottom: var(--gb-spacing-xs);
+		}
+	}
+	
+	strong,
+	b {
+		font-weight: 600;
+	}
+	
+	em,
+	i {
+		font-style: italic;
+	}
+}

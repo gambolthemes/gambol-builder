@@ -1,0 +1,199 @@
+/**
+ * Table of Contents Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-table-of-contents {
+	border: 1px solid var(--gb-colors-gray-200);
+	background-color: var(--gb-colors-gray-50);
+}
+
+.toc-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--gb-spacing-sm);
+	margin-bottom: var(--gb-spacing-md);
+	padding-bottom: var(--gb-spacing-sm);
+	border-bottom: 1px solid var(--gb-colors-gray-200);
+}
+
+.toc-title {
+	margin: 0;
+	font-size: 18px;
+	font-weight: 600;
+}
+
+.toc-toggle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	background: none;
+	border: none;
+	border-radius: var(--gb-radius-sm);
+	cursor: pointer;
+	transition: all 0.2s ease;
+	
+	&:hover {
+		background-color: var(--gb-colors-gray-200);
+	}
+	
+	.toggle-icon {
+		font-size: 12px;
+		transition: transform 0.2s ease;
+	}
+}
+
+// Collapsed state
+.is-collapsed {
+	.toc-content {
+		display: none;
+	}
+	
+	.toc-toggle .toggle-icon {
+		transform: rotate(-90deg);
+	}
+}
+
+.toc-content {
+	// Animation for collapse
+	overflow: hidden;
+	transition: height 0.3s ease;
+}
+
+.toc-list {
+	margin: 0;
+	padding: 0;
+}
+
+// Numbered list
+.list-numbered .toc-list {
+	list-style: decimal;
+	padding-left: 20px;
+	
+	li {
+		padding: var(--gb-spacing-xs) 0;
+	}
+}
+
+// Bullets list
+.list-bullets .toc-list {
+	list-style: disc;
+	padding-left: 20px;
+	
+	li {
+		padding: var(--gb-spacing-xs) 0;
+	}
+}
+
+// No list style
+.list-none .toc-list {
+	list-style: none;
+	
+	li {
+		padding: var(--gb-spacing-xs) 0;
+	}
+}
+
+.toc-item {
+	line-height: 1.5;
+	
+	a {
+		text-decoration: none;
+		transition: color 0.2s ease;
+		
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+}
+
+// Heading levels indentation
+.toc-level-1 {
+	font-weight: 600;
+}
+
+.toc-level-2 {
+	font-weight: 500;
+}
+
+.toc-level-3,
+.toc-level-4,
+.toc-level-5,
+.toc-level-6 {
+	font-size: 0.95em;
+}
+
+// Active state (highlighted when in viewport)
+.toc-item.is-active {
+	a {
+		color: var(--gb-colors-primary);
+		font-weight: 600;
+	}
+}
+
+// Progress indicator variant
+.wp-block-gambol-table-of-contents.has-progress {
+	.toc-item {
+		position: relative;
+		padding-left: var(--gb-spacing-md);
+		
+		&::before {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 8px;
+			height: 8px;
+			border-radius: 50%;
+			background-color: var(--gb-colors-gray-300);
+			transition: all 0.2s ease;
+		}
+		
+		&.is-passed::before {
+			background-color: var(--gb-colors-primary);
+		}
+		
+		&.is-active::before {
+			background-color: var(--gb-colors-primary);
+			transform: translateY(-50%) scale(1.3);
+		}
+	}
+}
+
+// Empty state
+.toc-empty {
+	margin: 0;
+	color: var(--gb-colors-gray-500);
+	font-style: italic;
+	text-align: center;
+	padding: var(--gb-spacing-md);
+}
+
+// Sticky variant
+.wp-block-gambol-table-of-contents.is-sticky {
+	position: sticky;
+	top: 20px;
+	max-height: calc(100vh - 40px);
+	overflow-y: auto;
+}
+
+// Responsive
+@media (max-width: 768px) {
+	.wp-block-gambol-table-of-contents {
+		padding: var(--gb-spacing-md) !important;
+	}
+	
+	.toc-title {
+		font-size: 16px;
+	}
+	
+	.toc-list {
+		font-size: 14px;
+	}
+}

@@ -1,0 +1,54 @@
+/**
+ * Heading Block Styles
+ *
+ * Minimal, performance-first CSS.
+ * Uses global CSS custom properties.
+ *
+ * @package GambolBuilder
+ */
+
+// Heading base.
+.wp-block-gambol-heading {
+	margin: 0;
+	font-family: var(--gb-typography-font-family);
+	color: var(--gb-colors-text);
+	line-height: var(--gb-typography-line-height-tight);
+}
+
+// Text alignment - use WordPress standard classes.
+.wp-block-gambol-heading.has-text-align-center {
+	text-align: center;
+}
+
+.wp-block-gambol-heading.has-text-align-right {
+	text-align: right;
+}
+
+.wp-block-gambol-heading.has-text-align-left {
+	text-align: left;
+}
+
+// Font weight utilities.
+.wp-block-gambol-heading.has-font-weight-300 {
+	font-weight: 300;
+}
+
+.wp-block-gambol-heading.has-font-weight-400 {
+	font-weight: 400;
+}
+
+.wp-block-gambol-heading.has-font-weight-500 {
+	font-weight: 500;
+}
+
+.wp-block-gambol-heading.has-font-weight-600 {
+	font-weight: 600;
+}
+
+.wp-block-gambol-heading.has-font-weight-700 {
+	font-weight: 700;
+}
+
+.wp-block-gambol-heading.has-font-weight-800 {
+	font-weight: 800;
+}

@@ -1,0 +1,128 @@
+/**
+ * Search Form Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-search-form {
+	width: 100%;
+}
+
+.wp-block-gambol-search-form__form {
+	display: flex;
+	gap: 0;
+}
+
+.wp-block-gambol-search-form__input {
+	flex: 1;
+	padding: 0 var(--gb-spacing-md);
+	border: 1px solid #ddd;
+	font-size: 16px;
+	outline: none;
+	min-width: 0;
+	
+	&:focus {
+		border-color: var(--gb-colors-primary);
+		box-shadow: 0 0 0 2px rgba(var(--gb-colors-primary-rgb), 0.2);
+	}
+	
+	&::placeholder {
+		color: var(--gb-colors-gray-400);
+	}
+}
+
+.wp-block-gambol-search-form__button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0 var(--gb-spacing-lg);
+	border: none;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 500;
+	transition: background-color 0.2s ease, transform 0.1s ease;
+	
+	&:hover {
+		filter: brightness(1.1);
+	}
+	
+	&:active {
+		transform: scale(0.98);
+	}
+	
+	svg {
+		width: 20px;
+		height: 20px;
+	}
+}
+
+// Inline layout
+.wp-block-gambol-search-form--inline {
+	.wp-block-gambol-search-form__form {
+		flex-direction: row;
+	}
+	
+	.wp-block-gambol-search-form__input {
+		border-right: none;
+		border-top-right-radius: 0 !important;
+		border-bottom-right-radius: 0 !important;
+	}
+	
+	.wp-block-gambol-search-form__button {
+		border-top-left-radius: 0 !important;
+		border-bottom-left-radius: 0 !important;
+	}
+}
+
+// Stacked layout
+.wp-block-gambol-search-form--stacked {
+	.wp-block-gambol-search-form__form {
+		flex-direction: column;
+		gap: var(--gb-spacing-sm);
+	}
+	
+	.wp-block-gambol-search-form__button {
+		width: 100%;
+	}
+}
+
+// Minimal layout
+.wp-block-gambol-search-form--minimal {
+	.wp-block-gambol-search-form__input {
+		border: none;
+		border-bottom: 2px solid var(--gb-colors-gray-300);
+		border-radius: 0 !important;
+		padding-left: 0;
+		padding-right: 0;
+		
+		&:focus {
+			border-bottom-color: var(--gb-colors-primary);
+			box-shadow: none;
+		}
+	}
+	
+	.wp-block-gambol-search-form__button {
+		background: transparent !important;
+		color: var(--gb-colors-gray-600) !important;
+		padding: 0 var(--gb-spacing-sm);
+		
+		&:hover {
+			color: var(--gb-colors-primary) !important;
+			filter: none;
+		}
+	}
+}
+
+// Alignment
+.wp-block-gambol-search-form.has-text-align-center {
+	.wp-block-gambol-search-form__form {
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+.wp-block-gambol-search-form.has-text-align-right {
+	.wp-block-gambol-search-form__form {
+		margin-left: auto;
+	}
+}

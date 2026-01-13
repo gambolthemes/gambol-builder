@@ -1,0 +1,25 @@
+/**
+ * Product Price Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-product-price {
+	margin-bottom: var(--gb-spacing-md);
+}
+
+.wp-block-gambol-product-price__wrapper {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--gb-spacing-sm);
+	
+	del {
+		text-decoration: line-through;
+		font-weight: 400;
+		font-size: 0.85em;
+	}
+	
+	ins {
+		text-decoration: none;
+	}
+}

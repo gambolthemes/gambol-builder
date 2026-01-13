@@ -1,0 +1,22 @@
+/**
+ * Product Rating Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-product-rating {
+	display: flex;
+	align-items: center;
+	gap: var(--gb-spacing-sm);
+	margin-bottom: var(--gb-spacing-md);
+}
+
+.wp-block-gambol-product-rating__stars {
+	display: flex;
+	gap: 2px;
+}
+
+.wp-block-gambol-product-rating__count {
+	font-size: 0.875rem;
+	color: var(--gb-colors-gray-500);
+}

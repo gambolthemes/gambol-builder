@@ -1,0 +1,156 @@
+/**
+ * Products Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-products {
+	padding: var(--gb-spacing-lg) 0;
+}
+
+.wp-block-gambol-products__grid {
+	display: grid;
+	grid-template-columns: repeat(var(--products-columns, 4), 1fr);
+	gap: var(--products-gap, 24px);
+}
+
+.wp-block-gambol-products__item {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	
+	.has-shadow & {
+		box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+		
+		&:hover {
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+		}
+	}
+	
+	&:hover {
+		transform: translateY(-4px);
+		
+		.wp-block-gambol-products__image img {
+			transform: scale(1.05);
+		}
+	}
+}
+
+.wp-block-gambol-products__image {
+	position: relative;
+	overflow: hidden;
+	aspect-ratio: var(--image-ratio, 1/1);
+	
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.4s ease;
+	}
+}
+
+.wp-block-gambol-products__placeholder {
+	width: 100%;
+	height: 100%;
+	background-color: var(--gb-colors-gray-100);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	
+	svg {
+		width: 30%;
+		height: 30%;
+		color: var(--gb-colors-gray-300);
+	}
+}
+
+.wp-block-gambol-products__badge {
+	position: absolute;
+	top: var(--gb-spacing-sm);
+	left: var(--gb-spacing-sm);
+	padding: 4px 12px;
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	border-radius: 4px;
+	z-index: 1;
+}
+
+.wp-block-gambol-products__content {
+	padding: var(--gb-spacing-md);
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	text-align: center;
+}
+
+.wp-block-gambol-products__title {
+	margin: 0 0 var(--gb-spacing-xs);
+	font-size: 1rem;
+	font-weight: 500;
+	line-height: 1.4;
+}
+
+.wp-block-gambol-products__rating {
+	display: flex;
+	justify-content: center;
+	gap: 2px;
+	margin-bottom: var(--gb-spacing-xs);
+	
+	svg {
+		width: 14px;
+		height: 14px;
+	}
+}
+
+.wp-block-gambol-products__price {
+	margin-bottom: var(--gb-spacing-sm);
+	font-size: 1rem;
+	font-weight: 600;
+	
+	del {
+		color: var(--gb-colors-gray-400);
+		font-weight: 400;
+		margin-right: var(--gb-spacing-xs);
+	}
+	
+	ins {
+		text-decoration: none;
+	}
+}
+
+.wp-block-gambol-products__add-to-cart {
+	display: inline-block;
+	padding: 10px 20px;
+	font-size: 0.875rem;
+	font-weight: 500;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	transition: opacity 0.3s ease;
+	margin-top: auto;
+	
+	&:hover {
+		opacity: 0.9;
+	}
+}
+
+// Responsive
+@media (max-width: 1024px) {
+	.wp-block-gambol-products__grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+@media (max-width: 768px) {
+	.wp-block-gambol-products__grid {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 480px) {
+	.wp-block-gambol-products__grid {
+		grid-template-columns: 1fr;
+	}
+}

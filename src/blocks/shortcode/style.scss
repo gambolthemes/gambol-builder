@@ -1,0 +1,68 @@
+/**
+ * Shortcode Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-shortcode {
+	background-color: var(--gb-colors-background-secondary, #f5f5f5);
+	border: 1px solid var(--gb-colors-border, #ddd);
+	border-radius: var(--gb-radius-base);
+	overflow: hidden;
+}
+
+.wp-block-gambol-shortcode__header {
+	display: flex;
+	align-items: center;
+	gap: var(--gb-spacing-sm);
+	padding: var(--gb-spacing-sm) var(--gb-spacing-md);
+	background-color: rgba(0, 0, 0, 0.05);
+	border-bottom: 1px solid var(--gb-colors-border, #ddd);
+}
+
+.wp-block-gambol-shortcode__icon {
+	font-family: monospace;
+	font-size: 14px;
+	font-weight: bold;
+	color: var(--gb-colors-primary);
+}
+
+.wp-block-gambol-shortcode__label {
+	font-size: 12px;
+	color: var(--gb-colors-text-secondary);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.wp-block-gambol-shortcode__input {
+	width: 100%;
+	padding: var(--gb-spacing-md);
+	border: none;
+	background-color: transparent;
+	font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+	font-size: 14px;
+	line-height: 1.6;
+	resize: vertical;
+	
+	&::placeholder {
+		color: var(--gb-colors-text-secondary);
+	}
+	
+	&:focus {
+		outline: none;
+	}
+}
+
+.wp-block-gambol-shortcode__preview {
+	border-top: 1px solid var(--gb-colors-border, #ddd);
+	padding: var(--gb-spacing-md);
+	background-color: #fff;
+}
+
+.wp-block-gambol-shortcode__preview-label {
+	font-size: 11px;
+	color: var(--gb-colors-text-secondary);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	margin-bottom: var(--gb-spacing-sm);
+}

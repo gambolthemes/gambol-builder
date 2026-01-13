@@ -1,0 +1,331 @@
+/**
+ * Gambol Builder Inspector Design Tokens
+ *
+ * Dark, premium UI tokens for the Inspector sidebar.
+ * Self-contained design system tokens.
+ *
+ * DESIGN PRINCIPLES:
+ * - Fast, not flashy
+ * - Premium dark aesthetic
+ * - Accessible contrast
+ * - Smooth micro-interactions
+ *
+ * @package GambolBuilder
+ * @version 2.0.0
+ */
+
+// =============================================================================
+// COLOR PALETTE
+// =============================================================================
+
+// Primary brand accent (Teal - unique, NOT blue)
+$gambol-accent: #00d4aa;
+$gambol-accent-hover: #00b894;
+$gambol-accent-active: #009977;
+$gambol-accent-muted: rgba(0, 212, 170, 0.12);
+$gambol-accent-subtle: rgba(0, 212, 170, 0.06);
+$gambol-accent-ghost: rgba(0, 212, 170, 0.03);
+
+// Light sidebar surfaces (White & Gray theme)
+$gambol-sidebar-bg: #ffffff;
+$gambol-sidebar-secondary: #f8f9fa;
+$gambol-sidebar-tertiary: #f1f3f5;
+$gambol-sidebar-elevated: #e9ecef;
+$gambol-sidebar-hover: rgba(0, 0, 0, 0.04);
+$gambol-sidebar-active: rgba(0, 0, 0, 0.08);
+$gambol-sidebar-selected: rgba(0, 212, 170, 0.12);
+
+// Text hierarchy (Light theme - accessible contrast)
+$gambol-text-primary: #1a1a1a;
+$gambol-text-secondary: #4a5568;
+$gambol-text-muted: #718096;
+$gambol-text-disabled: #a0aec0;
+
+// Borders (Light theme - muted separators)
+$gambol-border: rgba(0, 0, 0, 0.10);
+$gambol-border-subtle: rgba(0, 0, 0, 0.06);
+$gambol-border-strong: rgba(0, 0, 0, 0.16);
+$gambol-border-light: #e2e8f0;
+$gambol-border-focus: #00d4aa;
+
+// Semantic colors
+$gambol-success: #22c55e;
+$gambol-success-muted: rgba(34, 197, 94, 0.15);
+$gambol-warning: #eab308;
+$gambol-warning-muted: rgba(234, 179, 8, 0.15);
+$gambol-error: #ef4444;
+$gambol-error-muted: rgba(239, 68, 68, 0.15);
+$gambol-info: #3b82f6;
+$gambol-info-muted: rgba(59, 130, 246, 0.15);
+
+// =============================================================================
+// SPACING SCALE (4px base)
+// =============================================================================
+
+$space-xs: 4px;
+$space-sm: 8px;
+$space-md: 12px;
+$space-lg: 16px;
+$space-xl: 20px;
+$space-2xl: 24px;
+$space-3xl: 32px;
+
+// =============================================================================
+// TYPOGRAPHY
+// =============================================================================
+
+// Font stacks (system fonts only - no decorative)
+$font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, 
+              Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+$font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, 
+            Consolas, "Liberation Mono", monospace;
+
+// Font sizes (clear hierarchy)
+$font-size-2xs: 10px;
+$font-size-xs: 11px;
+$font-size-sm: 12px;
+$font-size-base: 13px;
+$font-size-md: 14px;
+$font-size-lg: 16px;
+$font-size-xl: 18px;
+$font-size-2xl: 20px;
+
+// Font weights
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// Line heights
+$line-height-tight: 1.25;
+$line-height-normal: 1.5;
+$line-height-relaxed: 1.625;
+
+// Letter spacing
+$letter-spacing-tight: -0.025em;
+$letter-spacing-normal: 0;
+$letter-spacing-wide: 0.025em;
+$letter-spacing-caps: 0.1em;
+
+// =============================================================================
+// BORDERS & RADIUS (6-10px sweet spot)
+// =============================================================================
+
+$radius-sm: 4px;
+$radius-md: 6px;
+$radius-lg: 8px;
+$radius-xl: 10px;
+$radius-2xl: 12px;
+$radius-full: 9999px;
+
+// =============================================================================
+// SHADOWS (subtle only)
+// =============================================================================
+
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+$shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.08);
+$shadow-focus: 0 0 0 3px rgba(0, 212, 170, 0.4);
+$shadow-focus-error: 0 0 0 3px rgba(239, 68, 68, 0.4);
+
+// =============================================================================
+// TRANSITIONS (smooth, not flashy)
+// =============================================================================
+
+$transition-instant: 50ms ease-out;
+$transition-fast: 100ms ease-out;
+$transition-base: 150ms ease-out;
+$transition-slow: 300ms ease-in-out;
+
+// Specific transitions
+$transition-colors: color 100ms ease-out,
+                    background-color 100ms ease-out,
+                    border-color 100ms ease-out;
+$transition-transform: transform 150ms ease-out;
+$transition-opacity: opacity 150ms ease-out;
+$transition-shadow: box-shadow 150ms ease-out;
+
+// =============================================================================
+// LAYOUT
+// =============================================================================
+
+$sidebar-width: 320px;
+$control-height: 32px;
+$control-height-sm: 28px;
+$control-height-lg: 36px;
+$input-height: 36px;
+
+// Icon sizes (Lucide-style: 24px base, 1.5px stroke)
+$icon-size-xs: 14px;
+$icon-size-sm: 16px;
+$icon-size-md: 20px;
+$icon-size-lg: 24px;
+$icon-size-xl: 28px;
+$icon-stroke: 1.5px;
+
+// =============================================================================
+// Z-INDEX SCALE
+// =============================================================================
+
+$z-base: 0;
+$z-dropdown: 100;
+$z-sticky: 200;
+$z-overlay: 300;
+$z-modal: 400;
+$z-popover: 500;
+$z-tooltip: 600;
+
+// =============================================================================
+// COMPONENT TOKENS
+// =============================================================================
+
+// Buttons
+$btn-padding-sm: 4px 8px;
+$btn-padding: 8px 16px;
+$btn-padding-lg: 12px 24px;
+$btn-radius: 6px;
+$btn-font-size: 12px;
+$btn-font-weight: 500;
+
+// Inputs (Light theme)
+$input-bg: #ffffff;
+$input-bg-hover: #f8f9fa;
+$input-border: rgba(0, 0, 0, 0.12);
+$input-border-hover: rgba(0, 0, 0, 0.20);
+$input-border-focus: #00d4aa;
+$input-radius: 6px;
+$input-padding: 8px 12px;
+
+// Cards (Light theme)
+$card-bg: #ffffff;
+$card-border: rgba(0, 0, 0, 0.08);
+$card-radius: 8px;
+$card-padding: 16px;
+$card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+// Tabs (Light theme)
+$tab-height: 40px;
+$tab-padding: 12px 16px;
+$tab-font-size: 12px;
+$tab-border-width: 2px;
+$tab-text: #718096;
+$tab-text-hover: #4a5568;
+$tab-text-active: #00d4aa;
+
+// =============================================================================
+// UTILITY MIXINS
+// =============================================================================
+
+// Focus ring
+@mixin focus-ring {
+	outline: none;
+	box-shadow: $shadow-focus;
+}
+
+// Focus ring for error state
+@mixin focus-ring-error {
+	outline: none;
+	box-shadow: $shadow-focus-error;
+}
+
+// Truncate text
+@mixin truncate {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+// Smooth transition
+@mixin smooth-transition($properties: all) {
+	transition: $properties 150ms ease-out;
+}
+
+// Hover lift
+@mixin hover-lift {
+	transition: transform $transition-base, box-shadow $transition-base;
+	
+	&:hover {
+		transform: translateY(-1px);
+		box-shadow: $shadow-md;
+	}
+}
+
+// Button base
+@mixin button-base {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: $space-sm;
+	height: $control-height;
+	padding: $btn-padding;
+	font-family: $font-family;
+	font-size: $btn-font-size;
+	font-weight: $btn-font-weight;
+	line-height: 1;
+	text-decoration: none;
+	border-radius: $btn-radius;
+	cursor: pointer;
+	transition: $transition-colors, $transition-shadow;
+	
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
+// Input base
+@mixin input-base {
+	display: block;
+	width: 100%;
+	height: $input-height;
+	padding: $input-padding;
+	font-family: $font-family;
+	font-size: $font-size-base;
+	color: $gambol-text-primary;
+	background: $input-bg;
+	border: 1px solid $input-border;
+	border-radius: $input-radius;
+	transition: $transition-colors;
+	
+	&::placeholder {
+		color: $gambol-text-muted;
+	}
+	
+	&:hover:not(:disabled) {
+		background: $input-bg-hover;
+		border-color: $input-border-hover;
+	}
+	
+	&:focus {
+		@include focus-ring;
+		border-color: $input-border-focus;
+	}
+	
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
+// Card container
+@mixin card {
+	background: $card-bg;
+	border: 1px solid $card-border;
+	border-radius: $card-radius;
+	padding: $card-padding;
+	box-shadow: $card-shadow;
+}
+
+// Screen reader only
+@mixin sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}

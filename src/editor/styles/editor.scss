@@ -1,0 +1,932 @@
+/**
+ * Gambol Builder - Editor Styles
+ * 
+ * Clean, professional light sidebar styling.
+ */
+
+// ============================================
+// FORCE WORDPRESS SKELETON TO TOP: 0
+// ============================================
+
+// Override WordPress default skeleton positioning
+.gambol-editor-active {
+    // Reset all skeleton elements to top: 0 by default
+    .interface-interface-skeleton {
+        top: 0 !important;
+    }
+    
+    .interface-interface-skeleton__body {
+        top: 50px !important; // Below Gambol toolbar
+    }
+    
+    .interface-interface-skeleton__content {
+        top: 50px !important; // Below Gambol toolbar
+    }
+    
+    // Right sidebar positioning
+    .interface-interface-skeleton__sidebar {
+        top: 50px !important;
+        height: calc(100vh - 50px) !important;
+    }
+}
+
+// When WordPress admin bar IS visible
+.admin-bar.gambol-editor-active {
+    .interface-interface-skeleton {
+        top: 0 !important;
+    }
+    
+    .interface-interface-skeleton__body,
+    .interface-interface-skeleton__content {
+        top: 50px !important;
+    }
+    
+    .interface-interface-skeleton__sidebar {
+        top: 0 !important;
+        height: calc(100vh - 82px) !important;
+    }
+}
+
+// ============================================
+// Design Tokens (Light Theme)
+// ============================================
+
+$gb-primary: #00d4aa;           // Gambol teal accent
+$gb-primary-hover: #00b894;
+$gb-primary-dark: #009977;
+
+$gb-secondary: #00d4aa;         // Using teal for actions (consistent branding)
+$gb-secondary-hover: #00b894;
+
+// Light theme colors
+$gb-bg-dark: #ffffff;
+$gb-bg-darker: #f8f9fa;
+$gb-bg-panel: #f1f3f5;
+$gb-bg-widget: #e9ecef;
+$gb-bg-widget-hover: #dee2e6;
+$gb-bg-input: #ffffff;
+
+// Text colors (Light theme)
+$gb-text-primary: #1a1a1a;
+$gb-text-secondary: #4a5568;
+$gb-text-muted: #718096;
+
+// Border colors (Light theme)
+$gb-border: #e2e8f0;
+$gb-border-light: #edf2f7;
+
+// Spacing
+$gb-spacing-xs: 4px;
+$gb-spacing-sm: 8px;
+$gb-spacing-md: 12px;
+$gb-spacing-lg: 16px;
+$gb-spacing-xl: 20px;
+$gb-spacing-2xl: 24px;
+
+// Typography
+$gb-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+$gb-font-size-xs: 11px;
+$gb-font-size-sm: 12px;
+$gb-font-size-md: 13px;
+$gb-font-size-lg: 14px;
+
+// Border radius
+$gb-radius-sm: 4px;
+$gb-radius-md: 6px;
+$gb-radius-lg: 8px;
+
+// Transitions
+$gb-transition: all 0.15s ease;
+
+// ============================================
+// Sidebar Container Override
+// ============================================
+
+.gambol-builder-sidebar {
+    &.interface-complementary-area {
+        width: 300px !important;
+    }
+
+    .components-panel {
+        background: $gb-bg-dark;
+        border: none;
+    }
+
+    .interface-complementary-area-header {
+        background: $gb-secondary !important;
+        border-bottom: none;
+        height: 48px;
+
+        .interface-complementary-area-header__small-title,
+        h2 {
+            color: $gb-text-primary;
+            font-weight: 600;
+            font-size: $gb-font-size-lg;
+        }
+
+        button {
+            color: $gb-text-primary;
+
+            &:hover {
+                color: $gb-text-primary;
+                background: rgba(0, 0, 0, 0.08);
+            }
+        }
+    }
+}
+
+// ============================================
+// Editor Panel
+// ============================================
+
+.gambol-editor-panel {
+    background: $gb-bg-dark;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    font-family: $gb-font-family;
+}
+
+// ============================================
+// Tab Navigation
+// ============================================
+
+.gambol-panel-tabs {
+    display: flex;
+    background: $gb-bg-darker;
+    border-bottom: 1px solid $gb-border;
+}
+
+.gambol-tab {
+    flex: 1;
+    padding: $gb-spacing-md $gb-spacing-lg;
+    background: transparent;
+    border: none;
+    color: $gb-text-secondary;
+    font-size: $gb-font-size-md;
+    font-weight: 500;
+    cursor: pointer;
+    transition: $gb-transition;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+
+    &:hover {
+        color: $gb-text-primary;
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    &.active {
+        color: $gb-text-primary;
+        background: $gb-bg-dark;
+        border-bottom: 2px solid $gb-primary;
+    }
+}
+
+// ============================================
+// Search Bar
+// ============================================
+
+.gambol-panel-search {
+    padding: $gb-spacing-md;
+    background: $gb-bg-darker;
+    border-bottom: 1px solid $gb-border;
+
+    .gambol-search-input {
+        margin: 0;
+
+        .components-base-control__field {
+            margin: 0;
+        }
+
+        input {
+            background: $gb-bg-input !important;
+            border: 1px solid $gb-border !important;
+            border-radius: $gb-radius-md !important;
+            color: $gb-text-primary !important;
+            padding: $gb-spacing-sm $gb-spacing-md !important;
+            font-size: $gb-font-size-md !important;
+            height: 40px !important;
+
+            &::placeholder {
+                color: $gb-text-muted !important;
+            }
+
+            &:focus {
+                border-color: $gb-primary !important;
+                box-shadow: 0 0 0 1px $gb-primary !important;
+            }
+        }
+    }
+}
+
+// ============================================
+// Panel Content
+// ============================================
+
+.gambol-panel-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: $gb-spacing-xl;
+}
+
+// ============================================
+// Widget Library
+// ============================================
+
+.gambol-widget-library {
+    padding: $gb-spacing-sm 0;
+}
+
+// Category Header
+.gambol-category-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: $gb-spacing-md $gb-spacing-lg;
+    background: transparent;
+    border: none;
+    color: $gb-text-secondary;
+    font-size: $gb-font-size-sm;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: $gb-transition;
+
+    &:hover {
+        color: $gb-text-primary;
+        background: rgba(0, 0, 0, 0.04);
+    }
+
+    svg {
+        width: 18px;
+        height: 18px;
+        fill: currentColor;
+    }
+}
+
+// Widget Grid
+.gambol-widget-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: $gb-spacing-sm;
+    padding: 0 $gb-spacing-md $gb-spacing-md;
+}
+
+// Widget Item
+.gambol-widget-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: $gb-spacing-sm;
+    padding: $gb-spacing-lg $gb-spacing-sm;
+    background: $gb-bg-widget;
+    border: 1px solid transparent;
+    border-radius: $gb-radius-md;
+    cursor: pointer;
+    transition: $gb-transition;
+
+    &:hover {
+        background: $gb-bg-widget-hover;
+        border-color: $gb-border-light;
+        transform: translateY(-1px);
+
+        .gambol-widget-icon {
+            color: $gb-primary;
+        }
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    // Dragging state
+    &[draggable="true"] {
+        cursor: grab;
+
+        &:active {
+            cursor: grabbing;
+        }
+    }
+}
+
+// Widget Icon
+.gambol-widget-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    color: $gb-text-secondary;
+    transition: $gb-transition;
+
+    svg {
+        width: 24px;
+        height: 24px;
+        fill: currentColor;
+    }
+}
+
+// Widget Title
+.gambol-widget-title {
+    font-size: $gb-font-size-xs;
+    color: $gb-text-secondary;
+    text-align: center;
+    line-height: 1.3;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+// ============================================
+// Global Settings Panel
+// ============================================
+
+.gambol-global-settings {
+    padding: $gb-spacing-lg;
+}
+
+.gambol-settings-intro {
+    margin-bottom: $gb-spacing-lg;
+
+    p {
+        color: $gb-text-secondary;
+        font-size: $gb-font-size-md;
+        margin: 0;
+        line-height: 1.5;
+    }
+}
+
+.gambol-settings-list {
+    display: flex;
+    flex-direction: column;
+    gap: $gb-spacing-sm;
+}
+
+.gambol-settings-item {
+    display: flex;
+    align-items: center;
+    gap: $gb-spacing-md;
+    padding: $gb-spacing-md;
+    background: $gb-bg-widget;
+    border-radius: $gb-radius-md;
+    text-decoration: none;
+    transition: $gb-transition;
+
+    &:hover {
+        background: $gb-bg-widget-hover;
+        text-decoration: none;
+
+        .gambol-settings-icon button {
+            color: $gb-primary;
+        }
+    }
+}
+
+.gambol-settings-icon {
+    flex-shrink: 0;
+
+    button {
+        background: transparent !important;
+        padding: 0 !important;
+        min-width: auto !important;
+        color: $gb-text-secondary;
+        transition: $gb-transition;
+
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
+
+.gambol-settings-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.gambol-settings-title {
+    font-size: $gb-font-size-md;
+    font-weight: 500;
+    color: $gb-text-primary;
+}
+
+.gambol-settings-description {
+    font-size: $gb-font-size-xs;
+    color: $gb-text-muted;
+}
+
+.gambol-settings-footer {
+    margin-top: $gb-spacing-xl;
+    padding-top: $gb-spacing-lg;
+    border-top: 1px solid $gb-border;
+
+    .gambol-open-settings-btn {
+        width: 100%;
+        justify-content: center;
+        background: $gb-primary !important;
+        color: #000 !important;
+        font-weight: 600;
+        border-radius: $gb-radius-md !important;
+        padding: $gb-spacing-md $gb-spacing-lg !important;
+        transition: $gb-transition;
+
+        &:hover {
+            background: $gb-primary-hover !important;
+        }
+    }
+}
+
+// ============================================
+// Scrollbar Styling
+// ============================================
+
+.gambol-panel-content {
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $gb-bg-darker;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $gb-border;
+        border-radius: 3px;
+
+        &:hover {
+            background: $gb-border-light;
+        }
+    }
+}
+
+// ============================================
+// Responsive Adjustments
+// ============================================
+
+@media (max-width: 782px) {
+    .gambol-builder-sidebar {
+        &.interface-complementary-area {
+            width: 100% !important;
+        }
+    }
+
+    .gambol-widget-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    // Responsive toolbar
+    .gambol-editor-toolbar {
+        top: 46px; // WP admin bar is 46px on mobile
+        left: 0 !important;
+        padding: 0 8px;
+        height: 44px;
+    }
+
+    .gambol-toolbar__left {
+        flex: 0 0 auto;
+    }
+
+    .gambol-toolbar__post-title {
+        display: none;
+    }
+
+    .gambol-toolbar__templates-btn span:not(.gambol-toolbar__icon) {
+        display: none;
+    }
+
+    .gambol-toolbar__devices {
+        padding: 2px;
+    }
+
+    .gambol-toolbar__device-btn {
+        width: 28px;
+        height: 26px;
+    }
+}
+
+// When admin bar is not shown (handled by default top: 0)
+
+// ============================================
+// GAMBOL EDITOR TOOLBAR
+// ============================================
+
+.gambol-editor-toolbar {
+    position: fixed;
+    top: 0;
+    left: 280px;
+    right: 0;
+    height: 50px;
+    background: $gb-bg-dark;
+    border-bottom: 1px solid $gb-border;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 $gb-spacing-lg;
+    z-index: 99998;
+    transition: left 0.25s ease;
+
+    // When WordPress admin bar is shown
+    .admin-bar & {
+        top: 0;
+    }
+
+    .gambol-sidebar-collapsed & {
+        left: 56px;
+    }
+}
+
+.gambol-toolbar__left,
+.gambol-toolbar__center,
+.gambol-toolbar__right {
+    display: flex;
+    align-items: center;
+    gap: $gb-spacing-md;
+}
+
+.gambol-toolbar__left {
+    flex: 1;
+}
+
+.gambol-toolbar__center {
+    flex: 0 0 auto;
+}
+
+.gambol-toolbar__right {
+    flex: 1;
+    justify-content: flex-end;
+}
+
+.gambol-toolbar__logo {
+    display: flex;
+    align-items: center;
+    margin-right: $gb-spacing-sm;
+}
+
+.gambol-toolbar__title {
+    display: flex;
+    flex-direction: column;
+}
+
+.gambol-toolbar__post-title {
+    font-size: $gb-font-size-md;
+    font-weight: 600;
+    color: $gb-text-primary;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+// Device Preview Buttons
+.gambol-toolbar__devices {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: $gb-bg-darker;
+    padding: 4px;
+    border-radius: $gb-radius-lg;
+}
+
+.gambol-toolbar__device-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    border-radius: $gb-radius-md;
+    color: $gb-text-muted;
+    cursor: pointer;
+    transition: $gb-transition;
+
+    &:hover {
+        color: $gb-text-secondary;
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    &.is-active {
+        background: $gb-primary;
+        color: #fff;
+    }
+}
+
+// Action Buttons
+.gambol-toolbar__history {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.gambol-toolbar__action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    border-radius: $gb-radius-md;
+    color: $gb-text-secondary;
+    cursor: pointer;
+    transition: $gb-transition;
+
+    &:hover {
+        color: $gb-text-primary;
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    &:disabled {
+        color: $gb-text-muted;
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.gambol-toolbar__status {
+    min-width: 80px;
+    text-align: right;
+}
+
+.gambol-toolbar__templates-btn {
+    display: flex;
+    align-items: center;
+    gap: $gb-spacing-sm;
+    padding: $gb-spacing-sm $gb-spacing-md;
+    background: linear-gradient(135deg, $gb-primary 0%, $gb-primary-dark 100%);
+    border: none;
+    border-radius: $gb-radius-md;
+    color: #000;
+    font-size: $gb-font-size-sm;
+    font-weight: 600;
+    cursor: pointer;
+    transition: $gb-transition;
+
+    &:hover {
+        background: linear-gradient(135deg, $gb-primary-hover 0%, $gb-primary 100%);
+        transform: translateY(-1px);
+    }
+
+    svg {
+        stroke: currentColor;
+    }
+}
+
+.gambol-toolbar__saving {
+    font-size: $gb-font-size-xs;
+    color: $gb-primary;
+    animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+// ============================================
+// DEVICE PREVIEW STYLES
+// ============================================
+
+// Style the editor canvas iframe for device preview
+.gambol-editor-active {
+    iframe[name="editor-canvas"] {
+        display: block;
+        transition: max-width 0.3s ease, margin 0.3s ease;
+        background: #f0f0f0;
+    }
+    
+    // Tablet preview
+    &[data-device-preview="tablet"] iframe[name="editor-canvas"],
+    .interface-interface-skeleton__content[data-device-preview="tablet"] iframe[name="editor-canvas"] {
+        max-width: 768px !important;
+        margin: 0 auto !important;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+    
+    // Mobile preview
+    &[data-device-preview="mobile"] iframe[name="editor-canvas"],
+    .interface-interface-skeleton__content[data-device-preview="mobile"] iframe[name="editor-canvas"] {
+        max-width: 375px !important;
+        margin: 0 auto !important;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+}
+
+// Alternative targeting for different WordPress versions
+.interface-interface-skeleton__content {
+    &[data-device-preview="tablet"] {
+        iframe[name="editor-canvas"] {
+            max-width: 768px !important;
+            margin: 0 auto !important;
+        }
+    }
+    
+    &[data-device-preview="mobile"] {
+        iframe[name="editor-canvas"] {
+            max-width: 375px !important;
+            margin: 0 auto !important;
+        }
+    }
+}
+
+// ============================================
+// TEMPLATES PANEL
+// ============================================
+
+.gambol-templates-panel {
+    position: fixed;
+    top: 0;
+    left: 280px;
+    right: 0;
+    bottom: 0;
+    background: $gb-bg-dark;
+    z-index: 99997;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    // When WordPress admin bar is shown
+    .admin-bar & {
+        top: 0;
+    }
+
+    @media (max-width: 782px) {
+        left: 0;
+
+        .admin-bar & {
+            top: 0;
+        }
+    }
+}
+
+.gambol-templates__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $gb-spacing-lg $gb-spacing-xl;
+    border-bottom: 1px solid $gb-border;
+    flex-shrink: 0;
+}
+
+.gambol-templates__title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: $gb-text-primary;
+}
+
+.gambol-templates__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    border-radius: $gb-radius-md;
+    color: $gb-text-secondary;
+    cursor: pointer;
+    transition: $gb-transition;
+
+    &:hover {
+        background: rgba(0, 0, 0, 0.08);
+        color: $gb-text-primary;
+    }
+}
+
+.gambol-templates__search {
+    padding: $gb-spacing-md $gb-spacing-xl;
+    border-bottom: 1px solid $gb-border;
+    flex-shrink: 0;
+
+    input {
+        width: 100%;
+        height: 44px;
+        padding: 0 $gb-spacing-lg;
+        background: $gb-bg-input;
+        border: 1px solid $gb-border;
+        border-radius: $gb-radius-lg;
+        color: $gb-text-primary;
+        font-size: $gb-font-size-md;
+
+        &::placeholder {
+            color: $gb-text-muted;
+        }
+
+        &:focus {
+            outline: none;
+            border-color: $gb-primary;
+        }
+    }
+}
+
+.gambol-templates__categories {
+    display: flex;
+    gap: $gb-spacing-sm;
+    padding: $gb-spacing-md $gb-spacing-xl;
+    border-bottom: 1px solid $gb-border;
+    flex-shrink: 0;
+    overflow-x: auto;
+}
+
+.gambol-templates__category {
+    padding: $gb-spacing-sm $gb-spacing-lg;
+    background: $gb-bg-widget;
+    border: 1px solid transparent;
+    border-radius: 20px;
+    color: $gb-text-secondary;
+    font-size: $gb-font-size-sm;
+    cursor: pointer;
+    transition: $gb-transition;
+    white-space: nowrap;
+
+    &:hover {
+        background: $gb-bg-widget-hover;
+        color: $gb-text-primary;
+    }
+
+    &.is-active {
+        background: $gb-primary;
+        color: #000;
+        font-weight: 600;
+    }
+}
+
+.gambol-templates__grid {
+    flex: 1;
+    overflow-y: auto;
+    padding: $gb-spacing-xl;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: $gb-spacing-lg;
+    align-content: start;
+}
+
+.gambol-templates__item {
+    display: flex;
+    flex-direction: column;
+    background: $gb-bg-widget;
+    border: 2px solid transparent;
+    border-radius: $gb-radius-lg;
+    overflow: hidden;
+    cursor: pointer;
+    transition: $gb-transition;
+
+    &:hover {
+        border-color: $gb-primary;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+}
+
+.gambol-templates__thumbnail {
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, $gb-bg-darker 0%, $gb-bg-panel 100%);
+}
+
+.gambol-templates__emoji {
+    font-size: 48px;
+}
+
+.gambol-templates__name {
+    padding: $gb-spacing-md;
+    font-size: $gb-font-size-md;
+    font-weight: 500;
+    color: $gb-text-primary;
+    text-align: center;
+    border-top: 1px solid $gb-border;
+}
+
+.gambol-templates__empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: $gb-spacing-2xl;
+    color: $gb-text-muted;
+}
+
+// ============================================
+// Device Preview Styles
+// ============================================
+
+[data-device-preview="tablet"] .editor-styles-wrapper {
+    max-width: 768px !important;
+    margin: 0 auto !important;
+    box-shadow: 0 0 0 1px $gb-border;
+}
+
+[data-device-preview="mobile"] .editor-styles-wrapper {
+    max-width: 375px !important;
+    margin: 0 auto !important;
+    box-shadow: 0 0 0 1px $gb-border;
+}

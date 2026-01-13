@@ -1,0 +1,869 @@
+/**
+ * Gambol Builder Inspector Sidebar Styles
+ *
+ * Dark, professional sidebar design with clean controls.
+ *
+ * @package GambolBuilder
+ */
+
+@use './variables' as *;
+
+// =============================================
+// INSPECTOR SIDEBAR
+// =============================================
+
+.gambol-inspector-sidebar {
+	background: $gambol-sidebar-bg;
+	color: $gambol-text-primary;
+	font-family: $font-family;
+	font-size: $font-size-base;
+	line-height: $line-height-normal;
+
+	// Override WordPress defaults
+	.components-panel {
+		background: transparent;
+		border: none;
+	}
+}
+
+// =============================================
+// BLOCK HEADER
+// =============================================
+
+.gambol-block-header {
+	display: flex;
+	align-items: center;
+	gap: $space-md;
+	padding: $space-lg $space-xl;
+	background: $gambol-sidebar-secondary;
+	border-bottom: 1px solid $gambol-border;
+}
+
+.gambol-block-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	background: $gambol-accent-muted;
+	border-radius: $radius-lg;
+	color: $gambol-accent;
+
+	svg {
+		width: $icon-size-lg;
+		height: $icon-size-lg;
+	}
+}
+
+.gambol-block-title {
+	flex: 1;
+
+	h2 {
+		margin: 0 0 2px;
+		font-size: $font-size-lg;
+		font-weight: $font-weight-semibold;
+		color: $gambol-text-primary;
+	}
+
+	span {
+		font-size: $font-size-sm;
+		color: $gambol-text-muted;
+	}
+}
+
+// =============================================
+// TAB NAVIGATION
+// =============================================
+
+.gambol-tabs {
+	display: flex;
+	background: $gambol-sidebar-secondary;
+	border-bottom: 1px solid $gambol-border;
+}
+
+.gambol-tab {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: $space-xs;
+	padding: $space-md $space-sm;
+	font-size: $font-size-sm;
+	font-weight: $font-weight-medium;
+	color: $gambol-text-muted;
+	background: transparent;
+	border: none;
+	border-bottom: 2px solid transparent;
+	cursor: pointer;
+	transition: all $transition-base;
+
+	&:hover {
+		color: $gambol-text-secondary;
+		background: rgba(0, 0, 0, 0.03);
+	}
+
+	&.is-active {
+		color: $gambol-accent;
+		border-bottom-color: $gambol-accent;
+		background: rgba(0, 0, 0, 0.04);
+	}
+
+	svg {
+		width: $icon-size-md;
+		height: $icon-size-md;
+		opacity: 0.7;
+	}
+
+	&.is-active svg {
+		opacity: 1;
+	}
+}
+
+// =============================================
+// TAB CONTENT
+// =============================================
+
+.gambol-tab-content {
+	padding: $space-lg;
+}
+
+// =============================================
+// CONTROL SECTION
+// =============================================
+
+.gambol-section {
+	margin-bottom: $space-lg;
+	padding: $space-lg;
+	background: $gambol-sidebar-secondary;
+	border: 1px solid $gambol-border;
+	border-radius: $radius-lg;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.gambol-section-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: $space-lg;
+	padding-bottom: $space-md;
+	border-bottom: 1px solid $gambol-border;
+}
+
+.gambol-section-title {
+	display: flex;
+	align-items: center;
+	gap: $space-sm;
+	font-size: $font-size-sm;
+	font-weight: $font-weight-semibold;
+	color: $gambol-text-secondary;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+
+	svg {
+		width: $icon-size-sm;
+		height: $icon-size-sm;
+		color: $gambol-accent;
+	}
+}
+
+// =============================================
+// CONTROL ROW
+// =============================================
+
+.gambol-control {
+	margin-bottom: $space-lg;
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+}
+
+.gambol-control-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: $space-sm;
+}
+
+.gambol-control-label {
+	font-size: $font-size-base;
+	font-weight: $font-weight-medium;
+	color: $gambol-text-secondary;
+}
+
+.gambol-control-actions {
+	display: flex;
+	gap: $space-xs;
+}
+
+// =============================================
+// BUTTON GROUP (Segmented Control)
+// =============================================
+
+.gambol-button-group {
+	display: flex;
+	background: $gambol-sidebar-tertiary;
+	border: 1px solid $gambol-border;
+	border-radius: $radius-md;
+	overflow: hidden;
+}
+
+.gambol-button-group-item {
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: $space-xs;
+	min-height: $control-height;
+	padding: $space-sm $space-md;
+	font-size: $font-size-sm;
+	font-weight: $font-weight-medium;
+	color: $gambol-text-muted;
+	background: transparent;
+	border: none;
+	border-right: 1px solid $gambol-border;
+	cursor: pointer;
+	transition: all $transition-base;
+
+	&:last-child {
+		border-right: none;
+	}
+
+	&:hover {
+		color: $gambol-text-secondary;
+		background: rgba(0, 0, 0, 0.04);
+	}
+
+	&.is-active {
+		color: $gambol-accent;
+		background: $gambol-accent-muted;
+	}
+
+	svg {
+		width: $icon-size-sm;
+		height: $icon-size-sm;
+	}
+}
+
+// =============================================
+// RANGE SLIDER
+// =============================================
+
+.gambol-range {
+	display: flex;
+	flex-direction: column;
+	gap: $space-sm;
+}
+
+.gambol-range-track {
+	display: flex;
+	align-items: center;
+	gap: $space-md;
+}
+
+.gambol-range-slider {
+	flex: 1;
+	-webkit-appearance: none;
+	height: 4px;
+	background: $gambol-sidebar-tertiary;
+	border-radius: $radius-full;
+	cursor: pointer;
+
+	&::-webkit-slider-thumb {
+		-webkit-appearance: none;
+		width: 14px;
+		height: 14px;
+		background: $gambol-accent;
+		border: 2px solid $gambol-sidebar-bg;
+		border-radius: 50%;
+		cursor: pointer;
+		box-shadow: $shadow-sm;
+		transition: transform $transition-fast;
+
+		&:hover {
+			transform: scale(1.15);
+		}
+	}
+
+	&::-moz-range-thumb {
+		width: 14px;
+		height: 14px;
+		background: $gambol-accent;
+		border: 2px solid $gambol-sidebar-bg;
+		border-radius: 50%;
+		cursor: pointer;
+	}
+}
+
+.gambol-range-input {
+	width: 56px;
+	padding: $space-sm;
+	font-size: $font-size-sm;
+	font-family: $font-mono;
+	text-align: center;
+	color: $gambol-text-primary;
+	background: $gambol-sidebar-tertiary;
+	border: 1px solid $gambol-border;
+	border-radius: $radius-md;
+	transition: border-color $transition-base;
+
+	&:focus {
+		outline: none;
+		border-color: $gambol-accent;
+	}
+}
+
+.gambol-range-unit {
+	font-size: $font-size-sm;
+	color: $gambol-text-muted;
+}
+
+// =============================================
+// TOGGLE SWITCH
+// =============================================
+
+.gambol-toggle {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: $space-sm 0;
+}
+
+.gambol-toggle-label {
+	font-size: $font-size-base;
+	color: $gambol-text-secondary;
+}
+
+.gambol-toggle-switch {
+	position: relative;
+	width: 40px;
+	height: 22px;
+	padding: 0;
+	background: $gambol-sidebar-tertiary;
+	border: 1px solid $gambol-border;
+	border-radius: $radius-full;
+	cursor: pointer;
+	transition: all $transition-base;
+
+	&.is-on {
+		background: $gambol-accent;
+		border-color: $gambol-accent;
+	}
+}
+
+.gambol-toggle-thumb {
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 16px;
+	height: 16px;
+	background: $gambol-text-primary;
+	border-radius: 50%;
+	box-shadow: $shadow-sm;
+	transition: transform $transition-base;
+
+	.is-on & {
+		transform: translateX(18px);
+	}
+}
+
+// =============================================
+// SELECT DROPDOWN
+// =============================================
+
+.gambol-select {
+	position: relative;
+}
+
+.gambol-select-trigger {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	min-height: $input-height;
+	padding: $space-sm $space-md;
+	font-size: $font-size-md;
+	color: $gambol-text-primary;
+	background: $gambol-sidebar-tertiary;
+	border: 1px solid $gambol-border;
+	border-radius: $radius-md;
+	cursor: pointer;
+	transition: border-color $transition-base;
+
+	&:hover {
+		border-color: $gambol-border-light;
+	}
+
+	&:focus,
+	&.is-open {
+		outline: none;
+		border-color: $gambol-accent;
+	}
+
+	svg {
+		width: $icon-size-sm;
+		height: $icon-size-sm;
+		color: $gambol-text-muted;
+		transition: transform $transition-base;
+	}
+
+	&.is-open svg {
+		transform: rotate(180deg);
+	}
+}
+
+.gambol-select-dropdown {
+	position: absolute;
+	top: calc(100% + 4px);
+	left: 0;
+	right: 0;
+	z-index: 100;
+	padding: $space-xs;
+	background: $gambol-sidebar-elevated;
+	border: 1px solid $gambol-border;
+	border-radius: $radius-md;
+	box-shadow: $shadow-lg;
+}
+
+.gambol-select-option {
+	display: flex;
+	align-items: center;
+	gap: $space-sm;
+	padding: $space-sm $space-md;
+	font-size: $font-size-md;
+	color: $gambol-text-secondary;
+	border-radius: $radius-sm;
+	cursor: pointer;
+	transition: all $transition-fast;
+
+	&:hover {
+		color: $gambol-text-primary;
+		background: rgba(0, 0, 0, 0.05);
+	}
+
+	&.is-selected {
+		color: $gambol-accent;
+		background: $gambol-accent-subtle;
+	}
+}
+
+// =============================================
+// COLOR PICKER
+// =============================================
+
+.gambol-color-picker {
+	display: flex;
+	flex-direction: column;
+	gap: $space-md;
+}
+
+.gambol-color-swatches {
+	display: flex;
+	flex-wrap: wrap;
+	gap: $space-sm;
+}
+
+.gambol-color-swatch {
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	border: 2px solid transparent;
+	border-radius: $radius-md;
+	cursor: pointer;
+	transition: all $transition-fast;
+
+	&:hover {
+		transform: scale(1.1);
+	}
+
+	&.is-selected {
+		border-color: $gambol-text-primary;
+		box-shadow: 0 0 0 2px $gambol-sidebar-bg;
+	}
+
+	&.is-transparent {
+		background: 
+			linear-gradient(45deg, #444 25%, transparent 25%),
+			linear-gradient(-45deg, #444 25%, transparent 25%),
+			linear-gradient(45deg, transparent 75%, #444 75%),
+			linear-gradient(-45deg, transparent 75%, #444 75%);
+		background-size: 8px 8px;
+		background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+	}
+}
+
+.gambol-color-custom {
+	display: flex;
+	align-items: center;
+	gap: $space-sm;
+}
+
+.gambol-color-preview {
+	width: 36px;
+	height: 36px;
+	border: 1px solid $gambol-border;
+	border-radius: $radius-md;
+	cursor: pointer;
+	transition: border-color $transition-base;
+
+	&:hover {
+		border-color: $gambol-border-light;
+	}
+}
+
+.gambol-color-input {
+	flex: 1;
+	padding: $space-sm $space-md;
+	font-size: $font-size-sm;
+	font-family: $font-mono;
+	color: $gambol-text-primary;
+	background: $gambol-sidebar-tertiary;
+	border: 1px solid $gambol-border;
+	border-radius: $radius-md;
+	transition: border-color $transition-base;
+
+	&:focus {
+		outline: none;
+		border-color: $gambol-accent;
+	}
+}
+
+// =============================================
+// SPACING CONTROL (Margin/Padding)
+// =============================================
+
+.gambol-spacing {
+	display: flex;
+	flex-direction: column;
+	gap: $space-md;
+}
+
+.gambol-spacing-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.gambol-spacing-link {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	color: $gambol-text-muted;
+	background: transparent;
+	border: 1px solid $gambol-border;
+	border-radius: $radius-md;
+	cursor: pointer;
+	transition: all $transition-base;
+
+	&:hover {
+		color: $gambol-text-secondary;
+		border-color: $gambol-border-light;
+	}
+
+	&.is-linked {
+		color: $gambol-accent;
+		background: $gambol-accent-subtle;
+		border-color: $gambol-accent;
+	}
+
+	svg {
+		width: $icon-size-sm;
+		height: $icon-size-sm;
+	}
+}
+
+.gambol-spacing-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: auto auto auto;
+	gap: $space-sm;
+	padding: $space-lg;
+	background: $gambol-sidebar-tertiary;
+	border: 1px solid $gambol-border;
+	border-radius: $radius-lg;
+}
+
+.gambol-spacing-input {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: $space-xs;
+
+	&.is-top { grid-column: 2; grid-row: 1; }
+	&.is-right { grid-column: 3; grid-row: 2; }
+	&.is-bottom { grid-column: 2; grid-row: 3; }
+	&.is-left { grid-column: 1; grid-row: 2; }
+
+	label {
+		font-size: $font-size-xs;
+		font-weight: $font-weight-semibold;
+		color: $gambol-text-muted;
+		text-transform: uppercase;
+	}
+
+	input {
+		width: 48px;
+		padding: $space-sm;
+		font-size: $font-size-sm;
+		font-family: $font-mono;
+		text-align: center;
+		color: $gambol-text-primary;
+		background: $gambol-sidebar-secondary;
+		border: 1px solid $gambol-border;
+		border-radius: $radius-md;
+		transition: border-color $transition-base;
+
+		&:focus {
+			outline: none;
+			border-color: $gambol-accent;
+		}
+	}
+}
+
+.gambol-spacing-center {
+	grid-column: 2;
+	grid-row: 2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	span {
+		width: 32px;
+		height: 32px;
+		background: $gambol-accent-subtle;
+		border: 1px dashed $gambol-accent;
+		border-radius: $radius-sm;
+	}
+}
+
+// =============================================
+// VISIBILITY TOGGLES
+// =============================================
+
+.gambol-visibility {
+	display: flex;
+	gap: $space-sm;
+}
+
+.gambol-visibility-btn {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: $space-xs;
+	padding: $space-md;
+	color: $gambol-text-muted;
+	background: $gambol-sidebar-tertiary;
+	border: 1px solid $gambol-border;
+	border-radius: $radius-md;
+	cursor: pointer;
+	transition: all $transition-base;
+
+	&:hover {
+		color: $gambol-text-secondary;
+		border-color: $gambol-border-light;
+	}
+
+	&.is-visible {
+		color: $gambol-accent;
+		background: $gambol-accent-subtle;
+		border-color: $gambol-accent;
+	}
+
+	&.is-hidden {
+		color: $gambol-error;
+		background: rgba($gambol-error, 0.1);
+		border-color: rgba($gambol-error, 0.3);
+	}
+
+	svg {
+		width: $icon-size-md;
+		height: $icon-size-md;
+	}
+
+	span {
+		font-size: $font-size-xs;
+		font-weight: $font-weight-medium;
+		text-transform: uppercase;
+	}
+}
+
+// =============================================
+// TEXT INPUT
+// =============================================
+
+.gambol-text-input {
+	width: 100%;
+	padding: $space-sm $space-md;
+	font-size: $font-size-md;
+	color: $gambol-text-primary;
+	background: $gambol-sidebar-tertiary;
+	border: 1px solid $gambol-border;
+	border-radius: $radius-md;
+	transition: border-color $transition-base;
+
+	&::placeholder {
+		color: $gambol-text-muted;
+	}
+
+	&:focus {
+		outline: none;
+		border-color: $gambol-accent;
+	}
+}
+
+// =============================================
+// SHADOW PRESETS
+// =============================================
+
+.gambol-shadow-presets {
+	display: flex;
+	gap: $space-sm;
+}
+
+.gambol-shadow-preset {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: $space-sm;
+	padding: $space-md;
+	color: $gambol-text-muted;
+	background: $gambol-sidebar-tertiary;
+	border: 1px solid $gambol-border;
+	border-radius: $radius-md;
+	cursor: pointer;
+	transition: all $transition-base;
+
+	&:hover {
+		border-color: $gambol-border-light;
+	}
+
+	&.is-active {
+		color: $gambol-accent;
+		background: $gambol-accent-subtle;
+		border-color: $gambol-accent;
+	}
+}
+
+.gambol-shadow-preview {
+	width: 32px;
+	height: 32px;
+	background: #ffffff;
+	border-radius: $radius-sm;
+
+	&.shadow-none {
+		box-shadow: none;
+		border: 1px solid $gambol-border;
+	}
+
+	&.shadow-simple {
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+	}
+
+	&.shadow-soft {
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+	}
+
+	&.shadow-strong {
+		box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+	}
+}
+
+.gambol-shadow-label {
+	font-size: $font-size-xs;
+	font-weight: $font-weight-medium;
+	text-transform: uppercase;
+}
+
+// =============================================
+// HELP TEXT
+// =============================================
+
+.gambol-help {
+	margin-top: $space-sm;
+	font-size: $font-size-sm;
+	color: $gambol-text-muted;
+	line-height: $line-height-relaxed;
+}
+
+// =============================================
+// DIVIDER
+// =============================================
+
+.gambol-divider {
+	height: 1px;
+	margin: $space-lg 0;
+	background: $gambol-border;
+}
+
+// =============================================
+// ICON BUTTON
+// =============================================
+
+.gambol-icon-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	color: $gambol-text-muted;
+	background: transparent;
+	border: none;
+	border-radius: $radius-md;
+	cursor: pointer;
+	transition: all $transition-base;
+
+	&:hover {
+		color: $gambol-text-secondary;
+		background: rgba(0, 0, 0, 0.05);
+	}
+
+	&.is-active {
+		color: $gambol-accent;
+	}
+
+	svg {
+		width: $icon-size-sm;
+		height: $icon-size-sm;
+	}
+}
+
+// =============================================
+// UNIT SELECTOR
+// =============================================
+
+.gambol-units {
+	display: flex;
+	background: $gambol-sidebar-tertiary;
+	border: 1px solid $gambol-border;
+	border-radius: $radius-sm;
+	overflow: hidden;
+}
+
+.gambol-unit {
+	padding: $space-xs $space-sm;
+	font-size: $font-size-xs;
+	font-weight: $font-weight-medium;
+	color: $gambol-text-muted;
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	transition: all $transition-fast;
+
+	&:hover {
+		color: $gambol-text-secondary;
+	}
+
+	&.is-active {
+		color: $gambol-accent;
+		background: $gambol-accent-subtle;
+	}
+}

@@ -1,0 +1,12 @@
+[
+	{
+		"title": "Main Footer",
+		"content": "<!-- wp:gambol/section {\"backgroundColor\":\"#1e1e1e\",\"paddingTop\":40,\"paddingBottom\":40} -->\n<section class=\"wp-block-gambol-section\" style=\"background-color:#1e1e1e;padding-top:40px;padding-bottom:40px\">\n<!-- wp:gambol/container {\"maxWidth\":1200} -->\n<div class=\"wp-block-gambol-container\" style=\"max-width:1200px\">\n<!-- wp:gambol/text {\"textAlign\":\"center\",\"textColor\":\"#ffffff\"} -->\n<p class=\"wp-block-gambol-text has-text-align-center\" style=\"color:#ffffff\">© 2026 Your Company. All rights reserved.</p>\n<!-- /wp:gambol/text -->\n\n<!-- wp:gambol/text {\"textAlign\":\"center\",\"textColor\":\"#aaaaaa\"} -->\n<p class=\"wp-block-gambol-text has-text-align-center\" style=\"color:#aaaaaa\"><a href=\"/privacy-policy/\" style=\"color:#aaaaaa\">Privacy Policy</a> | <a href=\"/terms-of-service/\" style=\"color:#aaaaaa\">Terms of Service</a></p>\n<!-- /wp:gambol/text -->\n</div>\n<!-- /wp:gambol/container -->\n</section>\n<!-- /wp:gambol/section -->",
+		"meta": {
+			"_gambol_hf_type": "footer",
+			"_gambol_hf_active": "1",
+			"_gambol_hf_display_on": "global",
+			"_gambol_hf_visibility": "all"
+		}
+	}
+]

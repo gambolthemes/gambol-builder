@@ -1,0 +1,200 @@
+/**
+ * Pricing Table Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-pricing-table {
+	position: relative;
+	background-color: #ffffff;
+	border: 1px solid var(--gb-colors-gray-200);
+	text-align: center;
+	overflow: hidden;
+	transition: all 0.3s ease;
+	
+	&:hover {
+		box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+		transform: translateY(-5px);
+	}
+}
+
+// Featured state
+.is-featured {
+	border-color: var(--gb-colors-primary);
+	border-width: 2px;
+	transform: scale(1.05);
+	z-index: 1;
+	
+	&:hover {
+		transform: scale(1.05) translateY(-5px);
+	}
+}
+
+.pricing-badge {
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: var(--gb-spacing-xs) var(--gb-spacing-md);
+	background-color: var(--gb-colors-primary);
+	color: #ffffff;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	border-bottom-left-radius: var(--gb-radius-base);
+}
+
+.pricing-header {
+	padding: var(--gb-spacing-lg);
+	background-color: var(--gb-colors-gray-50);
+	border-bottom: 1px solid var(--gb-colors-gray-200);
+}
+
+.pricing-plan-name {
+	margin: 0 0 var(--gb-spacing-xs) 0;
+	font-size: 24px;
+	font-weight: 700;
+	color: inherit;
+}
+
+.pricing-description {
+	margin: 0;
+	font-size: 14px;
+	color: var(--gb-colors-gray-600);
+	
+	.pricing-header[style*="color"] & {
+		opacity: 0.8;
+	}
+}
+
+.pricing-price {
+	padding: var(--gb-spacing-lg);
+	display: flex;
+	align-items: baseline;
+	justify-content: center;
+	gap: 4px;
+}
+
+.pricing-currency {
+	font-size: 24px;
+	font-weight: 600;
+	align-self: flex-start;
+	margin-top: 8px;
+}
+
+.pricing-amount {
+	font-size: 56px;
+	font-weight: 700;
+	line-height: 1;
+}
+
+.pricing-period {
+	font-size: 16px;
+	color: var(--gb-colors-gray-500);
+}
+
+.pricing-features {
+	list-style: none;
+	margin: 0;
+	padding: 0 var(--gb-spacing-lg);
+}
+
+.pricing-features li {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--gb-spacing-sm);
+	padding: var(--gb-spacing-sm) 0;
+	border-bottom: 1px solid var(--gb-colors-gray-100);
+	
+	&:last-child {
+		border-bottom: none;
+	}
+}
+
+.feature-icon {
+	width: 20px;
+	height: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+	font-size: 12px;
+	font-weight: 700;
+	flex-shrink: 0;
+}
+
+.is-included {
+	.feature-icon {
+		background-color: #dcfce7;
+		color: #16a34a;
+	}
+	
+	.feature-text {
+		color: var(--gb-colors-gray-700);
+	}
+}
+
+.is-excluded {
+	.feature-icon {
+		background-color: var(--gb-colors-gray-100);
+		color: var(--gb-colors-gray-400);
+	}
+	
+	.feature-text {
+		color: var(--gb-colors-gray-400);
+		text-decoration: line-through;
+	}
+}
+
+.pricing-button-wrapper {
+	padding: var(--gb-spacing-lg);
+}
+
+.pricing-button {
+	display: block;
+	width: 100%;
+	padding: var(--gb-spacing-md) var(--gb-spacing-lg);
+	background-color: var(--gb-colors-primary);
+	color: #ffffff;
+	font-size: 16px;
+	font-weight: 600;
+	text-decoration: none;
+	text-align: center;
+	border-radius: var(--gb-radius-base);
+	border: none;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	
+	&:hover {
+		opacity: 0.9;
+		transform: translateY(-2px);
+	}
+}
+
+// Featured button style
+.is-featured .pricing-button {
+	background-color: var(--gb-colors-primary);
+	box-shadow: 0 4px 14px rgba(var(--gb-colors-primary-rgb, 59, 130, 246), 0.4);
+}
+
+// Responsive
+@media (max-width: 768px) {
+	.is-featured {
+		transform: none;
+		
+		&:hover {
+			transform: translateY(-5px);
+		}
+	}
+	
+	.pricing-amount {
+		font-size: 42px;
+	}
+	
+	.pricing-header,
+	.pricing-price,
+	.pricing-button-wrapper {
+		padding: var(--gb-spacing-md);
+	}
+}

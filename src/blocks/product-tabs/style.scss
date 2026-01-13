@@ -1,0 +1,121 @@
+/**
+ * Product Tabs Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-product-tabs {
+	margin-bottom: var(--gb-spacing-xl);
+	
+	// Horizontal layout
+	&.layout-horizontal {
+		.product-tabs__nav {
+			display: flex;
+			flex-wrap: wrap;
+			gap: var(--gb-spacing-xs);
+			border-bottom: 1px solid var(--gb-colors-gray-200);
+			padding-bottom: 0;
+		}
+		
+		.product-tabs__tab {
+			padding: var(--gb-spacing-sm) var(--gb-spacing-lg);
+			margin-bottom: -1px;
+			
+			&.is-active {
+				border-bottom-left-radius: 0 !important;
+				border-bottom-right-radius: 0 !important;
+			}
+		}
+	}
+	
+	// Vertical layout
+	&.layout-vertical {
+		display: flex;
+		gap: var(--gb-spacing-lg);
+		
+		.product-tabs__nav {
+			display: flex;
+			flex-direction: column;
+			gap: var(--gb-spacing-xs);
+			min-width: 200px;
+		}
+		
+		.product-tabs__content {
+			flex: 1;
+		}
+	}
+}
+
+.product-tabs__tab {
+	font-weight: 500;
+	border: none;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	white-space: nowrap;
+	
+	&:hover:not(.is-active) {
+		opacity: 0.8;
+	}
+}
+
+.product-tabs__content {
+	border: 1px solid var(--gb-colors-gray-200);
+	border-top: none;
+	background: #fff;
+}
+
+.product-tabs__panel {
+	h2 {
+		margin: 0 0 var(--gb-spacing-md);
+		font-size: 1.5rem;
+	}
+	
+	p {
+		margin: 0 0 var(--gb-spacing-md);
+		line-height: 1.6;
+		
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+	
+	ul {
+		margin: var(--gb-spacing-md) 0;
+		padding-left: var(--gb-spacing-lg);
+		
+		li {
+			margin-bottom: var(--gb-spacing-xs);
+		}
+	}
+	
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		
+		th,
+		td {
+			padding: var(--gb-spacing-sm);
+			border-bottom: 1px solid var(--gb-colors-gray-200);
+			text-align: left;
+		}
+		
+		th {
+			font-weight: 600;
+			width: 30%;
+			color: var(--gb-colors-gray-700);
+		}
+	}
+}
+
+// Responsive
+@media (max-width: 768px) {
+	.wp-block-gambol-product-tabs.layout-vertical {
+		flex-direction: column;
+		
+		.product-tabs__nav {
+			flex-direction: row;
+			flex-wrap: wrap;
+			min-width: auto;
+		}
+	}
+}

@@ -1,0 +1,74 @@
+/**
+ * Icon List Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-icon-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	
+	&.layout-vertical {
+		display: flex;
+		flex-direction: column;
+		gap: var(--item-spacing, 10px);
+	}
+	
+	&.layout-horizontal {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		gap: var(--item-spacing, 10px);
+	}
+	
+	&.icon-right {
+		.wp-block-gambol-icon-list__item {
+			flex-direction: row-reverse;
+		}
+	}
+}
+
+.wp-block-gambol-icon-list__item {
+	display: flex;
+	align-items: center;
+	gap: var(--gb-spacing-sm);
+	
+	&.has-divider {
+		padding-bottom: var(--item-spacing, 10px);
+		border-bottom: 1px solid var(--divider-color, var(--gb-colors-border));
+		
+		&:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+		}
+	}
+}
+
+.wp-block-gambol-icon-list__icon {
+	flex-shrink: 0;
+	font-size: var(--icon-size, 16px);
+	color: var(--icon-color, var(--gb-colors-primary));
+	line-height: 1;
+}
+
+.wp-block-gambol-icon-list__text {
+	color: var(--text-color, inherit);
+	font-size: var(--gb-typography-font-size-base);
+	line-height: var(--gb-typography-line-height-base);
+}
+
+// Editor specific
+.wp-block-gambol-icon-list__remove {
+	opacity: 0;
+	transition: opacity 0.2s ease;
+	margin-left: auto;
+}
+
+.wp-block-gambol-icon-list__item:hover .wp-block-gambol-icon-list__remove {
+	opacity: 1;
+}
+
+.wp-block-gambol-icon-list__add {
+	margin-top: var(--gb-spacing-sm);
+}

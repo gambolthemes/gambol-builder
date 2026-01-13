@@ -1,0 +1,34 @@
+/**
+ * Text Block Styles
+ *
+ * Minimal, performance-first CSS.
+ * Uses global CSS custom properties.
+ *
+ * @package GambolBuilder
+ */
+
+// Text base.
+.wp-block-gambol-text {
+	margin: 0;
+	font-family: var(--gb-typography-font-family);
+	font-size: var(--gb-typography-font-size-base);
+	line-height: var(--gb-typography-line-height-base);
+	color: var(--gb-colors-text);
+}
+
+// Text alignment.
+.wp-block-gambol-text.has-text-align-left {
+	text-align: left;
+}
+
+.wp-block-gambol-text.has-text-align-center {
+	text-align: center;
+}
+
+.wp-block-gambol-text.has-text-align-right {
+	text-align: right;
+}
+
+.wp-block-gambol-text.has-text-align-justify {
+	text-align: justify;
+}

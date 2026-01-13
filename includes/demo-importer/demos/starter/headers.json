@@ -1,0 +1,14 @@
+[
+	{
+		"title": "Main Header",
+		"content": "<!-- wp:gambol/section {\"backgroundColor\":\"#ffffff\",\"paddingTop\":20,\"paddingBottom\":20} -->\n<section class=\"wp-block-gambol-section\" style=\"background-color:#ffffff;padding-top:20px;padding-bottom:20px\">\n<!-- wp:gambol/container {\"maxWidth\":1200} -->\n<div class=\"wp-block-gambol-container\" style=\"max-width:1200px;display:flex;justify-content:space-between;align-items:center\">\n<!-- wp:gambol/heading {\"level\":3} -->\n<h3 class=\"wp-block-gambol-heading\">Your Logo</h3>\n<!-- /wp:gambol/heading -->\n\n<!-- wp:gambol/text -->\n<p class=\"wp-block-gambol-text\"><a href=\"/\">Home</a> | <a href=\"/about-us/\">About</a> | <a href=\"/contact/\">Contact</a></p>\n<!-- /wp:gambol/text -->\n</div>\n<!-- /wp:gambol/container -->\n</section>\n<!-- /wp:gambol/section -->",
+		"meta": {
+			"_gambol_hf_type": "header",
+			"_gambol_hf_active": "1",
+			"_gambol_hf_sticky": "1",
+			"_gambol_hf_sticky_offset": "0",
+			"_gambol_hf_display_on": "global",
+			"_gambol_hf_visibility": "all"
+		}
+	}
+]

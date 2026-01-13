@@ -1,0 +1,56 @@
+/**
+ * HTML Block Styles
+ *
+ * @package GambolBuilder
+ */
+
+.wp-block-gambol-html {
+	background-color: var(--gb-colors-background-secondary, #1e1e1e);
+	border-radius: var(--gb-radius-base);
+	overflow: hidden;
+}
+
+.wp-block-gambol-html__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: var(--gb-spacing-sm) var(--gb-spacing-md);
+	background-color: rgba(0, 0, 0, 0.2);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wp-block-gambol-html__label {
+	font-family: monospace;
+	font-size: 12px;
+	color: rgba(255, 255, 255, 0.7);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.wp-block-gambol-html__textarea {
+	width: 100%;
+	min-height: 200px;
+	padding: var(--gb-spacing-md);
+	border: none;
+	background-color: transparent;
+	color: #abb2bf;
+	font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+	font-size: 14px;
+	line-height: 1.6;
+	resize: vertical;
+	
+	&::placeholder {
+		color: rgba(255, 255, 255, 0.3);
+	}
+	
+	&:focus {
+		outline: none;
+	}
+}
+
+.wp-block-gambol-html__preview {
+	padding: var(--gb-spacing-md);
+	background-color: #fff;
+	color: #333;
+	min-height: 100px;
+}
