@@ -4,7 +4,7 @@
  * @package GambolBuilder
  */
 
-import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 
 /**
  * Inner Section Save Component.
@@ -31,9 +31,7 @@ export default function save( { attributes } ) {
 		},
 	} );
 
-	return (
-		<div { ...blockProps }>
-			<InnerBlocks.Content />
-		</div>
-	);
+	const innerBlocksProps = useInnerBlocksProps.save( blockProps );
+
+	return <div { ...innerBlocksProps } />;
 }

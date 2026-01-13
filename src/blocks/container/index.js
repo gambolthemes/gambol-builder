@@ -39,7 +39,6 @@ registerBlockType( 'gambol/container', {
 	description: __( 'A centered container for constraining content width.', 'gambol-builder' ),
 	category: 'gambol-builder',
 	icon,
-	parent: [ 'gambol/section' ],
 	keywords: [
 		__( 'container', 'gambol-builder' ),
 		__( 'wrapper', 'gambol-builder' ),

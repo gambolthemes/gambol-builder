@@ -38,7 +38,6 @@ registerBlockType( 'gambol/column', {
 	description: __( 'A single column container.', 'gambol-builder' ),
 	category: 'gambol-builder',
 	icon,
-	parent: [ 'gambol/inner-section', 'gambol/grid', 'gambol/section' ],
 	keywords: [
 		__( 'column', 'gambol-builder' ),
 		__( 'layout', 'gambol-builder' ),

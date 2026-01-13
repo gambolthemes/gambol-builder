@@ -91,7 +91,7 @@ export default function save( { attributes } ) {
 	// Render stars
 	const renderStars = () => {
 		return [ ...Array( 5 ) ].map( ( _, index ) => (
-			<span key={ index } className="gambol-testimonial__star">
+			<span className="gambol-testimonial__star">
 				<StarIcon filled={ index < rating } />
 			</span>
 		) );

@@ -4,7 +4,7 @@
  * @package GambolBuilder
  */
 
-import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 
 /**
  * Column Save Component.
@@ -16,19 +16,27 @@ export default function save( { attributes } ) {
 		horizontalAlign,
 	} = attributes;
 
+	const style = {};
+	
+	if ( width ) {
+		style.flex = `0 0 ${ width }`;
+		style.maxWidth = width;
+	}
+	
+	if ( horizontalAlign && horizontalAlign !== 'flex-start' ) {
+		style.alignItems = horizontalAlign;
+	}
+	
+	if ( verticalAlign && verticalAlign !== 'flex-start' ) {
+		style.justifyContent = verticalAlign;
+	}
+
 	const blockProps = useBlockProps.save( {
 		className: 'wp-block-gambol-column',
-		style: {
-			flex: width ? `0 0 ${ width }` : undefined,
-			maxWidth: width || undefined,
-			alignItems: horizontalAlign,
-			justifyContent: verticalAlign,
-		},
+		style: Object.keys( style ).length > 0 ? style : undefined,
 	} );
 
-	return (
-		<div { ...blockProps }>
-			<InnerBlocks.Content />
-		</div>
-	);
+	const innerBlocksProps = useInnerBlocksProps.save( blockProps );
+
+	return <div { ...innerBlocksProps } />;
 }

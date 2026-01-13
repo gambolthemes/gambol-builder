@@ -63,6 +63,9 @@ safe_include( GAMBOL_BUILDER_PATH . 'includes/class-global-styles.php' );
 // Include Admin Page.
 safe_include( GAMBOL_BUILDER_PATH . 'includes/class-admin-page.php' );
 
+// Include Dynamic Blocks (server-side rendering).
+safe_include( GAMBOL_BUILDER_PATH . 'includes/blocks/class-dynamic-blocks.php' );
+
 // Include Header Footer Builder (optional module).
 if ( safe_include( GAMBOL_BUILDER_PATH . 'includes/header-footer/class-loader.php' ) ) {
 	safe_include( GAMBOL_BUILDER_PATH . 'includes/header-footer/template-functions.php' );
@@ -88,9 +91,11 @@ safe_include( GAMBOL_BUILDER_PATH . 'includes/licensing/class-loader.php' );
 function init() {
 	add_action( 'init', __NAMESPACE__ . '\register_blocks' );
 	add_action( 'enqueue_block_editor_assets', __NAMESPACE__ . '\enqueue_editor_assets' );
+	add_action( 'enqueue_block_assets', __NAMESPACE__ . '\enqueue_editor_iframe_assets' );
 	add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\enqueue_frontend_assets' );
 	add_filter( 'block_categories_all', __NAMESPACE__ . '\register_block_category', 10, 2 );
 	add_filter( 'allowed_block_types_all', __NAMESPACE__ . '\filter_allowed_block_types', 10, 2 );
+	add_filter( 'admin_body_class', __NAMESPACE__ . '\add_admin_body_classes' );
 
 	/**
 	 * Fires after Gambol Builder core is initialized.
@@ -100,6 +105,24 @@ function init() {
 	do_action( 'gambol_builder_init' );
 }
 add_action( 'plugins_loaded', __NAMESPACE__ . '\init' );
+
+/**
+ * Add admin body classes.
+ *
+ * @param string $classes Existing body classes.
+ * @return string Modified body classes.
+ */
+function add_admin_body_classes( $classes ) {
+	// Add WooCommerce active class.
+	if ( class_exists( 'WooCommerce' ) ) {
+		$classes .= ' woocommerce-active';
+	}
+	
+	// Add Gambol editor class.
+	$classes .= ' gambol-builder-editor';
+	
+	return $classes;
+}
 
 /**
  * Plugin activation hook.
@@ -282,6 +305,7 @@ function register_blocks() {
 
 /**
  * Enqueue editor-specific assets.
+ * Note: Scripts go here, CSS is enqueued via enqueue_block_assets for iframe support.
  *
  * @return void
  */
@@ -303,10 +327,44 @@ function enqueue_editor_assets() {
 		true
 	);
 
-	// Enqueue editor panel styles.
+	// Pass data to JavaScript.
+	wp_localize_script(
+		'gambol-builder-editor-panel',
+		'gambolBuilderData',
+		array(
+			'woocommerceActive' => class_exists( 'WooCommerce' ),
+			'pluginUrl'         => GAMBOL_BUILDER_URL,
+			'version'           => GAMBOL_BUILDER_VERSION,
+			'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
+			'nonce'             => wp_create_nonce( 'gambol_builder_nonce' ),
+			'adminUrl'          => admin_url(),
+		)
+	);
+}
+
+/**
+ * Enqueue editor styles for iframe support (WordPress 6.x+).
+ * Uses enqueue_block_assets hook which properly adds styles to the iframe.
+ *
+ * @return void
+ */
+function enqueue_editor_iframe_assets() {
+	// Only load in editor context.
+	if ( ! is_admin() ) {
+		return;
+	}
+
+	$editor_asset_file = GAMBOL_BUILDER_PATH . 'build/editor.asset.php';
+	if ( ! file_exists( $editor_asset_file ) ) {
+		return;
+	}
+
+	$editor_asset = require $editor_asset_file;
+
+	// Enqueue editor panel styles - this will work in iframe.
 	if ( file_exists( GAMBOL_BUILDER_PATH . 'build/editor.css' ) ) {
 		wp_enqueue_style(
-			'gambol-builder-editor-panel',
+			'gambol-builder-editor-styles',
 			GAMBOL_BUILDER_URL . 'build/editor.css',
 			array(),
 			$editor_asset['version']

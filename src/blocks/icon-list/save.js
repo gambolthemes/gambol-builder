@@ -48,7 +48,7 @@ export default function save( { attributes } ) {
 		<ul { ...blockProps }>
 			{ items.map( ( item, index ) => (
 				<li 
-					key={ index } 
+					key={ index }
 					className={ `wp-block-gambol-icon-list__item${ divider ? ' has-divider' : '' }` }
 				>
 					<span className="wp-block-gambol-icon-list__icon">

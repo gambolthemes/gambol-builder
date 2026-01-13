@@ -13,28 +13,28 @@
 
 // Brand Colors
 $gb-accent: #00d4aa;
-$gb-accent-hover: #00eabb;
-$gb-accent-active: #00b894;
-$gb-accent-muted: rgba(#00d4aa, 0.15);
-$gb-accent-subtle: rgba(#00d4aa, 0.08);
+$gb-accent-hover: #00b894;
+$gb-accent-active: #009977;
+$gb-accent-muted: rgba(#00d4aa, 0.12);
+$gb-accent-subtle: rgba(#00d4aa, 0.06);
 
-// Surface Colors
-$gb-surface-base: #121212;
-$gb-surface-elevated: #1c1c1c;
-$gb-surface-card: #232323;
-$gb-surface-hover: #2a2a2a;
-$gb-surface-active: #333333;
+// Surface Colors (Light Theme)
+$gb-surface-base: #ffffff;
+$gb-surface-elevated: #f8f9fa;
+$gb-surface-card: #f1f3f5;
+$gb-surface-hover: #e9ecef;
+$gb-surface-active: #dee2e6;
 
-// Text Colors
-$gb-text-primary: #ffffff;
-$gb-text-secondary: #b0b0b0;
-$gb-text-muted: #6b6b6b;
-$gb-text-disabled: #4a4a4a;
+// Text Colors (Light Theme)
+$gb-text-primary: #1a1a1a;
+$gb-text-secondary: #4a5568;
+$gb-text-muted: #718096;
+$gb-text-disabled: #a0aec0;
 
-// Border Colors
-$gb-border-subtle: rgba(255, 255, 255, 0.06);
-$gb-border-default: rgba(255, 255, 255, 0.10);
-$gb-border-strong: rgba(255, 255, 255, 0.16);
+// Border Colors (Light Theme)
+$gb-border-subtle: rgba(0, 0, 0, 0.06);
+$gb-border-default: rgba(0, 0, 0, 0.10);
+$gb-border-strong: rgba(0, 0, 0, 0.16);
 
 // Spacing
 $gb-space-1: 4px;
@@ -68,10 +68,10 @@ $gb-transition-fast: 0.1s ease;
 $gb-transition-default: 0.15s ease;
 $gb-transition-slow: 0.25s ease;
 
-// Shadows
-$gb-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
-$gb-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
-$gb-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.4);
+// Shadows (Light Theme)
+$gb-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+$gb-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.12);
+$gb-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
 $gb-shadow-focus: 0 0 0 2px rgba($gb-accent, 0.4);
 
 // =============================================================================
@@ -80,7 +80,7 @@ $gb-shadow-focus: 0 0 0 2px rgba($gb-accent, 0.4);
 
 .gambol-left-sidebar {
 	position: fixed;
-	top: 32px; // WordPress admin bar height
+	top: 0;
 	left: 0;
 	bottom: 0;
 	width: $sidebar-width;
@@ -92,6 +92,11 @@ $gb-shadow-focus: 0 0 0 2px rgba($gb-accent, 0.4);
 	font-family: $gb-font-sans;
 	transition: width $gb-transition-slow;
 	box-shadow: $gb-shadow-lg;
+
+	// When WordPress admin bar is shown
+	.admin-bar & {
+		top: 0;
+	}
 
 	// Collapsed state
 	&--collapsed {
@@ -381,6 +386,25 @@ $gb-shadow-focus: 0 0 0 2px rgba($gb-accent, 0.4);
 
 .gambol-block-group__content {
 	overflow: hidden;
+}
+
+.gambol-block-group__notice {
+	display: flex;
+	align-items: center;
+	gap: $gb-space-2;
+	margin: $gb-space-2 $gb-space-3;
+	padding: $gb-space-2 $gb-space-3;
+	background: rgba(255, 171, 0, 0.15);
+	border: 1px solid rgba(255, 171, 0, 0.3);
+	border-radius: $gb-radius-md;
+	font-size: $gb-text-xs;
+	color: #ffab00;
+	line-height: 1.4;
+	
+	svg {
+		flex-shrink: 0;
+		opacity: 0.8;
+	}
 }
 
 .gambol-block-group__grid {

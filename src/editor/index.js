@@ -6,7 +6,7 @@
  */
 
 import { registerPlugin } from '@wordpress/plugins';
-import { PluginSidebar, PluginSidebarMoreMenuItem } from '@wordpress/edit-post';
+import { PluginSidebar, PluginSidebarMoreMenuItem } from '@wordpress/editor';
 import { __ } from '@wordpress/i18n';
 import { layout } from '@wordpress/icons';
 import { useState, useCallback, createRoot, render } from '@wordpress/element';

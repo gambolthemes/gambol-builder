@@ -78,8 +78,8 @@ export default function save( { attributes } ) {
 			</div>
 			
 			<ul className="pricing-features">
-				{ features.map( ( feature, index ) => (
-					<li key={ index } className={ feature.included ? 'is-included' : 'is-excluded' }>
+				{ features.map( ( feature ) => (
+					<li className={ feature.included ? 'is-included' : 'is-excluded' }>
 						<span className="feature-icon">
 							{ feature.included ? '✓' : '✗' }
 						</span>

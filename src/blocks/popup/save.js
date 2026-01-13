@@ -4,7 +4,7 @@
  * @package GambolBuilder
  */
 
-import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 
 /**
  * Popup Save Component.
@@ -63,9 +63,7 @@ export default function save( { attributes } ) {
 							×
 						</button>
 					) }
-					<div className="popup-inner">
-						<InnerBlocks.Content />
-					</div>
+					<div { ...useInnerBlocksProps.save( { className: 'popup-inner' } ) } />
 				</div>
 			</div>
 		</div>

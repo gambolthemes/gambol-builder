@@ -38,7 +38,6 @@ registerBlockType( 'gambol/inner-section', {
 	description: __( 'A nested section for complex layouts within sections.', 'gambol-builder' ),
 	category: 'gambol-builder',
 	icon,
-	parent: [ 'gambol/section', 'gambol/container' ],
 	keywords: [
 		__( 'inner', 'gambol-builder' ),
 		__( 'section', 'gambol-builder' ),

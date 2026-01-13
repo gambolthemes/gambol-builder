@@ -41,6 +41,8 @@ const ChevronDown = () => (
  * @param {Array} props.blocks - Array of block definitions.
  * @param {boolean} props.defaultExpanded - Initial expanded state.
  * @param {Function} props.onBlockInsert - Callback when block is inserted.
+ * @param {boolean} props.showNotice - Whether to show a notice message.
+ * @param {string} props.noticeText - Notice text to display.
  * @return {JSX.Element} Block group element.
  */
 const BlockGroup = ( { 
@@ -48,6 +50,8 @@ const BlockGroup = ( {
 	blocks, 
 	defaultExpanded = true,
 	onBlockInsert,
+	showNotice = false,
+	noticeText = '',
 } ) => {
 	const [ isExpanded, setIsExpanded ] = useState( defaultExpanded );
 	const contentId = useId();
@@ -112,6 +116,14 @@ const BlockGroup = ( {
 				aria-label={ category.label }
 				hidden={ ! isExpanded }
 			>
+				{ showNotice && noticeText && (
+					<div className="gambol-block-group__notice">
+						<svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14">
+							<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+						</svg>
+						<span>{ noticeText }</span>
+					</div>
+				) }
 				<div className="gambol-block-group__grid">
 					{ blocks.map( ( block ) => (
 						<BlockItem

@@ -56,7 +56,7 @@ export default function save( { attributes } ) {
 				>
 					{ images.map( ( image, index ) => (
 						<div 
-							key={ image.id || index }
+							key={ index }
 							className="wp-block-gambol-image-carousel__slide"
 							style={ { aspectRatio } }
 						>

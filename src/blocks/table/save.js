@@ -60,8 +60,8 @@ export default function save( { attributes } ) {
 				{ hasHeader && (
 					<thead style={ headerStyle }>
 						<tr>
-							{ tableData[ 0 ].map( ( cell, colIndex ) => (
-								<th key={ colIndex } style={ cellStyle }>
+							{ tableData[ 0 ].map( ( cell ) => (
+								<th style={ cellStyle }>
 									<RichText.Content value={ cell } />
 								</th>
 							) ) }
@@ -74,9 +74,9 @@ export default function save( { attributes } ) {
 						const rowStyle = stripedRows && rowIndex % 2 === 1 ? { backgroundColor: stripedColor || undefined } : {};
 						
 						return (
-							<tr key={ rowIndex } style={ rowStyle }>
-								{ row.map( ( cell, colIndex ) => (
-									<td key={ colIndex } style={ cellStyle }>
+							<tr style={ rowStyle }>
+								{ row.map( ( cell ) => (
+									<td style={ cellStyle }>
 										<RichText.Content value={ cell } />
 									</td>
 								) ) }
@@ -88,8 +88,8 @@ export default function save( { attributes } ) {
 				{ hasFooter && (
 					<tfoot style={ headerStyle }>
 						<tr>
-							{ tableData[ tableData.length - 1 ].map( ( cell, colIndex ) => (
-								<td key={ colIndex } style={ cellStyle }>
+							{ tableData[ tableData.length - 1 ].map( ( cell ) => (
+								<td style={ cellStyle }>
 									<RichText.Content value={ cell } />
 								</td>
 							) ) }

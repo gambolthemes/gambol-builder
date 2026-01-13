@@ -49,7 +49,7 @@ export default function save( { attributes } ) {
 				<div className="wp-block-gambol-media-carousel__track">
 					{ items.map( ( item, index ) => (
 						<div 
-							key={ item.id || index }
+							key={ index }
 							className="wp-block-gambol-media-carousel__slide"
 							style={ { aspectRatio } }
 							data-type={ item.type }

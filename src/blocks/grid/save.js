@@ -4,7 +4,7 @@
  * @package GambolBuilder
  */
 
-import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
+import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
 
 /**
  * Grid Save Component.
@@ -26,22 +26,28 @@ export default function save( { attributes } ) {
 		? `repeat(auto-fit, minmax(${ minColumnWidth }, 1fr))`
 		: `repeat(${ columns }, 1fr)`;
 
+	const style = {
+		display: 'grid',
+		gridTemplateColumns,
+		gap: `${ rowGap }px ${ gap }px`,
+		'--grid-columns-tablet': columnsTablet,
+		'--grid-columns-mobile': columnsMobile,
+	};
+	
+	if ( alignItems && alignItems !== 'stretch' ) {
+		style.alignItems = alignItems;
+	}
+	
+	if ( justifyItems && justifyItems !== 'stretch' ) {
+		style.justifyItems = justifyItems;
+	}
+
 	const blockProps = useBlockProps.save( {
 		className: 'wp-block-gambol-grid',
-		style: {
-			display: 'grid',
-			gridTemplateColumns,
-			gap: `${ rowGap }px ${ gap }px`,
-			alignItems,
-			justifyItems,
-			'--grid-columns-tablet': columnsTablet,
-			'--grid-columns-mobile': columnsMobile,
-		},
+		style,
 	} );
 
-	return (
-		<div { ...blockProps }>
-			<InnerBlocks.Content />
-		</div>
-	);
+	const innerBlocksProps = useInnerBlocksProps.save( blockProps );
+
+	return <div { ...innerBlocksProps } />;
 }

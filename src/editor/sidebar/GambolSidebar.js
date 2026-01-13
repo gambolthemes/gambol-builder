@@ -18,6 +18,16 @@ import useDragDropInserter from './useDragDropInserter';
 import useKeyboardNavigation from './useKeyboardNavigation';
 
 /**
+ * Check if WooCommerce is active.
+ * This is set by PHP via wp_localize_script.
+ */
+const isWooCommerceActive = () => {
+	return window.gambolBuilderData?.woocommerceActive === true 
+		|| window.gambolBuilderData?.woocommerce_active === true
+		|| document.body.classList.contains( 'woocommerce-active' );
+};
+
+/**
  * Gambol Logo Icon
  */
 const GambolLogo = () => (
@@ -228,6 +238,11 @@ const GambolSidebar = () => {
 									if ( ! blocks || blocks.length === 0 ) {
 										return null;
 									}
+									
+									// Check if WooCommerce category and WooCommerce is not active
+									const isWooCategory = category.id === 'woocommerce';
+									const wooNotActive = isWooCategory && ! isWooCommerceActive();
+									
 									return (
 										<BlockGroup
 											key={ category.id }
@@ -235,6 +250,8 @@ const GambolSidebar = () => {
 											blocks={ blocks }
 											defaultExpanded={ true }
 											onBlockInsert={ handleBlockInsert }
+											showNotice={ wooNotActive }
+											noticeText={ __( 'WooCommerce plugin required for these blocks to work on frontend.', 'gambol-builder' ) }
 										/>
 									);
 								} ) }

@@ -126,7 +126,7 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 
 			{ isEditingURL && (
 				<Popover
-					position="bottom center"
+					placement="bottom"
 					onClose={ () => setIsEditingURL( false ) }
 					focusOnMount={ true }
 				>
@@ -264,15 +264,27 @@ export default function Edit( { attributes, setAttributes, isSelected } ) {
 				<RichText
 					tagName="span"
 					className="wp-block-gambol-button__link"
+					style={ {
+						display: 'inline-block',
+						padding: '12px 24px',
+						backgroundColor: 'var(--gb-colors-primary, #00d4aa)',
+						color: 'var(--gb-colors-background, #ffffff)',
+						borderRadius: '6px',
+						fontWeight: '600',
+						textDecoration: 'none',
+						cursor: 'pointer',
+						minWidth: '100px',
+						textAlign: 'center',
+					} }
 					value={ text }
 					onChange={ ( value ) => setAttributes( { text: value } ) }
-					placeholder={ __( 'Add text...', 'gambol-builder' ) }
+					placeholder={ __( 'Click here', 'gambol-builder' ) }
 					allowedFormats={ [ 'core/bold', 'core/italic' ] }
 				/>
 			</div>
 
 			{ isSelected && url && (
-				<Popover position="bottom center">
+				<Popover placement="bottom">
 					<div style={ { padding: '8px', fontSize: '12px' } }>
 						<a href={ url } target="_blank" rel="noopener noreferrer">
 							{ url }

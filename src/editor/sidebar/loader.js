@@ -314,18 +314,101 @@ const hideDefaultInserter = () => {
 			display: none !important;
 		}
 
+		/* -----------------------------------------------------------------
+		   HIDE WORDPRESS DEFAULT LEFT SIDEBAR (Secondary Sidebar)
+		   ----------------------------------------------------------------- */
+		.gambol-editor-active .interface-interface-skeleton__secondary-sidebar,
+		.gambol-editor-active .interface-interface-skeleton__left-sidebar,
+		.gambol-editor-active .editor-inserter-sidebar {
+			display: none !important;
+		}
+
+		/* -----------------------------------------------------------------
+		   HIDE WORDPRESS DEFAULT HEADER TOOLBAR BUTTONS
+		   ----------------------------------------------------------------- */
+		.gambol-editor-active .edit-post-header-toolbar__left .edit-post-header-toolbar__inserter-toggle,
+		.gambol-editor-active .editor-document-tools .editor-document-tools__inserter-toggle {
+			display: none !important;
+		}
+
+		/* -----------------------------------------------------------------
+		   ADJUST WORDPRESS RIGHT SIDEBAR - Keep but style it
+		   ----------------------------------------------------------------- */
+		.gambol-editor-active .interface-complementary-area {
+			background: #ffffff !important;
+			border-left: 1px solid #e2e8f0 !important;
+			top: 50px !important; /* Below Gambol toolbar */
+			height: calc(100vh - 50px) !important;
+		}
+		
+		/* When admin bar is visible */
+		.admin-bar.gambol-editor-active .interface-complementary-area {
+			top: 50px !important;
+			height: calc(100vh - 82px) !important;
+		}
+		
+		/* Mobile with admin bar */
+		@media (max-width: 782px) {
+			.admin-bar.gambol-editor-active .interface-complementary-area {
+				top: 50px !important;
+				height: calc(100vh - 96px) !important;
+			}
+		}
+		
+		.gambol-editor-active .interface-complementary-area .components-panel {
+			background: #ffffff !important;
+		}
+		
+		.gambol-editor-active .interface-complementary-area .components-panel__header {
+			background: #f8f9fa !important;
+			border-bottom: 1px solid #e2e8f0 !important;
+		}
+		
+		.gambol-editor-active .interface-complementary-area .components-panel__header h2,
+		.gambol-editor-active .interface-complementary-area .components-panel__header button {
+			color: #1a1a1a !important;
+		}
+		
+		.gambol-editor-active .interface-complementary-area .components-panel__body-title button {
+			color: #4a5568 !important;
+		}
+		
+		.gambol-editor-active .interface-complementary-area .components-panel__body {
+			background: #ffffff !important;
+			border-bottom: 1px solid #e2e8f0 !important;
+		}
+		
+		.gambol-editor-active .interface-complementary-area label,
+		.gambol-editor-active .interface-complementary-area .components-base-control__help {
+			color: #4a5568 !important;
+		}
+
+		/* -----------------------------------------------------------------
+		   HIDE DEFAULT EDITOR HEADER - We have custom toolbar
+		   ----------------------------------------------------------------- */
+		.gambol-editor-active .edit-post-header,
+		.gambol-editor-active .editor-header {
+			display: none !important;
+		}
+
 		/* =================================================================
 		   EDITOR LAYOUT ADJUSTMENTS
 		   ================================================================= */
 		
-		/* Adjust editor content area for Gambol sidebar */
+		/* Adjust editor content area for Gambol sidebar and toolbar */
 		.gambol-editor-active .interface-interface-skeleton__content {
 			margin-left: 280px;
+			margin-top: 50px; /* Below Gambol toolbar */
 			transition: margin-left 0.25s ease;
 		}
 		
 		.gambol-editor-active.gambol-sidebar-collapsed .interface-interface-skeleton__content {
 			margin-left: 56px;
+		}
+		
+		/* When admin bar is visible */
+		.admin-bar.gambol-editor-active .interface-interface-skeleton__content {
+			margin-top: 50px; /* Only toolbar, admin bar handled by skeleton */
 		}
 
 		/* Adjust the editor header too */
@@ -364,8 +447,13 @@ const hideDefaultInserter = () => {
 				width: 100%;
 				height: auto;
 				max-height: 50vh;
-				top: 32px;
+				top: 0;
 				bottom: auto;
+			}
+
+			/* When admin bar is shown on mobile */
+			.admin-bar.gambol-editor-active .gambol-left-sidebar {
+				top: 46px; /* Mobile admin bar is 46px */
 			}
 		}
 	`;

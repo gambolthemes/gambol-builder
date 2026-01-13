@@ -78,7 +78,7 @@ export default function save( { attributes } ) {
 		<div { ...blockProps }>
 			<div className="gambol-gallery__grid">
 				{ images.map( ( image, index ) => (
-					<figure key={ image.id } className="gambol-gallery__item">
+					<figure className="gambol-gallery__item">
 						<div className="gambol-gallery__image-wrapper">
 							{ enableLightbox ? (
 								<a

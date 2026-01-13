@@ -93,8 +93,8 @@ class Loader {
 	public function add_submenu() {
 		add_submenu_page(
 			'gambol-builder',
-			__( 'Header/Footer Settings', 'gambol-builder' ),
-			__( 'HF Settings', 'gambol-builder' ),
+			__( 'Theme Builder Settings', 'gambol-builder' ),
+			__( 'TB Settings', 'gambol-builder' ),
 			'manage_options',
 			'gambol-hf-settings',
 			array( $this, 'render_settings_page' )
@@ -115,7 +115,7 @@ class Loader {
 		$settings = $this->get_settings();
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Header & Footer Settings', 'gambol-builder' ); ?></h1>
+			<h1><?php esc_html_e( 'Theme Builder Settings', 'gambol-builder' ); ?></h1>
 
 			<form method="post" action="">
 				<?php wp_nonce_field( 'gambol_hf_settings', 'gambol_hf_settings_nonce' ); ?>
@@ -257,7 +257,7 @@ if ( function_exists( 'gambol_has_footer' ) && gambol_has_footer() ) {
 	 */
 	public function add_plugin_links( $links ) {
 		$custom_links = array(
-			'<a href="' . admin_url( 'edit.php?post_type=' . Post_Type::POST_TYPE ) . '">' . __( 'Headers & Footers', 'gambol-builder' ) . '</a>',
+			'<a href="' . admin_url( 'edit.php?post_type=' . Post_Type::POST_TYPE ) . '">' . __( 'Theme Builder', 'gambol-builder' ) . '</a>',
 		);
 
 		return array_merge( $custom_links, $links );

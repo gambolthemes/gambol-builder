@@ -77,9 +77,9 @@ export default function Dashboard() {
 					/>
 					<QuickLink
 						icon={ plugins }
-						title={ __( 'Header & Footer', 'gambol-builder' ) }
-						description={ __( 'Design custom headers and footers.', 'gambol-builder' ) }
-						href={ `${ adminUrl }edit.php?post_type=gambol_header_footer` }
+						title={ __( 'Theme Builder', 'gambol-builder' ) }
+						description={ __( 'Design custom headers, footers & templates.', 'gambol-builder' ) }
+						href={ `${ adminUrl }edit.php?post_type=gambol_hf` }
 					/>
 					<QuickLink
 						icon={ settings }

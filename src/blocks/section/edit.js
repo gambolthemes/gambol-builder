@@ -36,23 +36,6 @@ import {
 } from '../../components/inspector';
 
 /**
- * Allowed blocks inside Section.
- */
-const ALLOWED_BLOCKS = [
-	'gambol/container',
-	'core/columns',
-	'core/column',
-	'core/group',
-	'core/paragraph',
-	'core/heading',
-	'core/image',
-	'core/buttons',
-	'core/list',
-	'core/spacer',
-	'core/separator',
-];
-
-/**
  * Default template for new sections.
  */
 const TEMPLATE = [
@@ -269,14 +252,13 @@ export default function Edit( { attributes, setAttributes } ) {
 		style: { ...getWrapperStyles(), position: 'relative' },
 	} );
 
-	// Inner blocks props
+	// Inner blocks props - allow all blocks
 	const innerBlocksProps = useInnerBlocksProps(
 		{
 			className: 'wp-block-gambol-section__inner',
 			style: getInnerStyles(),
 		},
 		{
-			allowedBlocks: ALLOWED_BLOCKS,
 			template: TEMPLATE,
 			templateLock: false,
 		}

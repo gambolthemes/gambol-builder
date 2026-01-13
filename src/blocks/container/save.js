@@ -17,22 +17,54 @@ import { useBlockProps, useInnerBlocksProps } from '@wordpress/block-editor';
  */
 export default function save( { attributes } ) {
 	const {
+		contentWidth,
 		maxWidth,
-		paddingLeft,
-		paddingRight,
+		maxWidthUnit,
 		contentAlign,
+		flexDirection,
+		gap,
+		backgroundColor,
+		borderRadius,
+		borderColor,
+		borderWidth,
+		padding,
 	} = attributes;
 
 	// Build container styles - only add what's needed.
 	const containerStyle = {};
-	if ( maxWidth ) {
-		containerStyle.maxWidth = maxWidth;
+	
+	if ( contentWidth === 'custom' && maxWidth ) {
+		containerStyle.maxWidth = `${ maxWidth }${ maxWidthUnit || 'px' }`;
+		containerStyle.marginLeft = 'auto';
+		containerStyle.marginRight = 'auto';
+		containerStyle.width = '100%';
 	}
-	if ( paddingLeft ) {
-		containerStyle.paddingLeft = paddingLeft;
+	
+	// Flex layout
+	containerStyle.display = 'flex';
+	containerStyle.flexDirection = flexDirection || 'column';
+	
+	if ( gap ) {
+		containerStyle.gap = `${ gap }px`;
 	}
-	if ( paddingRight ) {
-		containerStyle.paddingRight = paddingRight;
+	
+	if ( backgroundColor ) {
+		containerStyle.backgroundColor = backgroundColor;
+	}
+	
+	if ( borderRadius ) {
+		containerStyle.borderRadius = `${ borderRadius }px`;
+	}
+	
+	if ( borderWidth && borderColor ) {
+		containerStyle.border = `${ borderWidth }px solid ${ borderColor }`;
+	}
+	
+	if ( padding ) {
+		containerStyle.paddingTop = `${ padding.top || 0 }px`;
+		containerStyle.paddingRight = `${ padding.right || 16 }px`;
+		containerStyle.paddingBottom = `${ padding.bottom || 0 }px`;
+		containerStyle.paddingLeft = `${ padding.left || 16 }px`;
 	}
 
 	// Build class names.

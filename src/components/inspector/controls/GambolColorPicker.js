@@ -110,7 +110,7 @@ export default function GambolColorPicker( {
 				{ /* Color Picker Popover */ }
 				{ showPicker && (
 					<Popover
-						position="bottom left"
+						placement="bottom-start"
 						onClose={ () => setShowPicker( false ) }
 						focusOnMount={ true }
 					>

@@ -73,22 +73,22 @@ class Post_Type {
 	 */
 	public function register_post_type() {
 		$labels = array(
-			'name'                  => _x( 'Headers & Footers', 'Post type general name', 'gambol-builder' ),
-			'singular_name'         => _x( 'Header/Footer', 'Post type singular name', 'gambol-builder' ),
-			'menu_name'             => _x( 'Headers & Footers', 'Admin Menu text', 'gambol-builder' ),
-			'name_admin_bar'        => _x( 'Header/Footer', 'Add New on Toolbar', 'gambol-builder' ),
+			'name'                  => _x( 'Theme Builder', 'Post type general name', 'gambol-builder' ),
+			'singular_name'         => _x( 'Template', 'Post type singular name', 'gambol-builder' ),
+			'menu_name'             => _x( 'Theme Builder', 'Admin Menu text', 'gambol-builder' ),
+			'name_admin_bar'        => _x( 'Template', 'Add New on Toolbar', 'gambol-builder' ),
 			'add_new'               => __( 'Add New', 'gambol-builder' ),
-			'add_new_item'          => __( 'Add New Header/Footer', 'gambol-builder' ),
-			'new_item'              => __( 'New Header/Footer', 'gambol-builder' ),
-			'edit_item'             => __( 'Edit Header/Footer', 'gambol-builder' ),
-			'view_item'             => __( 'View Header/Footer', 'gambol-builder' ),
-			'all_items'             => __( 'All Headers & Footers', 'gambol-builder' ),
-			'search_items'          => __( 'Search Headers & Footers', 'gambol-builder' ),
-			'not_found'             => __( 'No headers or footers found.', 'gambol-builder' ),
-			'not_found_in_trash'    => __( 'No headers or footers found in Trash.', 'gambol-builder' ),
-			'filter_items_list'     => _x( 'Filter headers/footers list', 'Screen reader text', 'gambol-builder' ),
-			'items_list_navigation' => _x( 'Headers/Footers list navigation', 'Screen reader text', 'gambol-builder' ),
-			'items_list'            => _x( 'Headers/Footers list', 'Screen reader text', 'gambol-builder' ),
+			'add_new_item'          => __( 'Add New Template', 'gambol-builder' ),
+			'new_item'              => __( 'New Template', 'gambol-builder' ),
+			'edit_item'             => __( 'Edit Template', 'gambol-builder' ),
+			'view_item'             => __( 'View Template', 'gambol-builder' ),
+			'all_items'             => __( 'Theme Builder', 'gambol-builder' ),
+			'search_items'          => __( 'Search Templates', 'gambol-builder' ),
+			'not_found'             => __( 'No templates found.', 'gambol-builder' ),
+			'not_found_in_trash'    => __( 'No templates found in Trash.', 'gambol-builder' ),
+			'filter_items_list'     => _x( 'Filter templates list', 'Screen reader text', 'gambol-builder' ),
+			'items_list_navigation' => _x( 'Templates list navigation', 'Screen reader text', 'gambol-builder' ),
+			'items_list'            => _x( 'Templates list', 'Screen reader text', 'gambol-builder' ),
 		);
 
 		$args = array(

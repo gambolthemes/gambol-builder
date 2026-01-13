@@ -96,7 +96,6 @@ export default function save( { attributes } ) {
 
 				return (
 					<div
-						key={ item.id }
 						className={ `gambol-accordion-item ${ isOpen ? 'is-open' : '' }` }
 						data-item-id={ item.id }
 					>

@@ -1,36 +1,79 @@
 /**
  * Gambol Builder - Editor Styles
  * 
- * Elementor-inspired dark sidebar styling.
+ * Clean, professional light sidebar styling.
  */
 
 // ============================================
-// Design Tokens (Elementor-inspired)
+// FORCE WORDPRESS SKELETON TO TOP: 0
+// ============================================
+
+// Override WordPress default skeleton positioning
+.gambol-editor-active {
+    // Reset all skeleton elements to top: 0 by default
+    .interface-interface-skeleton {
+        top: 0 !important;
+    }
+    
+    .interface-interface-skeleton__body {
+        top: 50px !important; // Below Gambol toolbar
+    }
+    
+    .interface-interface-skeleton__content {
+        top: 50px !important; // Below Gambol toolbar
+    }
+    
+    // Right sidebar positioning
+    .interface-interface-skeleton__sidebar {
+        top: 50px !important;
+        height: calc(100vh - 50px) !important;
+    }
+}
+
+// When WordPress admin bar IS visible
+.admin-bar.gambol-editor-active {
+    .interface-interface-skeleton {
+        top: 0 !important;
+    }
+    
+    .interface-interface-skeleton__body,
+    .interface-interface-skeleton__content {
+        top: 50px !important;
+    }
+    
+    .interface-interface-skeleton__sidebar {
+        top: 0 !important;
+        height: calc(100vh - 82px) !important;
+    }
+}
+
+// ============================================
+// Design Tokens (Light Theme)
 // ============================================
 
 $gb-primary: #00d4aa;           // Gambol teal accent
-$gb-primary-hover: #00eabb;
-$gb-primary-dark: #00b892;
+$gb-primary-hover: #00b894;
+$gb-primary-dark: #009977;
 
-$gb-secondary: #93003f;         // Magenta/maroon for actions
-$gb-secondary-hover: #a8004a;
+$gb-secondary: #00d4aa;         // Using teal for actions (consistent branding)
+$gb-secondary-hover: #00b894;
 
-// Dark theme colors
-$gb-bg-dark: #1e1e1e;
-$gb-bg-darker: #181818;
-$gb-bg-panel: #242424;
-$gb-bg-widget: #2a2a2a;
-$gb-bg-widget-hover: #363636;
-$gb-bg-input: #1a1a1a;
+// Light theme colors
+$gb-bg-dark: #ffffff;
+$gb-bg-darker: #f8f9fa;
+$gb-bg-panel: #f1f3f5;
+$gb-bg-widget: #e9ecef;
+$gb-bg-widget-hover: #dee2e6;
+$gb-bg-input: #ffffff;
 
-// Text colors
-$gb-text-primary: #ffffff;
-$gb-text-secondary: #b8b8b8;
-$gb-text-muted: #888888;
+// Text colors (Light theme)
+$gb-text-primary: #1a1a1a;
+$gb-text-secondary: #4a5568;
+$gb-text-muted: #718096;
 
-// Border colors
-$gb-border: #3a3a3a;
-$gb-border-light: #444444;
+// Border colors (Light theme)
+$gb-border: #e2e8f0;
+$gb-border-light: #edf2f7;
 
 // Spacing
 $gb-spacing-xs: 4px;
@@ -86,7 +129,7 @@ $gb-transition: all 0.15s ease;
 
             &:hover {
                 color: $gb-text-primary;
-                background: rgba(255, 255, 255, 0.1);
+                background: rgba(0, 0, 0, 0.08);
             }
         }
     }
@@ -213,7 +256,7 @@ $gb-transition: all 0.15s ease;
 
     &:hover {
         color: $gb-text-primary;
-        background: rgba(255, 255, 255, 0.03);
+        background: rgba(0, 0, 0, 0.04);
     }
 
     svg {
@@ -436,7 +479,38 @@ $gb-transition: all 0.15s ease;
     .gambol-widget-grid {
         grid-template-columns: repeat(3, 1fr);
     }
+
+    // Responsive toolbar
+    .gambol-editor-toolbar {
+        top: 46px; // WP admin bar is 46px on mobile
+        left: 0 !important;
+        padding: 0 8px;
+        height: 44px;
+    }
+
+    .gambol-toolbar__left {
+        flex: 0 0 auto;
+    }
+
+    .gambol-toolbar__post-title {
+        display: none;
+    }
+
+    .gambol-toolbar__templates-btn span:not(.gambol-toolbar__icon) {
+        display: none;
+    }
+
+    .gambol-toolbar__devices {
+        padding: 2px;
+    }
+
+    .gambol-toolbar__device-btn {
+        width: 28px;
+        height: 26px;
+    }
 }
+
+// When admin bar is not shown (handled by default top: 0)
 
 // ============================================
 // GAMBOL EDITOR TOOLBAR
@@ -444,7 +518,7 @@ $gb-transition: all 0.15s ease;
 
 .gambol-editor-toolbar {
     position: fixed;
-    top: 32px;
+    top: 0;
     left: 280px;
     right: 0;
     height: 50px;
@@ -456,6 +530,11 @@ $gb-transition: all 0.15s ease;
     padding: 0 $gb-spacing-lg;
     z-index: 99998;
     transition: left 0.25s ease;
+
+    // When WordPress admin bar is shown
+    .admin-bar & {
+        top: 0;
+    }
 
     .gambol-sidebar-collapsed & {
         left: 56px;
@@ -529,12 +608,12 @@ $gb-transition: all 0.15s ease;
 
     &:hover {
         color: $gb-text-secondary;
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(0, 0, 0, 0.05);
     }
 
     &.is-active {
         background: $gb-primary;
-        color: #000;
+        color: #fff;
     }
 }
 
@@ -560,7 +639,7 @@ $gb-transition: all 0.15s ease;
 
     &:hover {
         color: $gb-text-primary;
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(0, 0, 0, 0.05);
     }
 
     &:disabled {
@@ -611,12 +690,60 @@ $gb-transition: all 0.15s ease;
 }
 
 // ============================================
+// DEVICE PREVIEW STYLES
+// ============================================
+
+// Style the editor canvas iframe for device preview
+.gambol-editor-active {
+    iframe[name="editor-canvas"] {
+        display: block;
+        transition: max-width 0.3s ease, margin 0.3s ease;
+        background: #f0f0f0;
+    }
+    
+    // Tablet preview
+    &[data-device-preview="tablet"] iframe[name="editor-canvas"],
+    .interface-interface-skeleton__content[data-device-preview="tablet"] iframe[name="editor-canvas"] {
+        max-width: 768px !important;
+        margin: 0 auto !important;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+    
+    // Mobile preview
+    &[data-device-preview="mobile"] iframe[name="editor-canvas"],
+    .interface-interface-skeleton__content[data-device-preview="mobile"] iframe[name="editor-canvas"] {
+        max-width: 375px !important;
+        margin: 0 auto !important;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+    }
+}
+
+// Alternative targeting for different WordPress versions
+.interface-interface-skeleton__content {
+    &[data-device-preview="tablet"] {
+        iframe[name="editor-canvas"] {
+            max-width: 768px !important;
+            margin: 0 auto !important;
+        }
+    }
+    
+    &[data-device-preview="mobile"] {
+        iframe[name="editor-canvas"] {
+            max-width: 375px !important;
+            margin: 0 auto !important;
+        }
+    }
+}
+
+// ============================================
 // TEMPLATES PANEL
 // ============================================
 
 .gambol-templates-panel {
     position: fixed;
-    top: 32px;
+    top: 0;
     left: 280px;
     right: 0;
     bottom: 0;
@@ -625,6 +752,19 @@ $gb-transition: all 0.15s ease;
     display: flex;
     flex-direction: column;
     overflow: hidden;
+
+    // When WordPress admin bar is shown
+    .admin-bar & {
+        top: 0;
+    }
+
+    @media (max-width: 782px) {
+        left: 0;
+
+        .admin-bar & {
+            top: 0;
+        }
+    }
 }
 
 .gambol-templates__header {
@@ -657,7 +797,7 @@ $gb-transition: all 0.15s ease;
     transition: $gb-transition;
 
     &:hover {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(0, 0, 0, 0.08);
         color: $gb-text-primary;
     }
 }

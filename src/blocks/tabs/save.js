@@ -76,7 +76,6 @@ export default function save( { attributes } ) {
 			<div className="gambol-tabs__nav" role="tablist">
 				{ tabs.map( ( tab, index ) => (
 					<button
-						key={ tab.id }
 						type="button"
 						role="tab"
 						id={ tab.id }

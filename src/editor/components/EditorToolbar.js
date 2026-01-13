@@ -72,6 +72,13 @@ const ActionIcons = {
 			<circle cx="12" cy="12" r="3" />
 		</svg>
 	),
+	exit: (
+		<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5">
+			<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+			<polyline points="16 17 21 12 16 7" />
+			<line x1="21" y1="12" x2="9" y2="12" />
+		</svg>
+	),
 	save: (
 		<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.5">
 			<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
@@ -106,7 +113,7 @@ const EditorToolbar = ( { onTemplatesClick } ) => {
 
 	const { undo, redo } = useDispatch( 'core/editor' );
 	
-	const { hasUndo, hasRedo, isSaving, isPublishing, postTitle } = useSelect( ( select ) => {
+	const { hasUndo, hasRedo, isSaving, isPublishing, postTitle, previewLink, postId } = useSelect( ( select ) => {
 		const editor = select( 'core/editor' );
 		return {
 			hasUndo: editor.hasEditorUndo(),
@@ -114,7 +121,26 @@ const EditorToolbar = ( { onTemplatesClick } ) => {
 			isSaving: editor.isSavingPost(),
 			isPublishing: editor.isPublishingPost(),
 			postTitle: editor.getEditedPostAttribute( 'title' ) || __( 'Untitled', 'gambol-builder' ),
+			previewLink: editor.getEditedPostPreviewLink(),
+			postId: editor.getCurrentPostId(),
 		};
+	}, [] );
+
+	/**
+	 * Open preview in new tab
+	 */
+	const openPreview = useCallback( () => {
+		if ( previewLink ) {
+			window.open( previewLink, '_blank' );
+		}
+	}, [ previewLink ] );
+
+	/**
+	 * Go back to admin dashboard
+	 */
+	const goToAdmin = useCallback( () => {
+		const adminUrl = window.gambolBuilder?.adminUrl || '/wp-admin/';
+		window.location.href = adminUrl;
 	}, [] );
 
 	const { openGeneralSidebar } = useDispatch( 'core/edit-post' );
@@ -125,17 +151,40 @@ const EditorToolbar = ( { onTemplatesClick } ) => {
 	const handleDeviceChange = useCallback( ( device ) => {
 		setDevicePreview( device );
 		
-		// Apply preview mode to editor
-		const editorWrapper = document.querySelector( '.edit-post-visual-editor' );
+		// Responsive widths
+		const widths = {
+			desktop: '100%',
+			tablet: '768px',
+			mobile: '375px',
+		};
+
+		// Try iframe-based editor first (WordPress 6.x+)
+		const iframe = document.querySelector( 'iframe[name="editor-canvas"]' );
+		if ( iframe ) {
+			// Style the iframe itself
+			iframe.style.maxWidth = widths[ device ];
+			iframe.style.margin = device !== 'desktop' ? '0 auto' : '';
+			iframe.style.transition = 'max-width 0.3s ease, margin 0.3s ease';
+			iframe.style.display = 'block';
+			
+			// Also style content inside iframe
+			try {
+				const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+				if ( iframeDoc ) {
+					const body = iframeDoc.body;
+					if ( body ) {
+						body.setAttribute( 'data-device-preview', device );
+					}
+				}
+			} catch ( e ) {
+				// Cross-origin iframe, can't access content
+			}
+		}
+
+		// Also try traditional editor wrapper (fallback)
+		const editorWrapper = document.querySelector( '.edit-post-visual-editor, .editor-visual-editor' );
 		if ( editorWrapper ) {
 			editorWrapper.setAttribute( 'data-device-preview', device );
-			
-			// Set responsive widths
-			const widths = {
-				desktop: '100%',
-				tablet: '768px',
-				mobile: '375px',
-			};
 			
 			const canvas = editorWrapper.querySelector( '.editor-styles-wrapper' );
 			if ( canvas ) {
@@ -143,6 +192,12 @@ const EditorToolbar = ( { onTemplatesClick } ) => {
 				canvas.style.margin = device !== 'desktop' ? '0 auto' : '';
 				canvas.style.transition = 'max-width 0.3s ease';
 			}
+		}
+
+		// Try the editor content area directly
+		const editorContent = document.querySelector( '.interface-interface-skeleton__content' );
+		if ( editorContent ) {
+			editorContent.setAttribute( 'data-device-preview', device );
 		}
 	}, [] );
 
@@ -242,6 +297,29 @@ const EditorToolbar = ( { onTemplatesClick } ) => {
 						onClick={ openSettings }
 					>
 						{ ActionIcons.settings }
+					</button>
+				</Tooltip>
+
+				{/* Preview Button */}
+				<Tooltip text={ __( 'Preview', 'gambol-builder' ) }>
+					<button
+						className="gambol-toolbar__action-btn gambol-toolbar__preview-btn"
+						onClick={ openPreview }
+						disabled={ ! previewLink }
+						aria-label={ __( 'Preview', 'gambol-builder' ) }
+					>
+						{ ActionIcons.preview }
+					</button>
+				</Tooltip>
+
+				{/* Back to Admin Button */}
+				<Tooltip text={ __( 'Exit to Dashboard', 'gambol-builder' ) }>
+					<button
+						className="gambol-toolbar__action-btn gambol-toolbar__exit-btn"
+						onClick={ goToAdmin }
+						aria-label={ __( 'Exit to Dashboard', 'gambol-builder' ) }
+					>
+						{ ActionIcons.exit }
 					</button>
 				</Tooltip>
 

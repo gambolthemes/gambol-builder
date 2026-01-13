@@ -99,13 +99,13 @@
 
 	&:hover {
 		color: $gambol-text-secondary;
-		background: rgba(255, 255, 255, 0.02);
+		background: rgba(0, 0, 0, 0.03);
 	}
 
 	&.is-active {
 		color: $gambol-accent;
 		border-bottom-color: $gambol-accent;
-		background: rgba(255, 255, 255, 0.03);
+		background: rgba(0, 0, 0, 0.04);
 	}
 
 	svg {
@@ -234,7 +234,7 @@
 
 	&:hover {
 		color: $gambol-text-secondary;
-		background: rgba(255, 255, 255, 0.03);
+		background: rgba(0, 0, 0, 0.04);
 	}
 
 	&.is-active {
@@ -441,7 +441,7 @@
 
 	&:hover {
 		color: $gambol-text-primary;
-		background: rgba(255, 255, 255, 0.05);
+		background: rgba(0, 0, 0, 0.05);
 	}
 
 	&.is-selected {
@@ -823,7 +823,7 @@
 
 	&:hover {
 		color: $gambol-text-secondary;
-		background: rgba(255, 255, 255, 0.05);
+		background: rgba(0, 0, 0, 0.05);
 	}
 
 	&.is-active {

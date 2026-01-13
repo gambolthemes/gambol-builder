@@ -40,7 +40,7 @@ function ColorControl( { label, value, onChange } ) {
 				</button>
 				{ isOpen && (
 					<Popover
-						position="bottom left"
+						placement="bottom-start"
 						onClose={ () => setIsOpen( false ) }
 						className="gambol-color-popover"
 					>
