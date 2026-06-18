@@ -18,6 +18,7 @@ import {
 	SelectControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
+import DynamicTagsPicker from '../../components/inspector/DynamicTagsPicker';
 
 /**
  * Text Edit Component.
@@ -75,6 +76,12 @@ export default function Edit( { attributes, setAttributes } ) {
 							{ label: __( 'Justify', 'gambol-builder' ), value: 'justify' },
 						] }
 						onChange={ ( value ) => setAttributes( { textAlign: value } ) }
+					/>
+
+					<DynamicTagsPicker
+						onSelectTag={ ( tag ) =>
+							setAttributes( { content: ( content || '' ) + tag } )
+						}
 					/>
 				</PanelBody>
 			</InspectorControls>

@@ -1,12 +1,26 @@
 /**
  * Visibility Control
  *
- * Device visibility toggles (Desktop/Tablet/Mobile).
+ * Handles three visibility dimensions:
+ *   1. Device (Desktop / Tablet / Mobile)
+ *   2. User Status (Everyone / Logged In / Logged Out)
+ *   3. Schedule (show after / hide after date-time)
+ *
+ * Props shape:
+ *   value           = { desktop, tablet, mobile }
+ *   userStatus      = 'everyone' | 'logged_in' | 'logged_out'
+ *   showAfter       = '' | ISO date string
+ *   hideAfter       = '' | ISO date string
+ *   onChange        = (value) => void   — device object update
+ *   onUserStatus    = (status) => void  — optional
+ *   onShowAfter     = (date)   => void  — optional
+ *   onHideAfter     = (date)   => void  — optional
  *
  * @package GambolBuilder
  */
 
 import { __ } from '@wordpress/i18n';
+import { SelectControl, TextControl } from '@wordpress/components';
 
 // Device icons
 const DesktopIcon = () => (
@@ -30,21 +44,33 @@ const MobileIcon = () => (
 /**
  * VisibilityControl Component.
  *
- * @param {Object}   props          Component props.
- * @param {string}   props.label    Control label.
- * @param {Object}   props.value    Visibility state { desktop, tablet, mobile }.
- * @param {Function} props.onChange Change handler.
+ * @param {Object}   props               Component props.
+ * @param {string}   props.label         Control label.
+ * @param {Object}   props.value         Device visibility { desktop, tablet, mobile }.
+ * @param {Function} props.onChange      Device change handler.
+ * @param {string}   props.userStatus    User status visibility.
+ * @param {Function} props.onUserStatus  User status change handler.
+ * @param {string}   props.showAfter     Show after date (ISO).
+ * @param {Function} props.onShowAfter   Show after change handler.
+ * @param {string}   props.hideAfter     Hide after date (ISO).
+ * @param {Function} props.onHideAfter   Hide after change handler.
  * @return {JSX.Element} VisibilityControl element.
  */
 export default function VisibilityControl( {
 	label,
 	value = { desktop: true, tablet: true, mobile: true },
 	onChange,
+	userStatus,
+	onUserStatus,
+	showAfter,
+	onShowAfter,
+	hideAfter,
+	onHideAfter,
 } ) {
 	const devices = [
 		{ id: 'desktop', label: __( 'Desktop', 'gambol-builder' ), icon: <DesktopIcon /> },
-		{ id: 'tablet', label: __( 'Tablet', 'gambol-builder' ), icon: <TabletIcon /> },
-		{ id: 'mobile', label: __( 'Mobile', 'gambol-builder' ), icon: <MobileIcon /> },
+		{ id: 'tablet',  label: __( 'Tablet',  'gambol-builder' ), icon: <TabletIcon /> },
+		{ id: 'mobile',  label: __( 'Mobile',  'gambol-builder' ), icon: <MobileIcon /> },
 	];
 
 	const toggleDevice = ( device ) => {
@@ -61,6 +87,8 @@ export default function VisibilityControl( {
 					<span className="gambol-control-label">{ label }</span>
 				</div>
 			) }
+
+			{ /* Device visibility */ }
 			<div className="gambol-visibility">
 				{ devices.map( ( device ) => (
 					<button
@@ -75,6 +103,47 @@ export default function VisibilityControl( {
 					</button>
 				) ) }
 			</div>
+
+			{ /* User Status */ }
+			{ onUserStatus && (
+				<div className="gambol-visibility-section" style={ { marginTop: '16px' } }>
+					<SelectControl
+						label={ __( 'Show to', 'gambol-builder' ) }
+						value={ userStatus || 'everyone' }
+						options={ [
+							{ label: __( 'Everyone',    'gambol-builder' ), value: 'everyone'    },
+							{ label: __( 'Logged In',   'gambol-builder' ), value: 'logged_in'   },
+							{ label: __( 'Logged Out',  'gambol-builder' ), value: 'logged_out'  },
+						] }
+						onChange={ onUserStatus }
+					/>
+				</div>
+			) }
+
+			{ /* Schedule */ }
+			{ ( onShowAfter || onHideAfter ) && (
+				<div className="gambol-visibility-section" style={ { marginTop: '16px' } }>
+					<p style={ { margin: '0 0 8px', fontSize: '11px', textTransform: 'uppercase', fontWeight: 600, color: '#757575' } }>
+						{ __( 'Schedule', 'gambol-builder' ) }
+					</p>
+					{ onShowAfter && (
+						<TextControl
+							label={ __( 'Show After', 'gambol-builder' ) }
+							type="datetime-local"
+							value={ showAfter || '' }
+							onChange={ onShowAfter }
+						/>
+					) }
+					{ onHideAfter && (
+						<TextControl
+							label={ __( 'Hide After', 'gambol-builder' ) }
+							type="datetime-local"
+							value={ hideAfter || '' }
+							onChange={ onHideAfter }
+						/>
+					) }
+				</div>
+			) }
 		</div>
 	);
 }

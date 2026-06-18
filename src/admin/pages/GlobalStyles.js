@@ -152,6 +152,17 @@ export default function GlobalStyles() {
 		} ) );
 	};
 
+	/**
+	 * Update a palette color item.
+	 */
+	const updatePalette = ( index, field, value ) => {
+		setStyles( ( prev ) => {
+			const newPalette = [ ...( prev.palette || [] ) ];
+			newPalette[ index ] = { ...newPalette[ index ], [ field ]: value };
+			return { ...prev, palette: newPalette };
+		} );
+	};
+
 	// Load styles on mount.
 	useEffect( () => {
 		fetchStyles();
@@ -171,6 +182,11 @@ export default function GlobalStyles() {
 
 	// Tab definitions.
 	const tabs = [
+		{
+			name: 'palette',
+			title: __( 'Color Palette', 'gambol-builder' ),
+			className: 'gambol-tab-palette',
+		},
 		{
 			name: 'colors',
 			title: __( 'Colors', 'gambol-builder' ),
@@ -198,6 +214,8 @@ export default function GlobalStyles() {
 	 */
 	const renderTabContent = ( tab ) => {
 		switch ( tab.name ) {
+			case 'palette':
+				return <PaletteTab styles={ styles } updatePalette={ updatePalette } />;
 			case 'colors':
 				return <ColorsTab styles={ styles } updateStyle={ updateStyle } />;
 			case 'typography':
@@ -262,6 +280,37 @@ export default function GlobalStyles() {
 				</TabPanel>
 			</div>
 		</div>
+	);
+}
+
+/**
+ * Palette Tab Component
+ */
+function PaletteTab( { styles, updatePalette } ) {
+	const palette = styles?.palette || [];
+
+	return (
+		<>
+			<SettingsSection title={ __( 'Global Color Palette', 'gambol-builder' ) }>
+				<p className="gambol-help-text">
+					{ __( 'Define your brand colors. These appear as quick-select swatches in every color picker across the builder — just like Avada\'s global colors.', 'gambol-builder' ) }
+				</p>
+				<div className="gambol-palette-grid">
+					{ palette.map( ( item, index ) => (
+						<div key={ item.slug } className="gambol-palette-item">
+							<ColorControl
+								label={ item.name }
+								value={ item.color }
+								onChange={ ( value ) => updatePalette( index, 'color', value ) }
+							/>
+							<span className="gambol-palette-slug">
+								{ `--gb-palette-${ item.slug }` }
+							</span>
+						</div>
+					) ) }
+				</div>
+			</SettingsSection>
+		</>
 	);
 }
 

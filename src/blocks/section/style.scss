@@ -3,6 +3,12 @@
  *
  * Minimal, performance-first CSS.
  * Uses global CSS custom properties.
+ */
+
+// Animation system (included here so it compiles into the frontend stylesheet)
+@import '../../styles/animations';
+
+/**
  *
  * @package GambolBuilder
  */
@@ -56,4 +62,48 @@
 		display: flex;
 		flex-direction: column;
 	}
+}
+
+// ─── VIDEO BACKGROUND ────────────────────────────────────────────────────────
+
+.wp-block-gambol-section.has-video-background {
+	overflow: hidden;
+
+	> .gambol-section__video-bg {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		overflow: hidden;
+		pointer-events: none;
+
+		video,
+		iframe {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			width: 100vw;
+			height: 56.25vw; // 16:9 ratio
+			min-width: 177.78vh;
+			min-height: 100%;
+			transform: translate( -50%, -50% );
+			border: 0;
+		}
+	}
+
+	> .wp-block-gambol-section__inner {
+		position: relative;
+		z-index: 1;
+	}
+
+	> .wp-block-gambol-section__overlay {
+		z-index: 0;
+	}
+}
+
+// ─── PARALLAX BACKGROUND ─────────────────────────────────────────────────────
+
+.wp-block-gambol-section.has-parallax-background {
+	background-attachment: scroll; // JS handles the offset
+	overflow: hidden;
+	will-change: background-position;
 }

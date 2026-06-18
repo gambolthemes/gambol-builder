@@ -1,0 +1,146 @@
+/**
+ * Gambol Builder - Animation System
+ *
+ * CSS keyframes and utility classes for scroll-triggered entrance animations.
+ * Triggered by the frontend JS initAnimations() function via IntersectionObserver.
+ */
+
+// Elements with animation set start invisible
+.gambol-animate {
+	opacity: 0;
+	will-change: opacity, transform;
+	transition: none;
+
+	&.is-animated {
+		animation-fill-mode: both;
+	}
+}
+
+// Keyframe definitions
+
+@keyframes gb-fadeIn {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+
+@keyframes gb-fadeInUp {
+	from { opacity: 0; transform: translateY( 40px ); }
+	to   { opacity: 1; transform: translateY( 0 ); }
+}
+
+@keyframes gb-fadeInDown {
+	from { opacity: 0; transform: translateY( -40px ); }
+	to   { opacity: 1; transform: translateY( 0 ); }
+}
+
+@keyframes gb-fadeInLeft {
+	from { opacity: 0; transform: translateX( -40px ); }
+	to   { opacity: 1; transform: translateX( 0 ); }
+}
+
+@keyframes gb-fadeInRight {
+	from { opacity: 0; transform: translateX( 40px ); }
+	to   { opacity: 1; transform: translateX( 0 ); }
+}
+
+@keyframes gb-zoomIn {
+	from { opacity: 0; transform: scale( 0.8 ); }
+	to   { opacity: 1; transform: scale( 1 ); }
+}
+
+@keyframes gb-zoomOut {
+	from { opacity: 0; transform: scale( 1.2 ); }
+	to   { opacity: 1; transform: scale( 1 ); }
+}
+
+@keyframes gb-bounceIn {
+	0%   { opacity: 0; transform: scale( 0.3 ); }
+	50%  { opacity: 1; transform: scale( 1.05 ); }
+	70%  { transform: scale( 0.9 ); }
+	100% { opacity: 1; transform: scale( 1 ); }
+}
+
+@keyframes gb-slideInUp {
+	from { opacity: 0; transform: translateY( 60px ); }
+	to   { opacity: 1; transform: translateY( 0 ); }
+}
+
+@keyframes gb-slideInDown {
+	from { opacity: 0; transform: translateY( -60px ); }
+	to   { opacity: 1; transform: translateY( 0 ); }
+}
+
+@keyframes gb-slideInLeft {
+	from { opacity: 0; transform: translateX( -80px ); }
+	to   { opacity: 1; transform: translateX( 0 ); }
+}
+
+@keyframes gb-slideInRight {
+	from { opacity: 0; transform: translateX( 80px ); }
+	to   { opacity: 1; transform: translateX( 0 ); }
+}
+
+@keyframes gb-flipInX {
+	from { opacity: 0; transform: perspective( 400px ) rotateX( 90deg ); }
+	to   { opacity: 1; transform: perspective( 400px ) rotateX( 0 ); }
+}
+
+@keyframes gb-flipInY {
+	from { opacity: 0; transform: perspective( 400px ) rotateY( 90deg ); }
+	to   { opacity: 1; transform: perspective( 400px ) rotateY( 0 ); }
+}
+
+@keyframes gb-rotateIn {
+	from { opacity: 0; transform: rotate( -200deg ); }
+	to   { opacity: 1; transform: rotate( 0 ); }
+}
+
+@keyframes gb-lightSpeedIn {
+	from { opacity: 0; transform: translateX( 100% ) skewX( -30deg ); }
+	60%  { opacity: 1; transform: skewX( 20deg ); }
+	80%  { transform: skewX( -5deg ); }
+	to   { opacity: 1; transform: none; }
+}
+
+@keyframes gb-rollIn {
+	from { opacity: 0; transform: translateX( -100% ) rotate( -120deg ); }
+	to   { opacity: 1; transform: none; }
+}
+
+@keyframes gb-jackInTheBox {
+	from  { opacity: 0; transform: scale( 0.1 ) rotate( 30deg ); transform-origin: center bottom; }
+	50%   { transform: rotate( -10deg ); }
+	70%   { transform: rotate( 3deg ); }
+	to    { opacity: 1; transform: scale( 1 ); }
+}
+
+// Animation name → keyframe mapping (applied by JS)
+.gambol-animate {
+	&[data-animation="fadeIn"].is-animated         { animation-name: gb-fadeIn; }
+	&[data-animation="fadeInUp"].is-animated       { animation-name: gb-fadeInUp; }
+	&[data-animation="fadeInDown"].is-animated     { animation-name: gb-fadeInDown; }
+	&[data-animation="fadeInLeft"].is-animated     { animation-name: gb-fadeInLeft; }
+	&[data-animation="fadeInRight"].is-animated    { animation-name: gb-fadeInRight; }
+	&[data-animation="zoomIn"].is-animated         { animation-name: gb-zoomIn; }
+	&[data-animation="zoomOut"].is-animated        { animation-name: gb-zoomOut; }
+	&[data-animation="bounceIn"].is-animated       { animation-name: gb-bounceIn; }
+	&[data-animation="slideInUp"].is-animated      { animation-name: gb-slideInUp; }
+	&[data-animation="slideInDown"].is-animated    { animation-name: gb-slideInDown; }
+	&[data-animation="slideInLeft"].is-animated    { animation-name: gb-slideInLeft; }
+	&[data-animation="slideInRight"].is-animated   { animation-name: gb-slideInRight; }
+	&[data-animation="flipInX"].is-animated        { animation-name: gb-flipInX; }
+	&[data-animation="flipInY"].is-animated        { animation-name: gb-flipInY; }
+	&[data-animation="rotateIn"].is-animated       { animation-name: gb-rotateIn; }
+	&[data-animation="lightSpeedIn"].is-animated   { animation-name: gb-lightSpeedIn; }
+	&[data-animation="rollIn"].is-animated         { animation-name: gb-rollIn; }
+	&[data-animation="jackInTheBox"].is-animated   { animation-name: gb-jackInTheBox; }
+}
+
+// Respect reduced motion preference
+@media ( prefers-reduced-motion: reduce ) {
+	.gambol-animate {
+		opacity: 1 !important;
+		animation: none !important;
+		transition: none !important;
+	}
+}

@@ -11,19 +11,34 @@ import { ColorPicker, Popover } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 /**
- * Default color palette.
+ * Fallback palette if global palette is not available.
  */
-const DEFAULT_PALETTE = [
-	{ name: 'Primary', color: '#0073aa' },
-	{ name: 'Secondary', color: '#23282d' },
-	{ name: 'Success', color: '#00a32a' },
-	{ name: 'Warning', color: '#dba617' },
-	{ name: 'Error', color: '#d63638' },
-	{ name: 'White', color: '#ffffff' },
-	{ name: 'Light Gray', color: '#f5f5f5' },
-	{ name: 'Dark Gray', color: '#757575' },
-	{ name: 'Black', color: '#1e1e1e' },
+const FALLBACK_PALETTE = [
+	{ name: 'Primary',    color: '#00d4aa' },
+	{ name: 'Secondary',  color: '#6366f1' },
+	{ name: 'Accent',     color: '#f59e0b' },
+	{ name: 'Heading',    color: '#1a1a1a' },
+	{ name: 'Body Text',  color: '#4a4a4a' },
+	{ name: 'Background', color: '#ffffff' },
+	{ name: 'Success',    color: '#10b981' },
+	{ name: 'Warning',    color: '#f59e0b' },
+	{ name: 'Error',      color: '#ef4444' },
+	{ name: 'White',      color: '#ffffff' },
+	{ name: 'Black',      color: '#1e1e1e' },
 ];
+
+/**
+ * Get color palette from global editor data or fall back to defaults.
+ *
+ * @return {Array} Palette items with name and color.
+ */
+const getGlobalPalette = () => {
+	const globalPalette = window.gambolBuilderData?.globalPalette;
+	if ( globalPalette && globalPalette.length > 0 ) {
+		return globalPalette.map( ( item ) => ( { name: item.name, color: item.color } ) );
+	}
+	return FALLBACK_PALETTE;
+};
 
 /**
  * Color Control Component
@@ -43,7 +58,7 @@ const ColorControl = ( {
 	label,
 	value = '',
 	onChange,
-	palette = DEFAULT_PALETTE,
+	palette = getGlobalPalette(),
 	enableAlpha = true,
 	showPalette = true,
 	showReset = true,

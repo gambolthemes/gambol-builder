@@ -15,6 +15,7 @@ import './styles/admin.scss';
 // Import page components
 import Dashboard from './pages/Dashboard';
 import GlobalStyles from './pages/GlobalStyles';
+import ThemeOptions from './pages/ThemeOptions';
 
 /**
  * Get the current page from the root element.
@@ -33,6 +34,8 @@ function App() {
 	switch ( page ) {
 		case 'global-styles':
 			return <GlobalStyles />;
+		case 'theme-options':
+			return <ThemeOptions />;
 		case 'dashboard':
 		default:
 			return <Dashboard />;

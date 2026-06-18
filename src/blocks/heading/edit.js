@@ -23,6 +23,7 @@ import { __ } from '@wordpress/i18n';
 import {
 	heading,
 } from '@wordpress/icons';
+import DynamicTagsPicker from '../../components/inspector/DynamicTagsPicker';
 
 /**
  * Heading level options for toolbar.
@@ -121,6 +122,12 @@ export default function Edit( { attributes, setAttributes } ) {
 						value={ fontWeight }
 						options={ fontWeightOptions }
 						onChange={ ( value ) => setAttributes( { fontWeight: value } ) }
+					/>
+
+					<DynamicTagsPicker
+						onSelectTag={ ( tag ) =>
+							setAttributes( { content: ( content || '' ) + tag } )
+						}
 					/>
 				</PanelBody>
 			</InspectorControls>

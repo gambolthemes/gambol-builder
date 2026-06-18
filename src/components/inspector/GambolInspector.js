@@ -10,6 +10,7 @@ import { InspectorControls } from '@wordpress/block-editor';
 import { TabPanel } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import { settings, brush, cog } from '@wordpress/icons';
+import BlockPresets from './BlockPresets';
 
 /**
  * Tab configuration with icons and labels.
@@ -79,6 +80,10 @@ const GambolInspector = ( {
 	advancedTab,
 	tabs = DEFAULT_TABS,
 	initialTabName = 'general',
+	// Optional: pass to enable Block Presets in Advanced tab
+	blockName,
+	attributes,
+	setAttributes,
 } ) => {
 	/**
 	 * Render tab content based on tab name.
@@ -93,7 +98,18 @@ const GambolInspector = ( {
 			case 'style':
 				return styleTab ? styleTab() : null;
 			case 'advanced':
-				return advancedTab ? advancedTab() : null;
+				return (
+					<>
+						{ blockName && attributes && setAttributes && (
+							<BlockPresets
+								blockName={ blockName }
+								attributes={ attributes }
+								setAttributes={ setAttributes }
+							/>
+						) }
+						{ advancedTab ? advancedTab() : null }
+					</>
+				);
 			default:
 				return null;
 		}

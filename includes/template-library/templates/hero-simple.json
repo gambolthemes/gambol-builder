@@ -1,0 +1,9 @@
+{
+  "id": "bundled-hero-simple",
+  "title": "Simple Hero Section",
+  "type": "section",
+  "categories": ["hero", "general"],
+  "thumbnail": "",
+  "tags": ["hero", "banner", "heading", "button"],
+  "content": "<!-- wp:gambol/section {\"backgroundType\":\"color\",\"backgroundColor\":\"#f8f9fa\",\"padding\":{\"top\":80,\"right\":20,\"bottom\":80,\"left\":20}} --><section class=\"wp-block-gambol-section\"><div class=\"wp-block-gambol-section__inner\"><!-- wp:gambol/container --><div class=\"wp-block-gambol-container\"><!-- wp:gambol/heading {\"level\":1,\"textAlign\":\"center\",\"content\":\"Welcome to Our Website\"} /--><!-- wp:gambol/text {\"textAlign\":\"center\",\"content\":\"A short description of your business or product goes here. Keep it brief and impactful.\"} /--><!-- wp:gambol/button {\"text\":\"Get Started\",\"url\":\"#\",\"align\":\"center\"} /--></div><!-- /wp:gambol/container --></div></section><!-- /wp:gambol/section -->"
+}

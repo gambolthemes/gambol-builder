@@ -81,6 +81,21 @@ class Global_Styles {
 	 */
 	public function get_defaults() {
 		return array(
+			// Global named color palette (appears as swatches in all color pickers).
+			'palette'    => array(
+				array( 'slug' => 'primary',    'name' => 'Primary',    'color' => '#00d4aa' ),
+				array( 'slug' => 'secondary',  'name' => 'Secondary',  'color' => '#6366f1' ),
+				array( 'slug' => 'accent',     'name' => 'Accent',     'color' => '#f59e0b' ),
+				array( 'slug' => 'heading',    'name' => 'Heading',    'color' => '#1a1a1a' ),
+				array( 'slug' => 'body-text',  'name' => 'Body Text',  'color' => '#4a4a4a' ),
+				array( 'slug' => 'light-text', 'name' => 'Light Text', 'color' => '#757575' ),
+				array( 'slug' => 'background', 'name' => 'Background', 'color' => '#ffffff' ),
+				array( 'slug' => 'surface',    'name' => 'Surface',    'color' => '#f8f9fa' ),
+				array( 'slug' => 'border',     'name' => 'Border',     'color' => '#e0e0e0' ),
+				array( 'slug' => 'success',    'name' => 'Success',    'color' => '#10b981' ),
+				array( 'slug' => 'warning',    'name' => 'Warning',    'color' => '#f59e0b' ),
+				array( 'slug' => 'error',      'name' => 'Error',      'color' => '#ef4444' ),
+			),
 			// Colors.
 			'colors'     => array(
 				'primary'    => '#00d4aa',
@@ -185,6 +200,14 @@ class Global_Styles {
 		$merged = $defaults;
 
 		foreach ( $saved as $category => $values ) {
+			// Palette is a sequential array of objects — replace entirely when saved.
+			if ( 'palette' === $category ) {
+				if ( is_array( $values ) && ! empty( $values ) ) {
+					$merged[ $category ] = $values;
+				}
+				continue;
+			}
+
 			if ( isset( $merged[ $category ] ) && is_array( $values ) ) {
 				$merged[ $category ] = array_merge( $merged[ $category ], $values );
 			}
@@ -237,7 +260,21 @@ class Global_Styles {
 				continue;
 			}
 
+			// Palette is stored as indexed array of {slug, name, color} objects.
+			if ( 'palette' === $category ) {
+				foreach ( $values as $item ) {
+					if ( isset( $item['slug'], $item['color'] ) ) {
+						$property = sprintf( '--gb-palette-%s', $item['slug'] );
+						$css     .= sprintf( "\t%s: %s;\n", $property, esc_attr( $item['color'] ) );
+					}
+				}
+				continue;
+			}
+
 			foreach ( $values as $key => $value ) {
+				if ( ! is_string( $value ) && ! is_numeric( $value ) ) {
+					continue;
+				}
 				$property = sprintf( '--gb-%s-%s', $category, $key );
 				$css     .= sprintf( "\t%s: %s;\n", $property, esc_attr( $value ) );
 			}
@@ -277,7 +314,27 @@ class Global_Styles {
 		$sanitized = array();
 		$defaults  = $this->get_defaults();
 
+		// Handle palette separately (indexed array of objects, not flat key-value pairs).
+		if ( isset( $styles['palette'] ) && is_array( $styles['palette'] ) ) {
+			$sanitized['palette'] = array();
+			foreach ( $styles['palette'] as $item ) {
+				if ( ! is_array( $item ) || ! isset( $item['slug'], $item['name'], $item['color'] ) ) {
+					continue;
+				}
+				$sanitized['palette'][] = array(
+					'slug'  => sanitize_key( $item['slug'] ),
+					'name'  => sanitize_text_field( $item['name'] ),
+					'color' => sanitize_text_field( $item['color'] ),
+				);
+			}
+		}
+
 		foreach ( $defaults as $category => $values ) {
+			// Palette already handled above.
+			if ( 'palette' === $category ) {
+				continue;
+			}
+
 			if ( ! isset( $styles[ $category ] ) || ! is_array( $styles[ $category ] ) ) {
 				continue;
 			}
@@ -365,6 +422,16 @@ class Global_Styles {
 		}
 
 		return rest_ensure_response( $this->get_styles() );
+	}
+
+	/**
+	 * Get global color palette.
+	 *
+	 * @return array Palette items with slug, name, color.
+	 */
+	public function get_palette() {
+		$styles = $this->get_styles();
+		return $styles['palette'] ?? array();
 	}
 
 	/**

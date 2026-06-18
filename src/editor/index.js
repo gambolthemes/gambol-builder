@@ -11,15 +11,157 @@ import { __ } from '@wordpress/i18n';
 import { layout } from '@wordpress/icons';
 import { useState, useCallback, createRoot, render } from '@wordpress/element';
 import { subscribe, select } from '@wordpress/data';
+import { addFilter } from '@wordpress/hooks';
+import { InspectorControls } from '@wordpress/block-editor';
+import { createHigherOrderComponent } from '@wordpress/compose';
 import domReady from '@wordpress/dom-ready';
 
 import EditorPanel from './components/EditorPanel';
 import EditorToolbar from './components/EditorToolbar';
-import TemplatesPanel from './components/TemplatesPanel';
+import TemplatesLibraryModal from './components/TemplatesLibrary/TemplatesLibraryModal';
+import AnimationControl from '../components/inspector/controls/AnimationControl';
+import VisibilityControl from '../components/inspector/controls/VisibilityControl';
+import StickyControl from '../components/inspector/controls/StickyControl';
 import './styles/editor.scss';
 
 // Initialize the custom left sidebar (block inserter replacement)
 import './sidebar/loader';
+
+// =============================================
+// ANIMATION SYSTEM — Block Attribute Filter
+// Adds animationName, animationDelay, animationDuration to ALL gambol/* blocks
+// without modifying individual block files.
+// =============================================
+
+addFilter(
+	'blocks.registerBlockType',
+	'gambol/add-animation-attributes',
+	( settings, name ) => {
+		if ( ! name.startsWith( 'gambol/' ) ) {
+			return settings;
+		}
+		return {
+			...settings,
+			attributes: {
+				...( settings.attributes || {} ),
+				// Animation
+				animationName: {
+					type: 'string',
+					default: '',
+				},
+				animationDelay: {
+					type: 'number',
+					default: 0,
+				},
+				animationDuration: {
+					type: 'number',
+					default: 600,
+				},
+				// Conditional Visibility
+				visibilityDevices: {
+					type: 'object',
+					default: { desktop: true, tablet: true, mobile: true },
+				},
+				visibilityUserStatus: {
+					type: 'string',
+					default: 'everyone',
+				},
+				visibilityShowAfter: {
+					type: 'string',
+					default: '',
+				},
+				visibilityHideAfter: {
+					type: 'string',
+					default: '',
+				},
+				// Sticky
+				stickyEnabled: {
+					type: 'boolean',
+					default: false,
+				},
+				stickyOffset: {
+					type: 'number',
+					default: 0,
+				},
+				stickyBehavior: {
+					type: 'string',
+					default: 'always',
+				},
+			},
+		};
+	}
+);
+
+// Adds AnimationControl panel to the inspector for ALL gambol/* blocks
+const withAnimationControls = createHigherOrderComponent( ( BlockEdit ) => {
+	return ( props ) => {
+		if ( ! props.name.startsWith( 'gambol/' ) ) {
+			return <BlockEdit { ...props } />;
+		}
+
+		const { attributes, setAttributes } = props;
+
+		return (
+			<>
+				<BlockEdit { ...props } />
+				<InspectorControls>
+					<AnimationControl
+						animationName={ attributes.animationName || '' }
+						animationDelay={ attributes.animationDelay || 0 }
+						animationDuration={ attributes.animationDuration || 600 }
+						onChange={ ( values ) => setAttributes( values ) }
+					/>
+				</InspectorControls>
+			</>
+		);
+	};
+}, 'withAnimationControls' );
+
+addFilter(
+	'editor.BlockEdit',
+	'gambol/animation-controls',
+	withAnimationControls
+);
+
+// Adds Visibility + Sticky panels to ALL gambol/* block inspectors.
+const withAdvancedControls = createHigherOrderComponent( ( BlockEdit ) => {
+	return ( props ) => {
+		if ( ! props.name.startsWith( 'gambol/' ) ) {
+			return <BlockEdit { ...props } />;
+		}
+		const { attributes, setAttributes } = props;
+		return (
+			<>
+				<BlockEdit { ...props } />
+				<InspectorControls>
+					<VisibilityControl
+						label="Visibility"
+						value={ attributes.visibilityDevices || { desktop: true, tablet: true, mobile: true } }
+						onChange={ ( val ) => setAttributes( { visibilityDevices: val } ) }
+						userStatus={ attributes.visibilityUserStatus || 'everyone' }
+						onUserStatus={ ( val ) => setAttributes( { visibilityUserStatus: val } ) }
+						showAfter={ attributes.visibilityShowAfter || '' }
+						onShowAfter={ ( val ) => setAttributes( { visibilityShowAfter: val } ) }
+						hideAfter={ attributes.visibilityHideAfter || '' }
+						onHideAfter={ ( val ) => setAttributes( { visibilityHideAfter: val } ) }
+					/>
+					<StickyControl
+						enabled={ attributes.stickyEnabled || false }
+						offset={ attributes.stickyOffset || 0 }
+						behavior={ attributes.stickyBehavior || 'always' }
+						onChange={ ( vals ) => setAttributes( vals ) }
+					/>
+				</InspectorControls>
+			</>
+		);
+	};
+}, 'withAdvancedControls' );
+
+addFilter(
+	'editor.BlockEdit',
+	'gambol/advanced-controls',
+	withAdvancedControls
+);
 
 /**
  * Register the Gambol Builder settings sidebar plugin.
@@ -60,7 +202,7 @@ const GambolToolbarRoot = () => {
     return (
         <>
             <EditorToolbar onTemplatesClick={ toggleTemplates } />
-            { showTemplates && <TemplatesPanel onClose={ closeTemplates } /> }
+            { showTemplates && <TemplatesLibraryModal onClose={ closeTemplates } /> }
         </>
     );
 };

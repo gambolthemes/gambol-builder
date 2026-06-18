@@ -43,6 +43,13 @@ class Admin_Page {
 	const GLOBAL_STYLES_SLUG = 'gambol-global-styles';
 
 	/**
+	 * Theme Options page slug.
+	 *
+	 * @var string
+	 */
+	const THEME_OPTIONS_SLUG = 'gambol-theme-options';
+
+	/**
 	 * Get singleton instance.
 	 *
 	 * @return Admin_Page
@@ -107,6 +114,16 @@ class Admin_Page {
 			self::GLOBAL_STYLES_SLUG,
 			array( $this, 'render_global_styles_page' )
 		);
+
+		// Theme Options submenu.
+		add_submenu_page(
+			self::MENU_SLUG,
+			__( 'Theme Options', 'gambol-builder' ),
+			__( 'Theme Options', 'gambol-builder' ),
+			'manage_options',
+			self::THEME_OPTIONS_SLUG,
+			array( $this, 'render_theme_options_page' )
+		);
 	}
 
 	/**
@@ -130,6 +147,7 @@ class Admin_Page {
 		$our_pages = array(
 			'toplevel_page_' . self::MENU_SLUG,
 			'gambol_page_' . self::GLOBAL_STYLES_SLUG,
+			'gambol_page_' . self::THEME_OPTIONS_SLUG,
 		);
 
 		if ( ! in_array( $hook, $our_pages, true ) ) {
@@ -189,6 +207,9 @@ class Admin_Page {
 		if ( strpos( $hook, self::GLOBAL_STYLES_SLUG ) !== false ) {
 			return 'global-styles';
 		}
+		if ( strpos( $hook, self::THEME_OPTIONS_SLUG ) !== false ) {
+			return 'theme-options';
+		}
 		return 'dashboard';
 	}
 
@@ -214,6 +235,19 @@ class Admin_Page {
 		?>
 		<div class="wrap gambol-admin-wrap">
 			<div id="gambol-admin-root" data-page="global-styles"></div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render theme options page.
+	 *
+	 * @return void
+	 */
+	public function render_theme_options_page() {
+		?>
+		<div class="wrap gambol-admin-wrap">
+			<div id="gambol-admin-root" data-page="theme-options"></div>
 		</div>
 		<?php
 	}

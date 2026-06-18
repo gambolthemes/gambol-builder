@@ -24,15 +24,25 @@ export default function save( { attributes } ) {
 		closeOnOverlay,
 		closeOnEsc,
 		animation,
+		scrollPercent,
+		exitIntentEnabled,
+		cookieDays,
+		scheduledStart,
+		scheduledEnd,
 	} = attributes;
 
 	const blockProps = useBlockProps.save( {
 		className: `wp-block-gambol-popup trigger-${ triggerType } animation-${ animation }`,
-		'data-popup-id': popupId,
-		'data-trigger': triggerType,
-		'data-delay': triggerDelay,
-		'data-close-overlay': closeOnOverlay,
-		'data-close-esc': closeOnEsc,
+		'data-popup-id':       popupId,
+		'data-trigger':        triggerType,
+		'data-delay':          triggerDelay,
+		'data-close-overlay':  closeOnOverlay,
+		'data-close-esc':      closeOnEsc,
+		'data-scroll-percent': scrollPercent,
+		'data-exit-intent':    exitIntentEnabled,
+		'data-cookie-days':    cookieDays,
+		'data-start':          scheduledStart || undefined,
+		'data-end':            scheduledEnd   || undefined,
 	} );
 
 	const popupContentStyle = {

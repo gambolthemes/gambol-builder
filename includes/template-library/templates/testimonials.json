@@ -1,0 +1,9 @@
+{
+  "id": "bundled-testimonials",
+  "title": "Testimonials Carousel",
+  "type": "section",
+  "categories": ["testimonials", "general"],
+  "thumbnail": "",
+  "tags": ["testimonials", "carousel", "social proof", "reviews"],
+  "content": "<!-- wp:gambol/section {\"backgroundType\":\"color\",\"backgroundColor\":\"#f0fdf4\",\"padding\":{\"top\":64,\"right\":20,\"bottom\":64,\"left\":20}} --><section class=\"wp-block-gambol-section\"><div class=\"wp-block-gambol-section__inner\"><!-- wp:gambol/container --><div class=\"wp-block-gambol-container\"><!-- wp:gambol/heading {\"level\":2,\"textAlign\":\"center\",\"content\":\"What Our Clients Say\"} /--><!-- wp:gambol/testimonial-carousel --><div class=\"wp-block-gambol-testimonial-carousel\"><!-- wp:gambol/testimonial {\"quote\":\"Absolutely amazing product! It changed the way we work.\",\"author\":\"Jane Doe\",\"role\":\"CEO, Acme Inc\"} /--><!-- wp:gambol/testimonial {\"quote\":\"Top-notch quality and excellent customer support.\",\"author\":\"John Smith\",\"role\":\"CTO, Startup Co\"} /--></div><!-- /wp:gambol/testimonial-carousel --></div><!-- /wp:gambol/container --></div></section><!-- /wp:gambol/section -->"
+}

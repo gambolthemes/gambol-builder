@@ -10,6 +10,8 @@
  * @package GambolBuilder
  */
 
+import { initSticky } from './sticky';
+
 ( function() {
 	'use strict';
 
@@ -17,12 +19,87 @@
 	 * Initialize when DOM is ready.
 	 */
 	document.addEventListener( 'DOMContentLoaded', function() {
+		initAnimations();
+		initVideoBackgrounds();
+		initParallax();
 		initAccordions();
 		initTabs();
 		initVideoLightbox();
 		initGalleryLightbox();
 		initCounters();
+		initPopups();
+		initSticky();
 	} );
+
+	// =============================================
+	// VIDEO BACKGROUNDS
+	// =============================================
+
+	/**
+	 * Lazy-load self-hosted video backgrounds.
+	 * YouTube/Vimeo iframes auto-play on load; only MP4 <video> tags need this.
+	 */
+	function initVideoBackgrounds() {
+		const videos = document.querySelectorAll( '.gambol-section__video-bg video[data-src]' );
+		if ( ! videos.length ) return;
+
+		videos.forEach( function( video ) {
+			var src = video.dataset.src;
+			if ( ! src ) return;
+			var source = document.createElement( 'source' );
+			source.src = src;
+			source.type = 'video/mp4';
+			video.appendChild( source );
+			video.load();
+			video.play().catch( function() {} ); // Suppress autoplay policy errors
+		} );
+	}
+
+	// =============================================
+	// PARALLAX BACKGROUNDS
+	// =============================================
+
+	/**
+	 * Scroll-based parallax for sections with data-parallax="true".
+	 * Uses requestAnimationFrame for 60fps performance.
+	 */
+	function initParallax() {
+		var sections = document.querySelectorAll( '[data-parallax="true"]' );
+		if ( ! sections.length ) return;
+
+		// Skip on touch/mobile for performance.
+		if ( window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches ) return;
+
+		var ticking = false;
+
+		function updateParallax() {
+			sections.forEach( function( section ) {
+				var speed     = parseFloat( section.dataset.parallaxSpeed ) || 0.5;
+				var direction = section.dataset.parallaxDirection === 'down' ? 1 : -1;
+				var rect      = section.getBoundingClientRect();
+				var viewH     = window.innerHeight;
+
+				// Only compute when section is visible.
+				if ( rect.bottom < 0 || rect.top > viewH ) return;
+
+				var progress = ( viewH - rect.top ) / ( viewH + rect.height );
+				var offset   = Math.round( direction * progress * speed * 80 );
+
+				section.style.backgroundPosition = 'center calc(50% + ' + offset + 'px)';
+			} );
+			ticking = false;
+		}
+
+		window.addEventListener( 'scroll', function() {
+			if ( ! ticking ) {
+				requestAnimationFrame( updateParallax );
+				ticking = true;
+			}
+		}, { passive: true } );
+
+		// Run once on load.
+		updateParallax();
+	}
 
 	// =============================================
 	// ACCORDION
@@ -367,6 +444,53 @@
 		} );
 	}
 
+	// =============================================
+	// SCROLL-TRIGGERED ANIMATIONS
+	// =============================================
+
+	/**
+	 * Initialize scroll-triggered entrance animations for all .gambol-animate elements.
+	 * Uses IntersectionObserver — same pattern as counter animation above.
+	 */
+	function initAnimations() {
+		const elements = document.querySelectorAll( '.gambol-animate[data-animation]' );
+		if ( ! elements.length ) return;
+
+		// Respect reduced motion preference.
+		if ( window.matchMedia( '(prefers-reduced-motion: reduce)' ).matches ) {
+			elements.forEach( function( el ) {
+				el.style.opacity = '1';
+			} );
+			return;
+		}
+
+		const observer = new IntersectionObserver( function( entries ) {
+			entries.forEach( function( entry ) {
+				if ( entry.isIntersecting && ! entry.target.dataset.animated ) {
+					const el       = entry.target;
+					const delay    = parseInt( el.dataset.animationDelay, 10 ) || 0;
+					const duration = parseInt( el.dataset.animationDuration, 10 ) || 600;
+
+					setTimeout( function() {
+						el.style.animationDuration = duration + 'ms';
+						el.style.animationTimingFunction = 'ease-out';
+						el.classList.add( 'is-animated' );
+						el.dataset.animated = 'true';
+					}, delay );
+
+					observer.unobserve( el );
+				}
+			} );
+		}, {
+			threshold: 0.1,
+			rootMargin: '0px 0px -50px 0px',
+		} );
+
+		elements.forEach( function( el ) {
+			observer.observe( el );
+		} );
+	}
+
 	/**
 	 * Animate a single counter element.
 	 */
@@ -416,6 +540,125 @@
 		}
 
 		requestAnimationFrame( updateCounter );
+	}
+
+	// =============================================
+	// POPUP BUILDER
+	// =============================================
+
+	/**
+	 * Initialize all gambol popups on the page.
+	 * Handles: click trigger, time delay, scroll%, exit intent, cookie suppression, scheduling.
+	 */
+	function initPopups() {
+		var popups = document.querySelectorAll( '.wp-block-gambol-popup' );
+		if ( ! popups.length ) return;
+
+		popups.forEach( function( popup ) {
+			var id           = popup.dataset.popupId;
+			var trigger      = popup.dataset.trigger;
+			var delay        = parseInt( popup.dataset.delay, 10 ) || 0;
+			var closeOverlay = popup.dataset.closeOverlay !== 'false';
+			var closeEsc     = popup.dataset.closeEsc !== 'false';
+			var scrollPct    = parseInt( popup.dataset.scrollPercent, 10 ) || 50;
+			var exitIntent   = popup.dataset.exitIntent !== 'false';
+			var cookieDays   = parseInt( popup.dataset.cookieDays, 10 ) || 0;
+			var startDate    = popup.dataset.start || '';
+			var endDate      = popup.dataset.end   || '';
+
+			var overlay = popup.querySelector( '.popup-overlay' );
+			if ( ! overlay ) return;
+
+			// ---- Cookie suppression ----
+			if ( cookieDays > 0 && id ) {
+				var cookieKey = 'gambol_popup_' + id;
+				if ( document.cookie.split( ';' ).some( function( c ) {
+					return c.trim().startsWith( cookieKey + '=' );
+				} ) ) {
+					return; // Already dismissed, skip this popup.
+				}
+			}
+
+			// ---- Scheduling ----
+			var now = new Date();
+			if ( startDate ) {
+				var start = new Date( startDate );
+				if ( now < start ) return;
+			}
+			if ( endDate ) {
+				var end = new Date( endDate );
+				if ( now > end ) return;
+			}
+
+			// ---- Open / Close helpers ----
+			function openPopup() {
+				overlay.classList.add( 'is-open' );
+				document.body.style.overflow = 'hidden';
+
+				if ( cookieDays > 0 && id ) {
+					var expires = new Date();
+					expires.setDate( expires.getDate() + cookieDays );
+					document.cookie = 'gambol_popup_' + id + '=1; expires=' + expires.toUTCString() + '; path=/; SameSite=Lax';
+				}
+			}
+
+			function closePopup() {
+				overlay.classList.remove( 'is-open' );
+				document.body.style.overflow = '';
+			}
+
+			// Close button.
+			var closeBtn = overlay.querySelector( '.popup-close' );
+			if ( closeBtn ) {
+				closeBtn.addEventListener( 'click', closePopup );
+			}
+
+			// Close on overlay click.
+			if ( closeOverlay ) {
+				overlay.addEventListener( 'click', function( e ) {
+					if ( e.target === overlay ) closePopup();
+				} );
+			}
+
+			// Close on Escape key.
+			if ( closeEsc ) {
+				document.addEventListener( 'keydown', function( e ) {
+					if ( e.key === 'Escape' && overlay.classList.contains( 'is-open' ) ) {
+						closePopup();
+					}
+				} );
+			}
+
+			// ---- Trigger ----
+			if ( trigger === 'click' ) {
+				var triggerBtn = popup.querySelector( '.popup-trigger-button' );
+				if ( triggerBtn ) {
+					triggerBtn.addEventListener( 'click', openPopup );
+				}
+
+			} else if ( trigger === 'load' ) {
+				setTimeout( openPopup, delay * 1000 );
+
+			} else if ( trigger === 'scroll' ) {
+				var scrollListener = function() {
+					var scrolled = ( window.scrollY / ( document.body.scrollHeight - window.innerHeight ) ) * 100;
+					if ( scrolled >= scrollPct ) {
+						setTimeout( openPopup, delay * 1000 );
+						window.removeEventListener( 'scroll', scrollListener );
+					}
+				};
+				window.addEventListener( 'scroll', scrollListener, { passive: true } );
+
+			} else if ( trigger === 'exit' && exitIntent ) {
+				var exitListener = function( e ) {
+					if ( e.clientY <= 0 ) {
+						openPopup();
+						document.removeEventListener( 'mouseleave', exitListener );
+					}
+				};
+				document.addEventListener( 'mouseleave', exitListener );
+			}
+		} );
 	}
 
 } )();

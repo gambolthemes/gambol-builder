@@ -83,6 +83,27 @@ safe_include( GAMBOL_BUILDER_PATH . 'includes/theme-integration/class-loader.php
 // Include Licensing (optional module - may not be included in free version).
 safe_include( GAMBOL_BUILDER_PATH . 'includes/licensing/class-loader.php' );
 
+// Include Template Library (Avada Studio equivalent).
+safe_include( GAMBOL_BUILDER_PATH . 'includes/template-library/class-loader.php' );
+
+// Include Block Presets (Avada Element Presets equivalent).
+safe_include( GAMBOL_BUILDER_PATH . 'includes/class-block-presets.php' );
+
+// Include Dynamic Tags / Smart Fields.
+safe_include( GAMBOL_BUILDER_PATH . 'includes/class-dynamic-tags.php' );
+
+// Include Theme Options Panel.
+safe_include( GAMBOL_BUILDER_PATH . 'includes/class-theme-options.php' );
+
+// Include Popup Manager.
+safe_include( GAMBOL_BUILDER_PATH . 'includes/class-popup-manager.php' );
+
+// Include Conditional Visibility.
+safe_include( GAMBOL_BUILDER_PATH . 'includes/class-conditional-visibility.php' );
+
+// Include Mega Menu Builder.
+safe_include( GAMBOL_BUILDER_PATH . 'includes/mega-menu/class-loader.php' );
+
 /**
  * Initialize the plugin.
  *
@@ -327,6 +348,18 @@ function enqueue_editor_assets() {
 		true
 	);
 
+	// Get global color palette for editor color pickers.
+	$global_palette = array();
+	if ( class_exists( __NAMESPACE__ . '\Global_Styles' ) ) {
+		$global_palette = Global_Styles::get_instance()->get_palette();
+	}
+
+	// Get dynamic tag names for the editor Smart Fields UI.
+	$dynamic_tags = array();
+	if ( class_exists( __NAMESPACE__ . '\Dynamic_Tags' ) ) {
+		$dynamic_tags = Dynamic_Tags::get_instance()->get_tag_list();
+	}
+
 	// Pass data to JavaScript.
 	wp_localize_script(
 		'gambol-builder-editor-panel',
@@ -338,6 +371,10 @@ function enqueue_editor_assets() {
 			'ajaxUrl'           => admin_url( 'admin-ajax.php' ),
 			'nonce'             => wp_create_nonce( 'gambol_builder_nonce' ),
 			'adminUrl'          => admin_url(),
+			'globalPalette'     => $global_palette,
+			'dynamicTags'       => $dynamic_tags,
+			'restUrl'           => rest_url( 'gambol-builder/v1/' ),
+			'restNonce'         => wp_create_nonce( 'wp_rest' ),
 		)
 	);
 }
@@ -400,7 +437,53 @@ function enqueue_frontend_assets() {
 		$frontend_asset['version'],
 		true // Load in footer
 	);
+
+	// Device visibility CSS classes.
+	$visibility_css = '
+		@media (min-width: 1025px) { .gambol-hide-desktop { display: none !important; } }
+		@media (min-width: 768px) and (max-width: 1024px) { .gambol-hide-tablet { display: none !important; } }
+		@media (max-width: 767px) { .gambol-hide-mobile { display: none !important; } }
+	';
+	wp_add_inline_style( 'gambol-builder-style', $visibility_css );
 }
+
+/**
+ * Inject animation data attributes into rendered Gambol block HTML.
+ * Works for all blocks without requiring individual block modifications.
+ *
+ * @param string $block_content Rendered block HTML.
+ * @param array  $block         Block data with name and attrs.
+ * @return string Modified block HTML.
+ */
+function inject_animation_attributes( $block_content, $block ) {
+	if ( empty( $block['attrs']['animationName'] ) ) {
+		return $block_content;
+	}
+	if ( ! isset( $block['blockName'] ) || strpos( $block['blockName'], 'gambol/' ) !== 0 ) {
+		return $block_content;
+	}
+
+	$animation_name     = sanitize_key( $block['attrs']['animationName'] );
+	$animation_delay    = absint( $block['attrs']['animationDelay'] ?? 0 );
+	$animation_duration = absint( $block['attrs']['animationDuration'] ?? 600 );
+
+	$data_attrs = ' data-animation="' . esc_attr( $animation_name ) . '"'
+		. ' data-animation-delay="' . $animation_delay . '"'
+		. ' data-animation-duration="' . $animation_duration . '"';
+
+	// Add gambol-animate class to first tag.
+	if ( strpos( $block_content, 'class="' ) !== false ) {
+		$block_content = preg_replace( '/class="/', 'class="gambol-animate ', $block_content, 1 );
+	} else {
+		$block_content = preg_replace( '/(<[a-z][a-z0-9]*)/i', '$1 class="gambol-animate"', $block_content, 1 );
+	}
+
+	// Add data attributes to first tag.
+	$block_content = preg_replace( '/(<[a-z][a-z0-9]*)/i', '$1' . $data_attrs, $block_content, 1 );
+
+	return $block_content;
+}
+add_filter( 'render_block', __NAMESPACE__ . '\inject_animation_attributes', 10, 2 );
 
 /**
  * Check if current post/page has Gambol Builder blocks.

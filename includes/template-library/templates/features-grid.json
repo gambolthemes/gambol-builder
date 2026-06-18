@@ -1,0 +1,9 @@
+{
+  "id": "bundled-features-grid",
+  "title": "Features Grid",
+  "type": "section",
+  "categories": ["features", "general"],
+  "thumbnail": "",
+  "tags": ["features", "icons", "grid", "services"],
+  "content": "<!-- wp:gambol/section {\"padding\":{\"top\":64,\"right\":20,\"bottom\":64,\"left\":20}} --><section class=\"wp-block-gambol-section\"><div class=\"wp-block-gambol-section__inner\"><!-- wp:gambol/container --><div class=\"wp-block-gambol-container\"><!-- wp:gambol/heading {\"level\":2,\"textAlign\":\"center\",\"content\":\"Our Features\"} /--><!-- wp:gambol/grid {\"columns\":3} --><div class=\"wp-block-gambol-grid\"><!-- wp:gambol/icon-box {\"title\":\"Fast Performance\",\"description\":\"Optimized for speed from the ground up.\"} /--><!-- wp:gambol/icon-box {\"title\":\"Easy to Use\",\"description\":\"Intuitive interface anyone can master.\"} /--><!-- wp:gambol/icon-box {\"title\":\"Fully Responsive\",\"description\":\"Looks great on every device and screen size.\"} /--></div><!-- /wp:gambol/grid --></div><!-- /wp:gambol/container --></div></section><!-- /wp:gambol/section -->"
+}

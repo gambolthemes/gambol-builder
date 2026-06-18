@@ -112,7 +112,7 @@ registerBlockType( 'gambol/section', {
 		backgroundType: {
 			type: 'string',
 			default: 'none',
-			enum: [ 'none', 'color', 'gradient', 'image' ],
+			enum: [ 'none', 'color', 'gradient', 'image', 'video', 'parallax' ],
 		},
 		backgroundColor: {
 			type: 'string',
@@ -137,6 +137,38 @@ registerBlockType( 'gambol/section', {
 		backgroundRepeat: {
 			type: 'string',
 			default: 'no-repeat',
+		},
+		// Video background
+		backgroundVideoUrl: {
+			type: 'string',
+			default: '',
+		},
+		backgroundVideoType: {
+			type: 'string',
+			default: 'self',
+			enum: [ 'self', 'youtube', 'vimeo' ],
+		},
+		backgroundVideoLoop: {
+			type: 'boolean',
+			default: true,
+		},
+		backgroundVideoMuted: {
+			type: 'boolean',
+			default: true,
+		},
+		// Parallax (for image backgrounds)
+		parallaxEnabled: {
+			type: 'boolean',
+			default: false,
+		},
+		parallaxSpeed: {
+			type: 'number',
+			default: 0.5,
+		},
+		parallaxDirection: {
+			type: 'string',
+			default: 'up',
+			enum: [ 'up', 'down' ],
 		},
 
 		// Design - Overlay

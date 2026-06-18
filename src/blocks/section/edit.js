@@ -19,6 +19,7 @@ import {
 	ColorPalette,
 	GradientPicker,
 	Button,
+	TextControl as WPTextControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
@@ -73,6 +74,13 @@ export default function Edit( { attributes, setAttributes } ) {
 		backgroundImage,
 		backgroundPosition,
 		backgroundSize,
+		backgroundVideoUrl,
+		backgroundVideoType,
+		backgroundVideoLoop,
+		backgroundVideoMuted,
+		parallaxEnabled,
+		parallaxSpeed,
+		parallaxDirection,
 		overlayEnabled,
 		overlayColor,
 		overlayOpacity,
@@ -413,10 +421,12 @@ export default function Edit( { attributes, setAttributes } ) {
 					value={ backgroundType || 'none' }
 					onChange={ ( value ) => setAttributes( { backgroundType: value } ) }
 					options={ [
-						{ value: 'none', label: __( 'None', 'gambol-builder' ) },
-						{ value: 'color', label: __( 'Color', 'gambol-builder' ) },
+						{ value: 'none',     label: __( 'None',     'gambol-builder' ) },
+						{ value: 'color',    label: __( 'Color',    'gambol-builder' ) },
 						{ value: 'gradient', label: __( 'Gradient', 'gambol-builder' ) },
-						{ value: 'image', label: __( 'Image', 'gambol-builder' ) },
+						{ value: 'image',    label: __( 'Image',    'gambol-builder' ) },
+						{ value: 'video',    label: __( 'Video',    'gambol-builder' ) },
+						{ value: 'parallax', label: __( 'Parallax', 'gambol-builder' ) },
 					] }
 				/>
 
@@ -444,6 +454,94 @@ export default function Edit( { attributes, setAttributes } ) {
 							value={ backgroundGradient }
 							onChange={ ( value ) => setAttributes( { backgroundGradient: value } ) }
 						/>
+					</div>
+				) }
+
+				{/* Video Background */}
+				{ backgroundType === 'video' && (
+					<div className="gambol-control-group" style={ { marginTop: '16px' } }>
+						<WPTextControl
+							label={ __( 'Video URL', 'gambol-builder' ) }
+							value={ backgroundVideoUrl || '' }
+							onChange={ ( value ) => setAttributes( { backgroundVideoUrl: value } ) }
+							placeholder="https://..."
+							help={ __( 'Self-hosted MP4, or YouTube/Vimeo URL.', 'gambol-builder' ) }
+						/>
+						<div style={ { marginTop: '12px' } }>
+							<Dropdown
+								label={ __( 'Video Type', 'gambol-builder' ) }
+								value={ backgroundVideoType || 'self' }
+								onChange={ ( value ) => setAttributes( { backgroundVideoType: value } ) }
+								options={ [
+									{ value: 'self',    label: __( 'Self-Hosted (MP4)', 'gambol-builder' ) },
+									{ value: 'youtube', label: __( 'YouTube',           'gambol-builder' ) },
+									{ value: 'vimeo',   label: __( 'Vimeo',             'gambol-builder' ) },
+								] }
+							/>
+						</div>
+						<div style={ { marginTop: '12px' } }>
+							<Toggle
+								label={ __( 'Loop Video', 'gambol-builder' ) }
+								checked={ backgroundVideoLoop !== false }
+								onChange={ ( value ) => setAttributes( { backgroundVideoLoop: value } ) }
+							/>
+						</div>
+					</div>
+				) }
+
+				{/* Parallax Background */}
+				{ backgroundType === 'parallax' && (
+					<div className="gambol-control-group" style={ { marginTop: '16px' } }>
+						<MediaUploadCheck>
+							<MediaUpload
+								onSelect={ ( media ) => setAttributes( {
+									backgroundImage: { id: media.id, url: media.url, alt: media.alt },
+								} ) }
+								allowedTypes={ [ 'image' ] }
+								value={ backgroundImage?.id }
+								render={ ( { open } ) => (
+									<div className="gambol-image-control">
+										{ backgroundImage?.url ? (
+											<div className="gambol-image-preview">
+												<img
+													src={ backgroundImage.url }
+													alt={ backgroundImage.alt || '' }
+													style={ { width: '100%', height: '80px', objectFit: 'cover', borderRadius: '6px', marginBottom: '8px' } }
+												/>
+												<Button variant="secondary" onClick={ open }>
+													{ __( 'Replace', 'gambol-builder' ) }
+												</Button>
+											</div>
+										) : (
+											<Button variant="secondary" onClick={ open } style={ { width: '100%', justifyContent: 'center' } }>
+												{ __( 'Select Parallax Image', 'gambol-builder' ) }
+											</Button>
+										) }
+									</div>
+								) }
+							/>
+						</MediaUploadCheck>
+						<div style={ { marginTop: '12px' } }>
+							<RangeSlider
+								label={ __( 'Parallax Speed', 'gambol-builder' ) }
+								value={ parallaxSpeed || 0.5 }
+								onChange={ ( value ) => setAttributes( { parallaxSpeed: value } ) }
+								min={ 0.1 }
+								max={ 1 }
+								step={ 0.05 }
+							/>
+						</div>
+						<div style={ { marginTop: '12px' } }>
+							<ButtonGroup
+								label={ __( 'Parallax Direction', 'gambol-builder' ) }
+								value={ parallaxDirection || 'up' }
+								onChange={ ( value ) => setAttributes( { parallaxDirection: value } ) }
+								options={ [
+									{ value: 'up',   label: __( 'Up',   'gambol-builder' ) },
+									{ value: 'down', label: __( 'Down', 'gambol-builder' ) },
+								] }
+							/>
+						</div>
 					</div>
 				) }
 

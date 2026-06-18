@@ -13,6 +13,8 @@ import {
 import { __ } from '@wordpress/i18n';
 import { useState, useEffect } from '@wordpress/element';
 
+import { PanelBody, TextControl, RangeControl, ToggleControl } from '@wordpress/components';
+
 import {
 	InspectorSidebar,
 	Section,
@@ -41,6 +43,11 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		closeOnOverlay,
 		closeOnEsc,
 		animation,
+		scrollPercent,
+		exitIntentEnabled,
+		cookieDays,
+		scheduledStart,
+		scheduledEnd,
 	} = attributes;
 
 	const [ isPreviewOpen, setIsPreviewOpen ] = useState( false );
@@ -103,6 +110,44 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 										max={ 30 }
 									/>
 								) }
+								{ triggerType === 'scroll' && (
+									<RangeSlider
+										label={ __( 'Scroll % to Trigger', 'gambol-builder' ) }
+										value={ scrollPercent }
+										onChange={ ( value ) => setAttributes( { scrollPercent: value } ) }
+										min={ 1 }
+										max={ 100 }
+									/>
+								) }
+								{ triggerType === 'exit' && (
+									<Toggle
+										label={ __( 'Enable Exit Intent', 'gambol-builder' ) }
+										checked={ exitIntentEnabled }
+										onChange={ ( value ) => setAttributes( { exitIntentEnabled: value } ) }
+									/>
+								) }
+							</Section>
+
+							<Section title={ __( 'Display Rules', 'gambol-builder' ) }>
+								<RangeSlider
+									label={ __( 'Cookie Duration (days, 0 = always show)', 'gambol-builder' ) }
+									value={ cookieDays }
+									onChange={ ( value ) => setAttributes( { cookieDays: value } ) }
+									min={ 0 }
+									max={ 365 }
+								/>
+								<TextInput
+									label={ __( 'Show After (date)', 'gambol-builder' ) }
+									help={ __( 'YYYY-MM-DD format', 'gambol-builder' ) }
+									value={ scheduledStart }
+									onChange={ ( value ) => setAttributes( { scheduledStart: value } ) }
+								/>
+								<TextInput
+									label={ __( 'Hide After (date)', 'gambol-builder' ) }
+									help={ __( 'YYYY-MM-DD format', 'gambol-builder' ) }
+									value={ scheduledEnd }
+									onChange={ ( value ) => setAttributes( { scheduledEnd: value } ) }
+								/>
 							</Section>
 
 							<Section title={ __( 'Popup Settings', 'gambol-builder' ) }>

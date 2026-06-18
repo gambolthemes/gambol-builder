@@ -105,6 +105,26 @@ registerBlockType( 'gambol/popup', {
 			type: 'string',
 			default: 'fade',
 		},
+		scrollPercent: {
+			type: 'number',
+			default: 50,
+		},
+		exitIntentEnabled: {
+			type: 'boolean',
+			default: true,
+		},
+		cookieDays: {
+			type: 'number',
+			default: 0,
+		},
+		scheduledStart: {
+			type: 'string',
+			default: '',
+		},
+		scheduledEnd: {
+			type: 'string',
+			default: '',
+		},
 	},
 	edit: Edit,
 	save,
