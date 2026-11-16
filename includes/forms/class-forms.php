@@ -604,6 +604,13 @@ class Forms {
 
 			switch ( $rule['type'] ) {
 				case 'email':
+					// Something was typed but it is not an address: say so,
+					// rather than calling the field empty.
+					if ( '' !== trim( $value ) && ! is_email( sanitize_email( $value ) ) ) {
+						$errors[ $key ] = __( 'Please enter a valid email address.', 'gambol-builder' );
+						$data[ $key ]   = '';
+						continue 2;
+					}
 					$value = sanitize_email( $value );
 					break;
 				case 'textarea':

@@ -531,10 +531,8 @@ $gb-transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15
     z-index: 99998;
     transition: left 0.25s ease;
 
-    // When WordPress admin bar is shown
-    .admin-bar & {
-        top: 0;
-    }
+    // Below the WordPress admin bar when it is visible; loader.js measures it.
+    top: var(--gambol-adminbar-h, 0px);
 
     .gambol-sidebar-collapsed & {
         left: 56px;
@@ -800,10 +798,8 @@ $gb-transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15
     flex-direction: column;
     overflow: hidden;
 
-    // When WordPress admin bar is shown
-    .admin-bar & {
-        top: 0;
-    }
+    // Below the WordPress admin bar when it is visible; loader.js measures it.
+    top: var(--gambol-adminbar-h, 0px);
 
     @media (max-width: 782px) {
         left: 0;

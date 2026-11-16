@@ -170,7 +170,31 @@ const unmountSidebar = () => {
  * Hide the default Gutenberg block inserter and all default UI.
  * Adds comprehensive CSS to suppress all default inserter elements.
  */
+/**
+ * Expose the visible height of the WordPress admin bar as a CSS variable.
+ *
+ * Whether the bar shows in the editor differs between WordPress versions and
+ * fullscreen mode, so measure it instead of guessing from body classes.
+ */
+const trackAdminBarHeight = () => {
+	const bar = document.getElementById( 'wpadminbar' );
+	const update = () => {
+		let height = 0;
+		if ( bar && getComputedStyle( bar ).display !== 'none' ) {
+			const rect = bar.getBoundingClientRect();
+			height = Math.max( 0, Math.round( rect.bottom ) );
+		}
+		document.body.style.setProperty( '--gambol-adminbar-h', `${ height }px` );
+	};
+	update();
+	if ( bar && 'ResizeObserver' in window ) {
+		new window.ResizeObserver( update ).observe( bar );
+	}
+	window.addEventListener( 'resize', update );
+};
+
 const hideDefaultInserter = () => {
+	trackAdminBarHeight();
 	const styleId = 'gambol-hide-inserter';
 	
 	if ( document.getElementById( styleId ) ) {

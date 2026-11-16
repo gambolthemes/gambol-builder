@@ -450,7 +450,19 @@ JS;
 			$locations                   = get_nav_menu_locations();
 			$menu_obj                    = isset( $locations['primary'] ) ? wp_get_nav_menu_object( $locations['primary'] ) : null;
 		} else {
-			return '';
+			// Block themes register no menu locations: use the menu the site
+			// marked as Gambol's default (set by the demo importer), else the
+			// first menu that exists.
+			$default  = (int) get_option( 'gambol_default_menu', 0 );
+			$menu_obj = $default ? wp_get_nav_menu_object( $default ) : null;
+			if ( ! $menu_obj ) {
+				$menus    = wp_get_nav_menus( array( 'orderby' => 'term_id' ) );
+				$menu_obj = ! empty( $menus ) ? $menus[0] : null;
+			}
+			if ( ! $menu_obj ) {
+				return '';
+			}
+			$menu_args['menu'] = $menu_obj->term_id;
 		}
 
 		$layout    = in_array( $a['layout'], array( 'horizontal', 'vertical' ), true ) ? $a['layout'] : 'horizontal';

@@ -410,6 +410,29 @@ class Importer {
 			$menu_id = $this->create_menu( $demo, $session['pages'] );
 		}
 
+		if ( $menu_id ) {
+			$backup = get_option( self::BACKUP_OPTION, array() );
+			if ( is_array( $backup ) && ! isset( $backup['data']['menus'] ) ) {
+				$backup['data']['menus'] = array(
+					'default'   => (int) get_option( 'gambol_default_menu', 0 ),
+					'locations' => get_nav_menu_locations(),
+				);
+				update_option( self::BACKUP_OPTION, $backup, false );
+			}
+
+			// The Nav Menu block falls back to this menu (block themes have no locations).
+			update_option( 'gambol_default_menu', $menu_id );
+
+			// Classic themes: fill the theme's empty menu locations.
+			$locations = get_nav_menu_locations();
+			foreach ( array_keys( get_registered_nav_menus() ) as $location ) {
+				if ( empty( $locations[ $location ] ) ) {
+					$locations[ $location ] = $menu_id;
+				}
+			}
+			set_theme_mod( 'nav_menu_locations', $locations );
+		}
+
 		$results = array(
 			'demo_id'     => $demo_id,
 			'demo_name'   => isset( $demo['name'] ) ? $demo['name'] : $demo_id,
@@ -624,6 +647,12 @@ class Importer {
 		if ( isset( $backup['data']['global_styles'] ) ) {
 			update_option( 'gambol_builder_global_styles', $backup['data']['global_styles'] );
 			$results['restored']['global_styles'] = true;
+		}
+
+		if ( isset( $backup['data']['menus'] ) ) {
+			update_option( 'gambol_default_menu', (int) $backup['data']['menus']['default'] );
+			set_theme_mod( 'nav_menu_locations', (array) $backup['data']['menus']['locations'] );
+			$results['restored']['menus'] = true;
 		}
 
 		if ( isset( $backup['data']['reading'] ) ) {

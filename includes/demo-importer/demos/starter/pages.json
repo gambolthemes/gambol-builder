@@ -5,7 +5,7 @@
 		"excerpt": "Homepage.",
 		"menu_order": 0,
 		"meta": {
-			"_wp_page_template": "default"
+			"_wp_page_template": "gambol-full-width.php"
 		}
 	},
 	{
@@ -13,13 +13,17 @@
 		"content": "<!-- wp:gambol/section -->\n<section class=\"wp-block-gambol-section alignfull is-layout-boxed\" style=\"padding-top:40px;padding-right:20px;padding-bottom:40px;padding-left:20px\"><div class=\"wp-block-gambol-section__inner\" style=\"max-width:1200px;margin-left:auto;margin-right:auto;width:100%\"><!-- wp:gambol/heading {\"level\":1} -->\n<h1 class=\"wp-block-gambol-heading\">About us</h1>\n<!-- /wp:gambol/heading -->\n\n<!-- wp:gambol/text -->\n<p class=\"wp-block-gambol-text\">Tell visitors who you are and what you make.</p>\n<!-- /wp:gambol/text -->\n\n<!-- wp:gambol/button {\"url\":\"/contact/\",\"textAlign\":\"left\"} -->\n<div class=\"wp-block-gambol-button wp-block-gambol-button__wrapper has-text-align-left\"><a class=\"wp-block-gambol-button__link\" href=\"/contact/\">Contact us</a></div>\n<!-- /wp:gambol/button --></div></section>\n<!-- /wp:gambol/section -->",
 		"excerpt": "About page.",
 		"menu_order": 1,
-		"meta": {}
+		"meta": {
+			"_wp_page_template": "gambol-full-width.php"
+		}
 	},
 	{
 		"title": "Contact",
 		"content": "<!-- wp:gambol/section -->\n<section class=\"wp-block-gambol-section alignfull is-layout-boxed\" style=\"padding-top:40px;padding-right:20px;padding-bottom:40px;padding-left:20px\"><div class=\"wp-block-gambol-section__inner\" style=\"max-width:1200px;margin-left:auto;margin-right:auto;width:100%\"><!-- wp:gambol/heading {\"level\":1} -->\n<h1 class=\"wp-block-gambol-heading\">Contact</h1>\n<!-- /wp:gambol/heading -->\n\n<!-- wp:gambol/text -->\n<p class=\"wp-block-gambol-text\">Add your email, phone and address here.</p>\n<!-- /wp:gambol/text -->\n\n<!-- wp:gambol/button {\"url\":\"/contact/\",\"textAlign\":\"left\"} -->\n<div class=\"wp-block-gambol-button wp-block-gambol-button__wrapper has-text-align-left\"><a class=\"wp-block-gambol-button__link\" href=\"/contact/\">Contact us</a></div>\n<!-- /wp:gambol/button --></div></section>\n<!-- /wp:gambol/section -->",
 		"excerpt": "Contact page.",
 		"menu_order": 2,
-		"meta": {}
+		"meta": {
+			"_wp_page_template": "gambol-full-width.php"
+		}
 	}
 ]

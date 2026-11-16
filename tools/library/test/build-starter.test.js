@@ -113,9 +113,9 @@ const TEMPLATES = {
 
 test( 'build the starter demo and bundled templates', () => {
 	writeJson( 'includes/demo-importer/demos/starter/pages.json', [
-		{ title: 'Home', content: page( 'Welcome', 'Edit this page with Gambol Builder blocks.' ), excerpt: 'Homepage.', menu_order: 0, meta: { _wp_page_template: 'default' } },
-		{ title: 'About Us', content: page( 'About us', 'Tell visitors who you are and what you make.' ), excerpt: 'About page.', menu_order: 1, meta: {} },
-		{ title: 'Contact', content: page( 'Contact', 'Add your email, phone and address here.' ), excerpt: 'Contact page.', menu_order: 2, meta: {} },
+		{ title: 'Home', content: page( 'Welcome', 'Edit this page with Gambol Builder blocks.' ), excerpt: 'Homepage.', menu_order: 0, meta: { _wp_page_template: 'gambol-full-width.php' } },
+		{ title: 'About Us', content: page( 'About us', 'Tell visitors who you are and what you make.' ), excerpt: 'About page.', menu_order: 1, meta: { _wp_page_template: 'gambol-full-width.php' } },
+		{ title: 'Contact', content: page( 'Contact', 'Add your email, phone and address here.' ), excerpt: 'Contact page.', menu_order: 2, meta: { _wp_page_template: 'gambol-full-width.php' } },
 	] );
 
 	writeJson( 'includes/demo-importer/demos/starter/headers.json', [

@@ -68,8 +68,12 @@ class Global_Styles {
 	 * @return void
 	 */
 	private function init() {
-		add_action( 'wp_head', array( $this, 'output_css_variables' ), 1 );
-		add_action( 'admin_head', array( $this, 'output_css_variables' ), 1 );
+		// Frontend and the block editor canvas (iframe) both get the variables
+		// through enqueue_block_assets; other admin screens (the Global Styles
+		// page) through admin_enqueue_scripts.
+		add_action( 'enqueue_block_assets', array( $this, 'enqueue_css_variables' ), 1 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_css_variables' ), 1 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_css_variables' ), 1 );
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 	}
@@ -145,9 +149,9 @@ class Global_Styles {
 				'font-size'        => '15px',
 				'font-weight'      => '500',
 				'bg-color'         => '#00d4aa',
-				'text-color'       => '#ffffff',
+				'text-color'       => '#0b0b0b',
 				'hover-bg-color'   => '#00b894',
-				'hover-text-color' => '#ffffff',
+				'hover-text-color' => '#0b0b0b',
 			),
 			// Container.
 			'container'  => array(
@@ -232,6 +236,38 @@ class Global_Styles {
 	 *
 	 * @return void
 	 */
+	public function enqueue_css_variables() {
+		if ( wp_style_is( 'gambol-builder-global-styles', 'enqueued' ) ) {
+			return;
+		}
+		$css = $this->generate_css( $this->get_styles() );
+		if ( empty( $css ) ) {
+			return;
+		}
+		wp_register_style( 'gambol-builder-global-styles', false, array(), GAMBOL_BUILDER_VERSION );
+		wp_enqueue_style( 'gambol-builder-global-styles' );
+		wp_add_inline_style( 'gambol-builder-global-styles', ":root {\n" . $css . "}\n" . $this->generate_element_css() );
+	}
+
+	/**
+	 * Admin screens other than the block editor (whose canvas is handled by
+	 * enqueue_block_assets).
+	 *
+	 * @return void
+	 */
+	public function enqueue_admin_css_variables() {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( $screen && method_exists( $screen, 'is_block_editor' ) && $screen->is_block_editor() ) {
+			return;
+		}
+		$this->enqueue_css_variables();
+	}
+
+	/**
+	 * Print the variables directly (kept for themes or code that call it).
+	 *
+	 * @return void
+	 */
 	public function output_css_variables() {
 		$styles = $this->get_styles();
 		$css    = $this->generate_css( $styles );
@@ -302,8 +338,8 @@ class Global_Styles {
 				$level
 			);
 		}
-		$css .= "body .wp-block-gambol-button__link{background-color:var(--gb-buttons-bg-color,var(--gb-colors-primary));color:var(--gb-buttons-text-color,#fff);border-radius:var(--gb-buttons-border-radius);padding:var(--gb-buttons-padding-y) var(--gb-buttons-padding-x);font-size:var(--gb-buttons-font-size);font-weight:var(--gb-buttons-font-weight);}\n";
-		$css .= "body .wp-block-gambol-button__link:hover,body .wp-block-gambol-button__link:focus{background-color:var(--gb-button-hover-bg,var(--gb-buttons-hover-bg-color,var(--gb-colors-primary-hover)));color:var(--gb-button-hover-color,var(--gb-buttons-hover-text-color,#fff));}\n";
+		$css .= "body .wp-block-gambol-button__link{background-color:var(--gb-buttons-bg-color,var(--gb-colors-primary));color:var(--gb-buttons-text-color,#0b0b0b);border-radius:var(--gb-buttons-border-radius);padding:var(--gb-buttons-padding-y) var(--gb-buttons-padding-x);font-size:var(--gb-buttons-font-size);font-weight:var(--gb-buttons-font-weight);}\n";
+		$css .= "body .wp-block-gambol-button__link:hover,body .wp-block-gambol-button__link:focus{background-color:var(--gb-button-hover-bg,var(--gb-buttons-hover-bg-color,var(--gb-colors-primary-hover)));color:var(--gb-button-hover-color,var(--gb-buttons-hover-text-color,#0b0b0b));}\n";
 		return $css;
 	}
 

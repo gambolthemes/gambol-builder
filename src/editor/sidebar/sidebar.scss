@@ -80,8 +80,10 @@ $gb-shadow-focus: 0 0 0 2px rgba($gb-accent, 0.4);
 
 .gambol-left-sidebar {
 	position: fixed;
-	top: 0;
 	left: 0;
+
+	// Below the WordPress admin bar when it is visible; loader.js measures it.
+	top: var(--gambol-adminbar-h, 0px);
 	bottom: 0;
 	width: $sidebar-width;
 	background: $gb-surface-base;
@@ -92,11 +94,6 @@ $gb-shadow-focus: 0 0 0 2px rgba($gb-accent, 0.4);
 	font-family: $gb-font-sans;
 	transition: width $gb-transition-slow;
 	box-shadow: $gb-shadow-lg;
-
-	// When WordPress admin bar is shown
-	.admin-bar & {
-		top: 0;
-	}
 
 	// Collapsed state
 	&--collapsed {

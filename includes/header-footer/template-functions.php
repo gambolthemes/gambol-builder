@@ -114,3 +114,44 @@ function gambol_get_hf_content( $post_id ) {
 
 	return apply_filters( 'the_content', $post->post_content );
 }
+
+if ( ! function_exists( 'gambol_template_header' ) ) {
+	/**
+	 * Open the document in a Gambol page template.
+	 *
+	 * Classic themes: the theme's get_header() (which Gambol replaces when it
+	 * has a header for the page). Block themes have no header.php, so print
+	 * the Gambol document shell, with the theme's header template part when
+	 * Gambol has no header of its own.
+	 *
+	 * @return void
+	 */
+	function gambol_template_header() {
+		if ( ! function_exists( 'wp_is_block_theme' ) || ! wp_is_block_theme() ) {
+			get_header();
+			return;
+		}
+		require GAMBOL_BUILDER_PATH . 'templates/hf-header.php';
+		if ( ! gambol_has_header() && function_exists( 'block_template_part' ) ) {
+			block_template_part( 'header' );
+		}
+	}
+}
+
+if ( ! function_exists( 'gambol_template_footer' ) ) {
+	/**
+	 * Close the document in a Gambol page template (see gambol_template_header()).
+	 *
+	 * @return void
+	 */
+	function gambol_template_footer() {
+		if ( ! function_exists( 'wp_is_block_theme' ) || ! wp_is_block_theme() ) {
+			get_footer();
+			return;
+		}
+		if ( ! gambol_has_footer() && function_exists( 'block_template_part' ) ) {
+			block_template_part( 'footer' );
+		}
+		require GAMBOL_BUILDER_PATH . 'templates/hf-footer.php';
+	}
+}
