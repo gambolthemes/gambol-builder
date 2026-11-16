@@ -75,23 +75,22 @@
 		height: 20px;
 	}
 
-	// Plus/minus icon handling
-	.gambol-accordion-icon-plus,
-	.gambol-accordion-icon-minus {
+	// Every variant is saved; the accordion's icon class picks one.
+	svg {
 		display: none;
 	}
+}
 
-	.gambol-accordion-icon-plus {
-		display: block;
-	}
+.gambol-accordion--icon-chevron .gambol-accordion-icon-chevron,
+.gambol-accordion--icon-arrow .gambol-accordion-icon-arrow,
+.gambol-accordion--icon-plus-minus .gambol-accordion-item:not(.is-open) .gambol-accordion-icon-plus,
+.gambol-accordion--icon-plus-minus .gambol-accordion-item.is-open .gambol-accordion-icon-minus {
+	display: block;
+}
 
-	.gambol-accordion-item.is-open & .gambol-accordion-icon-plus {
-		display: none;
-	}
-
-	.gambol-accordion-item.is-open & .gambol-accordion-icon-minus {
-		display: block;
-	}
+// Accordions saved before the icon classes existed fall back to the chevron.
+.gambol-accordion:not([class*="gambol-accordion--icon-chevron"]):not([class*="gambol-accordion--icon-arrow"]):not([class*="gambol-accordion--icon-plus-minus"]) .gambol-accordion-icon-chevron {
+	display: block;
 }
 
 // Icon position modifiers
@@ -212,7 +211,7 @@
 		border: none;
 		border-radius: 3px;
 		cursor: pointer;
-		transition: all 0.15s ease;
+		transition: transform var(--gambol-accordion-duration, 300ms) ease;
 
 		&:hover:not(:disabled) {
 			color: #fff;
@@ -237,3 +236,21 @@
 
 // JavaScript will toggle the 'is-open' class and update aria-expanded
 // This CSS handles the visual state changes
+
+// Closed items are collapsed only once the script is running, so the content
+// is readable without JavaScript.
+.gambol-accordion.is-ready .gambol-accordion-item__body[hidden] {
+	display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.gambol-accordion-item__icon,
+	.gambol-accordion-item__icon svg {
+		transition: none;
+	}
+}
+
+// Older saved accordions used unclassed icons.
+.gambol-accordion-item__icon svg:not([class]) {
+	display: block;
+}

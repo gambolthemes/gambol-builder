@@ -180,6 +180,80 @@
 	}
 }
 
+// Frontend script states
+.wp-block-gambol-testimonial-carousel.is-ready .wp-block-gambol-testimonial-carousel__viewport {
+	touch-action: pan-y;
+}
+
+.wp-block-gambol-testimonial-carousel__track {
+	&.is-dragging,
+	&.is-resizing {
+		transition: none;
+	}
+
+	&.is-dragging {
+		user-select: none;
+	}
+}
+
+.wp-block-gambol-testimonial-carousel__arrow {
+	&[hidden] {
+		display: none;
+	}
+
+	&:disabled {
+		opacity: 0.4;
+		cursor: default;
+	}
+}
+
+.wp-block-gambol-testimonial-carousel__arrow,
+.wp-block-gambol-testimonial-carousel__dot,
+.wp-block-gambol-testimonial-carousel__pause,
+.wp-block-gambol-testimonial-carousel__viewport {
+	&:focus-visible {
+		outline: 2px solid var(--gb-colors-primary);
+		outline-offset: 2px;
+	}
+}
+
+.wp-block-gambol-testimonial-carousel__pause {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	z-index: 11;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	border: none;
+	border-radius: 50%;
+	background-color: var(--gb-colors-background);
+	box-shadow: var(--gb-shadows-base);
+	color: var(--gb-colors-text);
+	cursor: pointer;
+	transition: background-color var(--gb-transition-base), color var(--gb-transition-base);
+
+	&:hover {
+		background-color: var(--gb-colors-primary);
+		color: #fff;
+	}
+
+	&[hidden] {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wp-block-gambol-testimonial-carousel__track,
+	.wp-block-gambol-testimonial-carousel__arrow,
+	.wp-block-gambol-testimonial-carousel__dot {
+		transition: none;
+	}
+}
+
 // Layout: Bubble
 .wp-block-gambol-testimonial-carousel--bubble {
 	.wp-block-gambol-testimonial-carousel__content {

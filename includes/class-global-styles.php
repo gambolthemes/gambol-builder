@@ -68,8 +68,12 @@ class Global_Styles {
 	 * @return void
 	 */
 	private function init() {
-		add_action( 'wp_head', array( $this, 'output_css_variables' ), 1 );
-		add_action( 'admin_head', array( $this, 'output_css_variables' ), 1 );
+		// Frontend and the block editor canvas (iframe) both get the variables
+		// through enqueue_block_assets; other admin screens (the Global Styles
+		// page) through admin_enqueue_scripts.
+		add_action( 'enqueue_block_assets', array( $this, 'enqueue_css_variables' ), 1 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_css_variables' ), 1 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_css_variables' ), 1 );
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 	}
@@ -145,9 +149,9 @@ class Global_Styles {
 				'font-size'        => '15px',
 				'font-weight'      => '500',
 				'bg-color'         => '#00d4aa',
-				'text-color'       => '#ffffff',
+				'text-color'       => '#0b0b0b',
 				'hover-bg-color'   => '#00b894',
-				'hover-text-color' => '#ffffff',
+				'hover-text-color' => '#0b0b0b',
 			),
 			// Container.
 			'container'  => array(
@@ -232,6 +236,38 @@ class Global_Styles {
 	 *
 	 * @return void
 	 */
+	public function enqueue_css_variables() {
+		if ( wp_style_is( 'gambol-builder-global-styles', 'enqueued' ) ) {
+			return;
+		}
+		$css = $this->generate_css( $this->get_styles() );
+		if ( empty( $css ) ) {
+			return;
+		}
+		wp_register_style( 'gambol-builder-global-styles', false, array(), GAMBOL_BUILDER_VERSION );
+		wp_enqueue_style( 'gambol-builder-global-styles' );
+		wp_add_inline_style( 'gambol-builder-global-styles', ":root {\n" . $css . "}\n" . $this->generate_element_css() );
+	}
+
+	/**
+	 * Admin screens other than the block editor (whose canvas is handled by
+	 * enqueue_block_assets).
+	 *
+	 * @return void
+	 */
+	public function enqueue_admin_css_variables() {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( $screen && method_exists( $screen, 'is_block_editor' ) && $screen->is_block_editor() ) {
+			return;
+		}
+		$this->enqueue_css_variables();
+	}
+
+	/**
+	 * Print the variables directly (kept for themes or code that call it).
+	 *
+	 * @return void
+	 */
 	public function output_css_variables() {
 		$styles = $this->get_styles();
 		$css    = $this->generate_css( $styles );
@@ -241,9 +277,70 @@ class Global_Styles {
 		}
 
 		printf(
-			"<style id=\"gambol-builder-global-styles\">\n:root {\n%s}\n</style>\n",
-			$css // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			"<style id=\"gambol-builder-global-styles\">\n:root {\n%s}\n%s</style>\n",
+			$css, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- values pass css_value().
+			$this->generate_element_css() // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static CSS.
 		);
+	}
+
+	/**
+	 * Make a value safe inside a <style> declaration.
+	 *
+	 * esc_attr() would turn the quotes in font stacks into &quot; and break
+	 * them; instead remove anything that could end the declaration or tag.
+	 *
+	 * @param string|int|float $value Raw value.
+	 * @return string
+	 */
+	private function css_value( $value ) {
+		$value = wp_strip_all_tags( (string) $value );
+		return trim( preg_replace( '/[<>{};\\\\]|\/\*|\*\//', '', $value ) );
+	}
+
+	/**
+	 * Aliases the block stylesheets read, derived from the stored settings,
+	 * so every setting reaches the blocks and no variable is left undefined.
+	 *
+	 * @return string CSS declarations for :root.
+	 */
+	private function generate_alias_css() {
+		$aliases = array(
+			'--gb-typography-font-family'      => 'var(--gb-typography-font-family-base)',
+			'--gb-typography-line-height-tight' => 'var(--gb-typography-line-height-heading)',
+			'--gb-typography-line-height-loose' => '1.8',
+			'--gb-typography-font-size-xl'     => 'calc(var(--gb-typography-font-size-base) * var(--gb-typography-heading-scale-h5, 1.25))',
+			'--gb-typography-font-size-2xl'    => 'calc(var(--gb-typography-font-size-base) * var(--gb-typography-heading-scale-h4, 1.5))',
+			'--gb-typography-font-size-3xl'    => 'calc(var(--gb-typography-font-size-base) * var(--gb-typography-heading-scale-h3, 1.75))',
+			'--gb-typography-font-size-4xl'    => 'calc(var(--gb-typography-font-size-base) * var(--gb-typography-heading-scale-h2, 2))',
+			'--gb-colors-primary-hover'        => 'var(--gb-buttons-hover-bg-color, color-mix(in srgb, var(--gb-colors-primary) 85%, #000))',
+			'--gb-spacing-4xl'                 => '96px',
+		);
+
+		$css = '';
+		foreach ( $aliases as $property => $value ) {
+			$css .= sprintf( "\t%s: %s;\n", $property, $value );
+		}
+		return $css;
+	}
+
+	/**
+	 * Element rules that apply the typography and button settings to Gambol
+	 * blocks. Low specificity, so per-block settings (inline styles) win.
+	 *
+	 * @return string CSS rules.
+	 */
+	private function generate_element_css() {
+		$css  = ":where(.wp-block-gambol-text){font-family:var(--gb-typography-font-family-base);}\n";
+		$css .= ":where(.wp-block-gambol-heading){font-family:var(--gb-typography-font-family-heading);line-height:var(--gb-typography-line-height-heading);}\n";
+		foreach ( array( 1, 2, 3, 4, 5, 6 ) as $level ) {
+			$css .= sprintf(
+				":where(h%1\$d.wp-block-gambol-heading:not([style*=\"font-size\"])){font-size:calc(var(--gb-typography-font-size-base) * var(--gb-typography-heading-scale-h%1\$d));}\n",
+				$level
+			);
+		}
+		$css .= "body .wp-block-gambol-button__link{background-color:var(--gb-buttons-bg-color,var(--gb-colors-primary));color:var(--gb-buttons-text-color,#0b0b0b);border-radius:var(--gb-buttons-border-radius);padding:var(--gb-buttons-padding-y) var(--gb-buttons-padding-x);font-size:var(--gb-buttons-font-size);font-weight:var(--gb-buttons-font-weight);}\n";
+		$css .= "body .wp-block-gambol-button__link:hover,body .wp-block-gambol-button__link:focus{background-color:var(--gb-button-hover-bg,var(--gb-buttons-hover-bg-color,var(--gb-colors-primary-hover)));color:var(--gb-button-hover-color,var(--gb-buttons-hover-text-color,#0b0b0b));}\n";
+		return $css;
 	}
 
 	/**
@@ -264,8 +361,8 @@ class Global_Styles {
 			if ( 'palette' === $category ) {
 				foreach ( $values as $item ) {
 					if ( isset( $item['slug'], $item['color'] ) ) {
-						$property = sprintf( '--gb-palette-%s', $item['slug'] );
-						$css     .= sprintf( "\t%s: %s;\n", $property, esc_attr( $item['color'] ) );
+						$property = sprintf( '--gb-palette-%s', sanitize_key( $item['slug'] ) );
+						$css     .= sprintf( "\t%s: %s;\n", $property, $this->css_value( $item['color'] ) );
 					}
 				}
 				continue;
@@ -275,12 +372,16 @@ class Global_Styles {
 				if ( ! is_string( $value ) && ! is_numeric( $value ) ) {
 					continue;
 				}
-				$property = sprintf( '--gb-%s-%s', $category, $key );
-				$css     .= sprintf( "\t%s: %s;\n", $property, esc_attr( $value ) );
+				$property = sprintf( '--gb-%s-%s', sanitize_key( $category ), sanitize_key( $key ) );
+				$value    = $this->css_value( $value );
+				if ( '' === $value ) {
+					continue;
+				}
+				$css .= sprintf( "\t%s: %s;\n", $property, $value );
 			}
 		}
 
-		return $css;
+		return $css . $this->generate_alias_css();
 	}
 
 	/**
@@ -413,7 +514,9 @@ class Global_Styles {
 		$sanitized = $this->sanitize_styles( $styles );
 		$updated   = $this->update_styles( $sanitized );
 
-		if ( ! $updated ) {
+		// update_option() returns false when the value did not change; that is
+		// a successful save, not an error.
+		if ( ! $updated && get_option( self::OPTION_NAME ) !== $sanitized ) {
 			return new \WP_Error(
 				'update_failed',
 				__( 'Failed to update styles.', 'gambol-builder' ),

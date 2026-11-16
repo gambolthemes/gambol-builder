@@ -1,8 +1,10 @@
 <?php
 /**
- * Demo Importer.
+ * Demo Importer - Importer
  *
- * Handles the actual import and rollback logic.
+ * Imports a demo's pages, headers, footers and global styles, either in one
+ * call (import()) or step by step (start_session(), the import_* steps, then
+ * finalize()), and records everything it creates so it can be rolled back.
  *
  * @package GambolBuilder
  */
@@ -15,9 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Class Importer
- *
- * Manages import operations for demo content.
+ * Importer Class.
  */
 class Importer {
 
@@ -29,18 +29,25 @@ class Importer {
 	private static $instance = null;
 
 	/**
-	 * Option name for storing import history.
+	 * Option name for import history.
 	 *
 	 * @var string
 	 */
 	const IMPORT_HISTORY_OPTION = 'gambol_demo_import_history';
 
 	/**
-	 * Option name for storing backup data.
+	 * Option name for the pre-import backup.
 	 *
 	 * @var string
 	 */
 	const BACKUP_OPTION = 'gambol_demo_import_backup';
+
+	/**
+	 * Option name for the step-by-step import in progress.
+	 *
+	 * @var string
+	 */
+	const SESSION_OPTION = 'gambol_demo_import_session';
 
 	/**
 	 * Get singleton instance.
@@ -60,91 +67,150 @@ class Importer {
 	private function __construct() {}
 
 	/**
-	 * Import demo content.
+	 * Import a whole demo in one request.
 	 *
 	 * @param string $demo_id Demo ID.
 	 * @param array  $options Import options.
 	 * @return array|\WP_Error Result array or error.
 	 */
 	public function import( $demo_id, $options = array() ) {
-		$defaults = array(
-			'pages'         => true,
-			'headers'       => true,
-			'footers'       => true,
-			'global_styles' => true,
-			'create_backup' => true,
+		$options = wp_parse_args(
+			$options,
+			array(
+				'pages'         => true,
+				'headers'       => true,
+				'footers'       => true,
+				'global_styles' => true,
+				'create_backup' => true,
+			)
 		);
 
-		$options = wp_parse_args( $options, $defaults );
-
-		$demo_manager = Demo_Manager::get_instance();
-		$demo = $demo_manager->get_demo( $demo_id );
-
+		$demo = Demo_Manager::get_instance()->get_demo( $demo_id );
 		if ( ! $demo ) {
 			return new \WP_Error( 'invalid_demo', __( 'Demo not found.', 'gambol-builder' ) );
 		}
 
-		// Create backup if requested.
+		$this->start_session( $demo_id );
+
 		if ( $options['create_backup'] ) {
 			$this->create_backup( $options );
 		}
 
-		$results = array(
-			'demo_id'   => $demo_id,
-			'demo_name' => $demo['name'],
-			'imported'  => array(),
-			'errors'    => array(),
-			'post_ids'  => array(),
-		);
-
-		// Import pages.
-		if ( $options['pages'] ) {
-			$pages_result = $this->import_pages( $demo_id );
-			if ( is_wp_error( $pages_result ) ) {
-				$results['errors']['pages'] = $pages_result->get_error_message();
-			} else {
-				$results['imported']['pages'] = $pages_result['count'];
-				$results['post_ids'] = array_merge( $results['post_ids'], $pages_result['post_ids'] );
+		$errors = array();
+		foreach ( array( 'pages', 'headers', 'footers', 'global_styles' ) as $step ) {
+			if ( empty( $options[ $step ] ) ) {
+				continue;
+			}
+			$result = $this->run_step( $demo_id, $step );
+			if ( is_wp_error( $result ) ) {
+				$errors[ $step ] = $result->get_error_message();
 			}
 		}
 
-		// Import headers.
-		if ( $options['headers'] ) {
-			$headers_result = $this->import_headers( $demo_id );
-			if ( is_wp_error( $headers_result ) ) {
-				$results['errors']['headers'] = $headers_result->get_error_message();
-			} else {
-				$results['imported']['headers'] = $headers_result['count'];
-				$results['post_ids'] = array_merge( $results['post_ids'], $headers_result['post_ids'] );
-			}
-		}
-
-		// Import footers.
-		if ( $options['footers'] ) {
-			$footers_result = $this->import_footers( $demo_id );
-			if ( is_wp_error( $footers_result ) ) {
-				$results['errors']['footers'] = $footers_result->get_error_message();
-			} else {
-				$results['imported']['footers'] = $footers_result['count'];
-				$results['post_ids'] = array_merge( $results['post_ids'], $footers_result['post_ids'] );
-			}
-		}
-
-		// Import global styles.
-		if ( $options['global_styles'] ) {
-			$styles_result = $this->import_global_styles( $demo_id );
-			if ( is_wp_error( $styles_result ) ) {
-				$results['errors']['global_styles'] = $styles_result->get_error_message();
-			} else {
-				$results['imported']['global_styles'] = true;
-			}
-		}
-
-		// Save import history.
-		$this->save_import_history( $results );
+		$results           = $this->finalize( $demo_id );
+		$results['errors'] = $errors;
 
 		return $results;
 	}
+
+	/**
+	 * Run one import step.
+	 *
+	 * @param string $demo_id Demo ID.
+	 * @param string $step    One of backup, pages, headers, footers, global_styles, finalize.
+	 * @return mixed|\WP_Error Step result.
+	 */
+	public function run_step( $demo_id, $step ) {
+		switch ( $step ) {
+			case 'backup':
+				$this->start_session( $demo_id );
+				return $this->create_backup(
+					array(
+						'pages'         => true,
+						'headers'       => true,
+						'footers'       => true,
+						'global_styles' => true,
+					)
+				);
+			case 'pages':
+				return $this->import_pages( $demo_id );
+			case 'headers':
+				return $this->import_hf( $demo_id, 'header' );
+			case 'footers':
+				return $this->import_hf( $demo_id, 'footer' );
+			case 'global_styles':
+				return $this->import_global_styles( $demo_id );
+			case 'finalize':
+				return $this->finalize( $demo_id );
+		}
+		return new \WP_Error( 'invalid_step', __( 'Invalid import step.', 'gambol-builder' ), array( 'status' => 400 ) );
+	}
+
+	// ---------------------------------------------------------------------
+	// Session: what this import has created so far.
+	// ---------------------------------------------------------------------
+
+	/**
+	 * Start (or restart) an import session.
+	 *
+	 * @param string $demo_id Demo ID.
+	 * @return void
+	 */
+	public function start_session( $demo_id ) {
+		update_option(
+			self::SESSION_OPTION,
+			array(
+				'demo_id'     => $demo_id,
+				'started'     => current_time( 'mysql' ),
+				'post_ids'    => array(),
+				'pages'       => array(),
+				'deactivated' => array(),
+				'imported'    => array(),
+			),
+			false
+		);
+	}
+
+	/**
+	 * Get the current session for a demo, starting one if needed.
+	 *
+	 * @param string $demo_id Demo ID.
+	 * @return array
+	 */
+	private function get_session( $demo_id ) {
+		$session = get_option( self::SESSION_OPTION, array() );
+		if ( empty( $session['demo_id'] ) || $session['demo_id'] !== $demo_id ) {
+			$this->start_session( $demo_id );
+			$session = get_option( self::SESSION_OPTION, array() );
+		}
+		return $session;
+	}
+
+	/**
+	 * Merge data into the session.
+	 *
+	 * @param string $demo_id Demo ID.
+	 * @param array  $data    Keys: post_ids, pages (title => id), deactivated, imported (step => value).
+	 * @return void
+	 */
+	private function record( $demo_id, $data ) {
+		$session = $this->get_session( $demo_id );
+		foreach ( array( 'post_ids', 'deactivated' ) as $key ) {
+			if ( ! empty( $data[ $key ] ) ) {
+				$session[ $key ] = array_values( array_unique( array_merge( $session[ $key ], array_map( 'absint', $data[ $key ] ) ) ) );
+			}
+		}
+		foreach ( array( 'pages', 'imported' ) as $key ) {
+			if ( ! empty( $data[ $key ] ) ) {
+				$session[ $key ] = array_merge( $session[ $key ], $data[ $key ] );
+			}
+		}
+		update_option( self::SESSION_OPTION, $session, false );
+	}
+
+	// ---------------------------------------------------------------------
+	// Steps.
+	// ---------------------------------------------------------------------
 
 	/**
 	 * Import pages.
@@ -152,27 +218,37 @@ class Importer {
 	 * @param string $demo_id Demo ID.
 	 * @return array|\WP_Error Result or error.
 	 */
-	private function import_pages( $demo_id ) {
-		$demo_manager = Demo_Manager::get_instance();
-		$pages = $demo_manager->get_demo_data( $demo_id, 'pages' );
+	public function import_pages( $demo_id ) {
+		$pages = Demo_Manager::get_instance()->get_demo_data( $demo_id, 'pages' );
 
 		if ( false === $pages ) {
 			return new \WP_Error( 'no_pages', __( 'No pages data found.', 'gambol-builder' ) );
 		}
 
 		$post_ids = array();
-		$count = 0;
+		$by_title = array();
 
 		foreach ( $pages as $page ) {
 			$result = $this->import_post( $page, 'page' );
 			if ( ! is_wp_error( $result ) ) {
 				$post_ids[] = $result;
-				$count++;
+				if ( ! empty( $page['title'] ) ) {
+					$by_title[ $page['title'] ] = $result;
+				}
 			}
 		}
 
+		$this->record(
+			$demo_id,
+			array(
+				'post_ids' => $post_ids,
+				'pages'    => $by_title,
+				'imported' => array( 'pages' => count( $post_ids ) ),
+			)
+		);
+
 		return array(
-			'count'    => $count,
+			'count'    => count( $post_ids ),
 			'post_ids' => $post_ids,
 		);
 	}
@@ -181,64 +257,100 @@ class Importer {
 	 * Import headers.
 	 *
 	 * @param string $demo_id Demo ID.
-	 * @return array|\WP_Error Result or error.
+	 * @return array|\WP_Error
 	 */
-	private function import_headers( $demo_id ) {
-		$demo_manager = Demo_Manager::get_instance();
-		$headers = $demo_manager->get_demo_data( $demo_id, 'headers' );
-
-		if ( false === $headers ) {
-			return new \WP_Error( 'no_headers', __( 'No headers data found.', 'gambol-builder' ) );
-		}
-
-		$post_ids = array();
-		$count = 0;
-
-		foreach ( $headers as $header ) {
-			$header['meta']['_gambol_hf_type'] = 'header';
-			$result = $this->import_post( $header, 'gambol_hf' );
-			if ( ! is_wp_error( $result ) ) {
-				$post_ids[] = $result;
-				$count++;
-			}
-		}
-
-		return array(
-			'count'    => $count,
-			'post_ids' => $post_ids,
-		);
+	public function import_headers( $demo_id ) {
+		return $this->import_hf( $demo_id, 'header' );
 	}
 
 	/**
 	 * Import footers.
 	 *
 	 * @param string $demo_id Demo ID.
+	 * @return array|\WP_Error
+	 */
+	public function import_footers( $demo_id ) {
+		return $this->import_hf( $demo_id, 'footer' );
+	}
+
+	/**
+	 * Import headers or footers.
+	 *
+	 * The demo's active global header/footer replaces the site's current one:
+	 * existing active ones of the same type are deactivated (and restored on
+	 * rollback) so the site never shows two headers.
+	 *
+	 * @param string $demo_id Demo ID.
+	 * @param string $type    header or footer.
 	 * @return array|\WP_Error Result or error.
 	 */
-	private function import_footers( $demo_id ) {
-		$demo_manager = Demo_Manager::get_instance();
-		$footers = $demo_manager->get_demo_data( $demo_id, 'footers' );
+	private function import_hf( $demo_id, $type ) {
+		$items = Demo_Manager::get_instance()->get_demo_data( $demo_id, 'header' === $type ? 'headers' : 'footers' );
 
-		if ( false === $footers ) {
-			return new \WP_Error( 'no_footers', __( 'No footers data found.', 'gambol-builder' ) );
+		if ( false === $items ) {
+			/* translators: %s: header or footer */
+			return new \WP_Error( 'no_' . $type, sprintf( __( 'No %s data found.', 'gambol-builder' ), $type ) );
 		}
 
-		$post_ids = array();
-		$count = 0;
+		$deactivated = $this->deactivate_active_hf( $type );
 
-		foreach ( $footers as $footer ) {
-			$footer['meta']['_gambol_hf_type'] = 'footer';
-			$result = $this->import_post( $footer, 'gambol_hf' );
+		$post_ids = array();
+		foreach ( $items as $item ) {
+			$item['meta']                   = isset( $item['meta'] ) && is_array( $item['meta'] ) ? $item['meta'] : array();
+			$item['meta']['_gambol_hf_type'] = $type;
+			$result                         = $this->import_post( $item, 'gambol_hf' );
 			if ( ! is_wp_error( $result ) ) {
 				$post_ids[] = $result;
-				$count++;
 			}
 		}
 
+		$this->record(
+			$demo_id,
+			array(
+				'post_ids'    => $post_ids,
+				'deactivated' => $deactivated,
+				'imported'    => array( $type . 's' => count( $post_ids ) ),
+			)
+		);
+
 		return array(
-			'count'    => $count,
+			'count'    => count( $post_ids ),
 			'post_ids' => $post_ids,
 		);
+	}
+
+	/**
+	 * Deactivate the currently active headers or footers of one type.
+	 *
+	 * @param string $type header or footer.
+	 * @return int[] IDs that were deactivated.
+	 */
+	private function deactivate_active_hf( $type ) {
+		$ids = get_posts(
+			array(
+				'post_type'      => 'gambol_hf',
+				'post_status'    => 'publish',
+				'posts_per_page' => -1,
+				'fields'         => 'ids',
+				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					'relation' => 'AND',
+					array(
+						'key'   => '_gambol_hf_type',
+						'value' => $type,
+					),
+					array(
+						'key'   => '_gambol_hf_active',
+						'value' => '1',
+					),
+				),
+			)
+		);
+
+		foreach ( $ids as $id ) {
+			update_post_meta( $id, '_gambol_hf_active', '0' );
+		}
+
+		return array_map( 'absint', $ids );
 	}
 
 	/**
@@ -247,23 +359,134 @@ class Importer {
 	 * @param string $demo_id Demo ID.
 	 * @return bool|\WP_Error True on success or error.
 	 */
-	private function import_global_styles( $demo_id ) {
-		$demo_manager = Demo_Manager::get_instance();
-		$styles = $demo_manager->get_demo_data( $demo_id, 'global_styles' );
+	public function import_global_styles( $demo_id ) {
+		$styles = Demo_Manager::get_instance()->get_demo_data( $demo_id, 'global_styles' );
 
 		if ( false === $styles ) {
 			return new \WP_Error( 'no_styles', __( 'No global styles data found.', 'gambol-builder' ) );
 		}
 
-		// Get the global styles instance.
 		if ( ! class_exists( 'GambolBuilder\Global_Styles' ) ) {
 			return new \WP_Error( 'no_global_styles', __( 'Global Styles class not found.', 'gambol-builder' ) );
 		}
 
 		$global_styles = \GambolBuilder\Global_Styles::get_instance();
-		$result = $global_styles->update_styles( $styles );
+		$global_styles->update_styles( $global_styles->sanitize_styles( $styles ) );
 
-		return $result ? true : new \WP_Error( 'styles_error', __( 'Failed to update global styles.', 'gambol-builder' ) );
+		// update_option() returns false when nothing changed, which is not a failure.
+		$this->record( $demo_id, array( 'imported' => array( 'global_styles' => true ) ) );
+
+		return true;
+	}
+
+	/**
+	 * Finish an import: front page, menu, history.
+	 *
+	 * @param string $demo_id Demo ID.
+	 * @return array Import summary.
+	 */
+	public function finalize( $demo_id ) {
+		$demo    = Demo_Manager::get_instance()->get_demo( $demo_id );
+		$session = $this->get_session( $demo_id );
+
+		// Front page.
+		$front_title = ! empty( $demo['front_page'] ) ? $demo['front_page'] : '';
+		if ( $front_title && ! empty( $session['pages'][ $front_title ] ) ) {
+			$backup = get_option( self::BACKUP_OPTION, array() );
+			if ( is_array( $backup ) && ! isset( $backup['data']['reading'] ) ) {
+				$backup['data']['reading'] = array(
+					'show_on_front' => get_option( 'show_on_front' ),
+					'page_on_front' => (int) get_option( 'page_on_front' ),
+				);
+				update_option( self::BACKUP_OPTION, $backup, false );
+			}
+			update_option( 'show_on_front', 'page' );
+			update_option( 'page_on_front', (int) $session['pages'][ $front_title ] );
+		}
+
+		// Navigation menu from the imported pages.
+		$menu_id = 0;
+		if ( ! empty( $session['pages'] ) && ! empty( $demo['menu'] ) ) {
+			$menu_id = $this->create_menu( $demo, $session['pages'] );
+		}
+
+		if ( $menu_id ) {
+			$backup = get_option( self::BACKUP_OPTION, array() );
+			if ( is_array( $backup ) && ! isset( $backup['data']['menus'] ) ) {
+				$backup['data']['menus'] = array(
+					'default'   => (int) get_option( 'gambol_default_menu', 0 ),
+					'locations' => get_nav_menu_locations(),
+				);
+				update_option( self::BACKUP_OPTION, $backup, false );
+			}
+
+			// The Nav Menu block falls back to this menu (block themes have no locations).
+			update_option( 'gambol_default_menu', $menu_id );
+
+			// Classic themes: fill the theme's empty menu locations.
+			$locations = get_nav_menu_locations();
+			foreach ( array_keys( get_registered_nav_menus() ) as $location ) {
+				if ( empty( $locations[ $location ] ) ) {
+					$locations[ $location ] = $menu_id;
+				}
+			}
+			set_theme_mod( 'nav_menu_locations', $locations );
+		}
+
+		$results = array(
+			'demo_id'     => $demo_id,
+			'demo_name'   => isset( $demo['name'] ) ? $demo['name'] : $demo_id,
+			'imported'    => $session['imported'],
+			'post_ids'    => $session['post_ids'],
+			'deactivated' => $session['deactivated'],
+			'menu_id'     => $menu_id,
+		);
+
+		$this->save_import_history( $results );
+		delete_option( self::SESSION_OPTION );
+
+		return $results;
+	}
+
+	/**
+	 * Create a navigation menu from the imported pages.
+	 *
+	 * @param array $demo  Demo config; `menu` is a list of page titles.
+	 * @param array $pages Imported pages, title => ID.
+	 * @return int Menu ID, or 0.
+	 */
+	private function create_menu( $demo, $pages ) {
+		/* translators: %s: demo name */
+		$name    = sprintf( __( '%s menu', 'gambol-builder' ), isset( $demo['name'] ) ? $demo['name'] : 'Demo' );
+		$base    = $name;
+		$counter = 2;
+		while ( wp_get_nav_menu_object( $name ) ) {
+			$name = $base . ' ' . $counter++;
+		}
+
+		$menu_id = wp_create_nav_menu( $name );
+		if ( is_wp_error( $menu_id ) ) {
+			return 0;
+		}
+
+		foreach ( (array) $demo['menu'] as $title ) {
+			if ( empty( $pages[ $title ] ) ) {
+				continue;
+			}
+			wp_update_nav_menu_item(
+				$menu_id,
+				0,
+				array(
+					'menu-item-title'     => $title,
+					'menu-item-object'    => 'page',
+					'menu-item-object-id' => (int) $pages[ $title ],
+					'menu-item-type'      => 'post_type',
+					'menu-item-status'    => 'publish',
+				)
+			);
+		}
+
+		return (int) $menu_id;
 	}
 
 	/**
@@ -274,53 +497,92 @@ class Importer {
 	 * @return int|\WP_Error Post ID or error.
 	 */
 	private function import_post( $data, $post_type ) {
+		$content = isset( $data['content'] ) ? \GambolBuilder\resolve_asset_tokens( (string) $data['content'] ) : '';
+
+		// Demo content is shipped with the plugin; only filter it for users who
+		// could not have written it themselves.
+		if ( ! current_user_can( 'unfiltered_html' ) ) {
+			$content = wp_kses_post( $content );
+		}
+
 		$post_data = array(
 			'post_title'   => isset( $data['title'] ) ? sanitize_text_field( $data['title'] ) : '',
-			'post_content' => isset( $data['content'] ) ? wp_kses_post( $data['content'] ) : '',
+			'post_content' => $content,
 			'post_status'  => 'publish',
 			'post_type'    => $post_type,
 		);
 
-		// Add excerpt if available.
 		if ( isset( $data['excerpt'] ) ) {
 			$post_data['post_excerpt'] = sanitize_textarea_field( $data['excerpt'] );
 		}
 
-		// Add menu order if available.
 		if ( isset( $data['menu_order'] ) ) {
 			$post_data['menu_order'] = absint( $data['menu_order'] );
 		}
 
-		// Check for existing post with same title.
-		$existing = get_page_by_title( $post_data['post_title'], OBJECT, $post_type );
-		if ( $existing ) {
-			$post_data['post_title'] .= ' (Imported)';
+		if ( isset( $data['slug'] ) ) {
+			$post_data['post_name'] = sanitize_title( $data['slug'] );
 		}
 
-		$post_id = wp_insert_post( $post_data, true );
+		if ( $this->title_exists( $post_data['post_title'], $post_type ) ) {
+			/* translators: %s: original title */
+			$post_data['post_title'] = sprintf( __( '%s (Imported)', 'gambol-builder' ), $post_data['post_title'] );
+		}
+
+		// wp_insert_post() unslashes its input: slash it so the JSON escapes in
+		// block comments (<, " ...) survive and the blocks stay valid.
+		$post_id = wp_insert_post( wp_slash( $post_data ), true );
 
 		if ( is_wp_error( $post_id ) ) {
 			return $post_id;
 		}
 
-		// Add post meta.
 		if ( isset( $data['meta'] ) && is_array( $data['meta'] ) ) {
 			foreach ( $data['meta'] as $key => $value ) {
-				update_post_meta( $post_id, sanitize_key( $key ), $value );
+				update_post_meta( $post_id, sanitize_key( $key ), wp_slash( $value ) );
 			}
 		}
 
-		// Mark as imported.
-		update_post_meta( $post_id, '_gambol_demo_imported', true );
+		update_post_meta( $post_id, '_gambol_demo_imported', '1' );
 		update_post_meta( $post_id, '_gambol_demo_import_time', current_time( 'mysql' ) );
 
 		return $post_id;
 	}
 
 	/**
+	 * Whether a post with this exact title exists (replaces the deprecated get_page_by_title).
+	 *
+	 * @param string $title     Title.
+	 * @param string $post_type Post type.
+	 * @return bool
+	 */
+	private function title_exists( $title, $post_type ) {
+		if ( '' === $title ) {
+			return false;
+		}
+		$query = new \WP_Query(
+			array(
+				'post_type'              => $post_type,
+				'title'                  => $title,
+				'post_status'            => 'any',
+				'posts_per_page'         => 1,
+				'fields'                 => 'ids',
+				'no_found_rows'          => true,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+			)
+		);
+		return ! empty( $query->posts );
+	}
+
+	// ---------------------------------------------------------------------
+	// Backup, rollback, reset, history.
+	// ---------------------------------------------------------------------
+
+	/**
 	 * Create backup before import.
 	 *
-	 * @param array $options Import options to know what to backup.
+	 * @param array $options Import options to know what to back up.
 	 * @return bool True on success.
 	 */
 	public function create_backup( $options ) {
@@ -329,21 +591,17 @@ class Importer {
 			'data'      => array(),
 		);
 
-		// Backup global styles.
-		if ( $options['global_styles'] ) {
+		if ( ! empty( $options['global_styles'] ) ) {
 			$backup['data']['global_styles'] = get_option( 'gambol_builder_global_styles', array() );
 		}
 
-		// We don't backup existing posts as they're not deleted during import.
-		// If you need full rollback, you could store post IDs for deletion.
-
-		update_option( self::BACKUP_OPTION, $backup );
+		update_option( self::BACKUP_OPTION, $backup, false );
 
 		return true;
 	}
 
 	/**
-	 * Rollback last import.
+	 * Roll back the last import.
 	 *
 	 * @return array|\WP_Error Result or error.
 	 */
@@ -355,76 +613,99 @@ class Importer {
 		}
 
 		$last_import = end( $history );
-		$results = array(
+		$results     = array(
 			'deleted_posts' => 0,
 			'restored'      => array(),
 		);
 
-		// Delete imported posts.
 		if ( ! empty( $last_import['post_ids'] ) ) {
 			foreach ( $last_import['post_ids'] as $post_id ) {
-				$deleted = wp_delete_post( $post_id, true );
-				if ( $deleted ) {
+				// Only delete what the importer created.
+				if ( get_post_meta( $post_id, '_gambol_demo_imported', true ) && wp_delete_post( $post_id, true ) ) {
 					$results['deleted_posts']++;
 				}
 			}
 		}
 
-		// Restore backup data.
+		if ( ! empty( $last_import['menu_id'] ) ) {
+			wp_delete_nav_menu( (int) $last_import['menu_id'] );
+		}
+
+		// Re-activate the headers/footers the import switched off.
+		if ( ! empty( $last_import['deactivated'] ) ) {
+			foreach ( $last_import['deactivated'] as $id ) {
+				if ( 'gambol_hf' === get_post_type( $id ) ) {
+					update_post_meta( $id, '_gambol_hf_active', '1' );
+				}
+			}
+			$results['restored']['headers_footers'] = count( $last_import['deactivated'] );
+		}
+
 		$backup = get_option( self::BACKUP_OPTION, array() );
 
-		if ( ! empty( $backup['data']['global_styles'] ) ) {
+		// An empty array is a real previous state (defaults), so restore it too.
+		if ( isset( $backup['data']['global_styles'] ) ) {
 			update_option( 'gambol_builder_global_styles', $backup['data']['global_styles'] );
 			$results['restored']['global_styles'] = true;
 		}
 
-		// Remove last import from history.
-		array_pop( $history );
-		update_option( self::IMPORT_HISTORY_OPTION, $history );
+		if ( isset( $backup['data']['menus'] ) ) {
+			update_option( 'gambol_default_menu', (int) $backup['data']['menus']['default'] );
+			set_theme_mod( 'nav_menu_locations', (array) $backup['data']['menus']['locations'] );
+			$results['restored']['menus'] = true;
+		}
 
-		// Clear backup.
+		if ( isset( $backup['data']['reading'] ) ) {
+			update_option( 'show_on_front', $backup['data']['reading']['show_on_front'] );
+			update_option( 'page_on_front', (int) $backup['data']['reading']['page_on_front'] );
+			$results['restored']['front_page'] = true;
+		}
+
+		array_pop( $history );
+		update_option( self::IMPORT_HISTORY_OPTION, $history, false );
 		delete_option( self::BACKUP_OPTION );
 
 		return $results;
 	}
 
 	/**
-	 * Reset all demo content.
+	 * Delete all demo content ever imported.
 	 *
-	 * @return array|\WP_Error Result or error.
+	 * @return array Result.
 	 */
 	public function reset_all() {
-		$results = array(
-			'deleted_posts' => 0,
-		);
+		$results = array( 'deleted_posts' => 0 );
 
-		// Find all imported posts.
 		$imported_posts = get_posts(
 			array(
 				'post_type'      => array( 'page', 'gambol_hf' ),
 				'posts_per_page' => -1,
 				'post_status'    => 'any',
-				'meta_query'     => array(
+				'fields'         => 'ids',
+				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 					array(
 						'key'     => '_gambol_demo_imported',
-						'value'   => '1',
-						'compare' => '=',
+						'compare' => 'EXISTS',
 					),
 				),
 			)
 		);
 
-		// Delete imported posts.
-		foreach ( $imported_posts as $post ) {
-			$deleted = wp_delete_post( $post->ID, true );
-			if ( $deleted ) {
+		foreach ( $imported_posts as $post_id ) {
+			if ( wp_delete_post( $post_id, true ) ) {
 				$results['deleted_posts']++;
 			}
 		}
 
-		// Clear history.
+		foreach ( $this->get_import_history() as $entry ) {
+			if ( ! empty( $entry['menu_id'] ) ) {
+				wp_delete_nav_menu( (int) $entry['menu_id'] );
+			}
+		}
+
 		delete_option( self::IMPORT_HISTORY_OPTION );
 		delete_option( self::BACKUP_OPTION );
+		delete_option( self::SESSION_OPTION );
 
 		return $results;
 	}
@@ -439,19 +720,20 @@ class Importer {
 		$history = $this->get_import_history();
 
 		$history[] = array(
-			'timestamp' => current_time( 'mysql' ),
-			'demo_id'   => $import_result['demo_id'],
-			'demo_name' => $import_result['demo_name'],
-			'imported'  => $import_result['imported'],
-			'post_ids'  => $import_result['post_ids'],
+			'timestamp'   => current_time( 'mysql' ),
+			'demo_id'     => $import_result['demo_id'],
+			'demo_name'   => $import_result['demo_name'],
+			'imported'    => $import_result['imported'],
+			'post_ids'    => $import_result['post_ids'],
+			'deactivated' => isset( $import_result['deactivated'] ) ? $import_result['deactivated'] : array(),
+			'menu_id'     => isset( $import_result['menu_id'] ) ? (int) $import_result['menu_id'] : 0,
 		);
 
-		// Keep only last 10 imports.
 		if ( count( $history ) > 10 ) {
 			$history = array_slice( $history, -10 );
 		}
 
-		update_option( self::IMPORT_HISTORY_OPTION, $history );
+		update_option( self::IMPORT_HISTORY_OPTION, $history, false );
 	}
 
 	/**
@@ -460,7 +742,8 @@ class Importer {
 	 * @return array Import history.
 	 */
 	public function get_import_history() {
-		return get_option( self::IMPORT_HISTORY_OPTION, array() );
+		$history = get_option( self::IMPORT_HISTORY_OPTION, array() );
+		return is_array( $history ) ? $history : array();
 	}
 
 	/**
@@ -479,7 +762,6 @@ class Importer {
 	 * @return bool True if rollback is available.
 	 */
 	public function can_rollback() {
-		$history = $this->get_import_history();
-		return ! empty( $history );
+		return ! empty( $this->get_import_history() );
 	}
 }

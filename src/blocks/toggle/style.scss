@@ -70,13 +70,24 @@
 	}
 }
 
+// Content stays visible without JS; it is collapsed only once the
+// frontend script has wired the toggle (.is-ready).
 .wp-block-gambol-toggle__content {
-	display: none;
 	border-top: 1px solid var(--gb-colors-border);
 	
 	> div {
 		line-height: 1.7;
 	}
+}
+
+.wp-block-gambol-toggle.is-ready:not(.is-open) > .wp-block-gambol-toggle__content,
+.wp-block-gambol-toggle__content[hidden] {
+	display: none;
+}
+
+.wp-block-gambol-toggle__header:focus-visible {
+	outline: 2px solid var(--gb-colors-primary);
+	outline-offset: -2px;
 }
 
 // Open state
@@ -125,6 +136,16 @@
 
 .wp-block-gambol-toggle.is-open .wp-block-gambol-toggle__content {
 	animation: gambol-toggle-open 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wp-block-gambol-toggle__icon {
+		transition: none;
+	}
+
+	.wp-block-gambol-toggle.is-open .wp-block-gambol-toggle__content {
+		animation: none;
+	}
 }
 
 // Grouped toggles (FAQ style)

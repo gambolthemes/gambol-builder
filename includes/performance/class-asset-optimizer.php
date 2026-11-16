@@ -77,7 +77,13 @@ class Asset_Optimizer {
 
 		// Remove jQuery migrate.
 		if ( $settings->is_enabled( 'remove_jquery_migrate' ) ) {
-			add_action( 'wp_default_scripts', array( $this, 'remove_jquery_migrate' ) );
+			// The optimizers start on `wp`, usually after WP_Scripts has been
+			// built: apply directly then, otherwise wait for it.
+			if ( did_action( 'wp_default_scripts' ) ) {
+				$this->remove_jquery_migrate( wp_scripts() );
+			} else {
+				add_action( 'wp_default_scripts', array( $this, 'remove_jquery_migrate' ) );
+			}
 		}
 
 		// Disable dashicons.

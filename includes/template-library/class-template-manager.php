@@ -100,6 +100,9 @@ class Template_Manager {
 			if ( ! is_array( $data ) ) {
 				continue;
 			}
+			if ( isset( $data['content'] ) ) {
+				$data['content'] = \GambolBuilder\resolve_asset_tokens( $data['content'] );
+			}
 			$data['source'] = 'bundled';
 			$data['id']     = $data['id'] ?? 'bundled-' . sanitize_title( basename( $file, '.json' ) );
 			$templates[]    = $data;
@@ -150,12 +153,24 @@ class Template_Manager {
 			return new \WP_Error( 'missing_data', __( 'Title and content are required.', 'gambol-builder' ) );
 		}
 
-		$post_id = wp_insert_post( array(
-			'post_type'    => 'gambol_template',
-			'post_status'  => 'publish',
-			'post_title'   => sanitize_text_field( $data['title'] ),
-			'post_content' => wp_kses_post( $data['content'] ),
-		) );
+		// Block markup must keep its JSON escapes: slash it for wp_insert_post, and
+		// only filter it for users who may not post unfiltered HTML.
+		$content = (string) $data['content'];
+		if ( ! current_user_can( 'unfiltered_html' ) ) {
+			$content = wp_kses_post( $content );
+		}
+
+		$post_id = wp_insert_post(
+			wp_slash(
+				array(
+					'post_type'    => 'gambol_template',
+					'post_status'  => 'publish',
+					'post_title'   => sanitize_text_field( $data['title'] ),
+					'post_content' => $content,
+				)
+			),
+			true
+		);
 
 		if ( is_wp_error( $post_id ) ) {
 			return $post_id;
@@ -179,7 +194,10 @@ class Template_Manager {
 		if ( ! $post || 'gambol_template' !== $post->post_type ) {
 			return new \WP_Error( 'not_found', __( 'Template not found.', 'gambol-builder' ) );
 		}
-		wp_delete_post( $post_id, true );
+		if ( ! current_user_can( 'delete_post', $post->ID ) ) {
+			return new \WP_Error( 'forbidden', __( 'You cannot delete this template.', 'gambol-builder' ), array( 'status' => 403 ) );
+		}
+		wp_delete_post( $post->ID, true );
 		return true;
 	}
 
@@ -193,17 +211,27 @@ class Template_Manager {
 		if ( strpos( $id, 'local-' ) === 0 ) {
 			$post_id = (int) str_replace( 'local-', '', $id );
 			$post    = get_post( $post_id );
-			return $post ? $post->post_content : '';
+			// Only saved templates, and only ones this user may read.
+			if ( ! $post || 'gambol_template' !== $post->post_type ) {
+				return '';
+			}
+			if ( 'publish' !== $post->post_status && ! current_user_can( 'read_post', $post->ID ) ) {
+				return '';
+			}
+			return $post->post_content;
 		}
 
-		// Bundled template.
-		$slug  = str_replace( 'bundled-', '', $id );
+		// Bundled template: the slug must be a plain file name, never a path.
+		$slug = str_replace( 'bundled-', '', (string) $id );
+		if ( ! preg_match( '/^[a-z0-9][a-z0-9-]*$/', $slug ) ) {
+			return '';
+		}
 		$file  = self::TEMPLATES_DIR . $slug . '.json';
 		if ( ! file_exists( $file ) ) {
 			return '';
 		}
 		$json = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 		$data = json_decode( $json, true );
-		return $data['content'] ?? '';
+		return \GambolBuilder\resolve_asset_tokens( $data['content'] ?? '' );
 	}
 }

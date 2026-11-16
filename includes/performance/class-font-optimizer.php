@@ -68,50 +68,17 @@ class Font_Optimizer {
 		$settings = Settings::get_instance();
 
 		if ( $settings->is_enabled( 'optimize_google_fonts' ) ) {
-			// Collect Google Fonts before output.
-			add_action( 'wp_enqueue_scripts', array( $this, 'collect_google_fonts' ), 100 );
-
-			// Output combined fonts in head.
-			add_action( 'wp_head', array( $this, 'output_optimized_fonts' ), 2 );
-
-			// Add preload hints.
-			add_action( 'wp_head', array( $this, 'add_font_preload' ), 1 );
-		}
-
-		// Add font-display swap.
-		if ( $settings->is_enabled( 'font_display_swap' ) ) {
+			// Each Google Fonts stylesheet is kept as enqueued: rewriting or
+			// merging css2 URLs (repeated family= params, axis syntax) breaks
+			// fonts and the styles that depend on their handles. Instead,
+			// connect to the font hosts early and make text render at once.
+			add_filter( 'wp_resource_hints', array( $this, 'add_google_preconnect' ), 10, 2 );
 			add_filter( 'style_loader_tag', array( $this, 'add_font_display_swap' ), 10, 4 );
-		}
-	}
 
-	/**
-	 * Collect Google Fonts from enqueued styles.
-	 *
-	 * @return void
-	 */
-	public function collect_google_fonts() {
-		global $wp_styles;
-
-		if ( empty( $wp_styles->queue ) ) {
-			return;
-		}
-
-		foreach ( $wp_styles->queue as $handle ) {
-			if ( ! isset( $wp_styles->registered[ $handle ] ) ) {
-				continue;
-			}
-
-			$style = $wp_styles->registered[ $handle ];
-			$src = $style->src;
-
-			// Check if Google Fonts URL.
-			if ( $this->is_google_fonts_url( $src ) ) {
-				$this->google_fonts[ $handle ] = $src;
-
-				// Dequeue original.
-				wp_dequeue_style( $handle );
-				wp_deregister_style( $handle );
-			}
+			// Preload self-hosted font files listed in the settings.
+			add_action( 'wp_head', array( $this, 'add_font_preload' ), 1 );
+		} elseif ( $settings->is_enabled( 'font_display_swap' ) ) {
+			add_filter( 'style_loader_tag', array( $this, 'add_font_display_swap' ), 10, 4 );
 		}
 	}
 
@@ -122,128 +89,41 @@ class Font_Optimizer {
 	 * @return bool True if Google Fonts URL.
 	 */
 	private function is_google_fonts_url( $url ) {
-		return strpos( $url, 'fonts.googleapis.com' ) !== false;
+		return is_string( $url ) && false !== strpos( $url, 'fonts.googleapis.com' );
 	}
 
 	/**
-	 * Output optimized combined Google Fonts.
+	 * Preconnect to Google Fonts when a Google Fonts stylesheet is enqueued.
 	 *
-	 * @return void
+	 * @param array  $urls          Resource hint URLs.
+	 * @param string $relation_type Hint type.
+	 * @return array
 	 */
-	public function output_optimized_fonts() {
-		if ( empty( $this->google_fonts ) ) {
-			return;
+	public function add_google_preconnect( $urls, $relation_type ) {
+		if ( 'preconnect' !== $relation_type ) {
+			return $urls;
 		}
 
-		$combined_url = $this->combine_google_fonts();
+		global $wp_styles;
+		$uses_google = false;
+		if ( $wp_styles instanceof \WP_Styles ) {
+			foreach ( (array) $wp_styles->queue as $handle ) {
+				if ( isset( $wp_styles->registered[ $handle ] ) && $this->is_google_fonts_url( $wp_styles->registered[ $handle ]->src ) ) {
+					$uses_google = true;
+					break;
+				}
+			}
+		}
 
-		if ( $combined_url ) {
-			printf(
-				'<link rel="stylesheet" href="%s" media="print" onload="this.media=\'all\'">' . "\n",
-				esc_url( $combined_url )
+		if ( $uses_google ) {
+			$urls[] = 'https://fonts.googleapis.com';
+			$urls[] = array(
+				'href'        => 'https://fonts.gstatic.com',
+				'crossorigin' => 'anonymous',
 			);
-			printf(
-				'<noscript><link rel="stylesheet" href="%s"></noscript>' . "\n",
-				esc_url( $combined_url )
-			);
-		}
-	}
-
-	/**
-	 * Combine multiple Google Fonts URLs into one.
-	 *
-	 * @return string|false Combined URL or false on failure.
-	 */
-	private function combine_google_fonts() {
-		$families = array();
-		$display = 'swap';
-
-		foreach ( $this->google_fonts as $url ) {
-			$parsed = wp_parse_url( $url );
-
-			if ( ! isset( $parsed['query'] ) ) {
-				continue;
-			}
-
-			parse_str( $parsed['query'], $args );
-
-			if ( isset( $args['family'] ) ) {
-				// Handle multiple families in one URL.
-				$font_families = explode( '|', $args['family'] );
-				$families = array_merge( $families, $font_families );
-			}
-
-			// Use display from first URL that has it.
-			if ( isset( $args['display'] ) && 'swap' !== $display ) {
-				$display = $args['display'];
-			}
 		}
 
-		if ( empty( $families ) ) {
-			return false;
-		}
-
-		// Remove duplicates and combine.
-		$families = $this->merge_font_families( $families );
-
-		// Build combined URL.
-		$combined_url = add_query_arg(
-			array(
-				'family'  => implode( '|', $families ),
-				'display' => $display,
-			),
-			'https://fonts.googleapis.com/css2'
-		);
-
-		return $combined_url;
-	}
-
-	/**
-	 * Merge font families intelligently.
-	 *
-	 * @param array $families Font families.
-	 * @return array Merged families.
-	 */
-	private function merge_font_families( $families ) {
-		$merged = array();
-
-		foreach ( $families as $family ) {
-			// Parse font family and weights.
-			if ( strpos( $family, ':' ) !== false ) {
-				list( $name, $weights ) = explode( ':', $family, 2 );
-			} else {
-				$name = $family;
-				$weights = '';
-			}
-
-			$name = trim( $name );
-
-			if ( ! isset( $merged[ $name ] ) ) {
-				$merged[ $name ] = array();
-			}
-
-			if ( ! empty( $weights ) ) {
-				// Parse weights.
-				$weight_list = explode( ',', $weights );
-				$merged[ $name ] = array_merge( $merged[ $name ], $weight_list );
-			}
-		}
-
-		// Build final families array.
-		$result = array();
-
-		foreach ( $merged as $name => $weights ) {
-			$weights = array_unique( array_filter( $weights ) );
-			sort( $weights );
-
-			if ( ! empty( $weights ) ) {
-				$result[] = $name . ':' . implode( ',', $weights );
-			} else {
-				$result[] = $name;
-			}
-		}
-
-		return $result;
+		return $urls;
 	}
 
 	/**

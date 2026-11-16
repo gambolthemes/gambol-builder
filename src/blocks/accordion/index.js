@@ -11,6 +11,8 @@ import { __ } from '@wordpress/i18n';
 
 import Edit from './edit';
 import save from './save';
+import getDeprecated from './deprecated';
+import './item';
 import './style.scss';
 
 /**
@@ -134,7 +136,7 @@ const attributes = {
 /**
  * Register main accordion block.
  */
-registerBlockType( 'gambol/accordion', {
+const settings = {
 	apiVersion: 3,
 	title: __( 'Accordion', 'gambol-builder' ),
 	description: __( 'Create collapsible content sections.', 'gambol-builder' ),
@@ -162,46 +164,8 @@ registerBlockType( 'gambol/accordion', {
 	},
 	edit: Edit,
 	save,
-} );
+};
 
-/**
- * Register accordion item inner block.
- */
-registerBlockType( 'gambol/accordion-item', {
-	apiVersion: 3,
-	title: __( 'Accordion Item', 'gambol-builder' ),
-	description: __( 'Single accordion item with collapsible content.', 'gambol-builder' ),
-	category: 'gambol-content',
-	icon: 'text',
-	parent: [ 'gambol/accordion' ],
-	attributes: {
-		itemId: {
-			type: 'string',
-			default: '',
-		},
-	},
-	supports: {
-		html: false,
-		inserter: false,
-	},
-	edit: ( { attributes } ) => {
-		const { useBlockProps, useInnerBlocksProps } = require( '@wordpress/block-editor' );
-		const blockProps = useBlockProps( { className: 'gambol-accordion-item__content' } );
-		const innerBlocksProps = useInnerBlocksProps( blockProps, {
-			template: [ [ 'core/paragraph', { placeholder: __( 'Add accordion content...', 'gambol-builder' ) } ] ],
-			templateLock: false,
-		} );
-		return <div { ...innerBlocksProps } />;
-	},
-	save: ( { attributes } ) => {
-		const { useBlockProps, useInnerBlocksProps } = require( '@wordpress/block-editor' );
-		const blockProps = useBlockProps.save( {
-			className: 'gambol-accordion-item__content',
-			id: `content-${ attributes.itemId }`,
-			role: 'region',
-			'aria-labelledby': `header-${ attributes.itemId }`,
-		} );
-		const innerBlocksProps = useInnerBlocksProps.save( blockProps );
-		return <div { ...innerBlocksProps } />;
-	},
-} );
+settings.deprecated = getDeprecated( settings );
+
+registerBlockType( 'gambol/accordion', settings );

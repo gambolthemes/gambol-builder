@@ -105,6 +105,78 @@
 	}
 }
 
+// Frontend script states
+.wp-block-gambol-image-carousel.is-ready .wp-block-gambol-image-carousel__viewport {
+	touch-action: pan-y;
+}
+
+.wp-block-gambol-image-carousel__track {
+	&.is-dragging,
+	&.is-resizing {
+		transition: none;
+	}
+
+	&.is-dragging {
+		user-select: none;
+	}
+}
+
+.wp-block-gambol-image-carousel__arrow {
+	&[hidden] {
+		display: none;
+	}
+
+	&:disabled {
+		opacity: 0.4;
+		cursor: default;
+	}
+}
+
+.wp-block-gambol-image-carousel__arrow,
+.wp-block-gambol-image-carousel__dot,
+.wp-block-gambol-image-carousel__pause,
+.wp-block-gambol-image-carousel__viewport {
+	&:focus-visible {
+		outline: 2px solid var(--gb-colors-primary);
+		outline-offset: 2px;
+	}
+}
+
+.wp-block-gambol-image-carousel__pause {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	z-index: 11;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	border: none;
+	border-radius: 50%;
+	background-color: rgba(0, 0, 0, 0.6);
+	color: #fff;
+	cursor: pointer;
+	transition: background-color var(--gb-transition-base);
+
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.8);
+	}
+
+	&[hidden] {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wp-block-gambol-image-carousel__track,
+	.wp-block-gambol-image-carousel__arrow,
+	.wp-block-gambol-image-carousel__dot {
+		transition: none;
+	}
+}
+
 // Editor styles
 .wp-block-gambol-image-carousel__upload {
 	width: 100%;

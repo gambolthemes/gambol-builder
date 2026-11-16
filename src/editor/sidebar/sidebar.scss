@@ -80,8 +80,10 @@ $gb-shadow-focus: 0 0 0 2px rgba($gb-accent, 0.4);
 
 .gambol-left-sidebar {
 	position: fixed;
-	top: 0;
 	left: 0;
+
+	// Below the WordPress admin bar when it is visible; loader.js measures it.
+	top: var(--gambol-adminbar-h, 0px);
 	bottom: 0;
 	width: $sidebar-width;
 	background: $gb-surface-base;
@@ -92,11 +94,6 @@ $gb-shadow-focus: 0 0 0 2px rgba($gb-accent, 0.4);
 	font-family: $gb-font-sans;
 	transition: width $gb-transition-slow;
 	box-shadow: $gb-shadow-lg;
-
-	// When WordPress admin bar is shown
-	.admin-bar & {
-		top: 0;
-	}
 
 	// Collapsed state
 	&--collapsed {
@@ -167,7 +164,7 @@ $gb-shadow-focus: 0 0 0 2px rgba($gb-accent, 0.4);
 	border-radius: $gb-radius-md;
 	color: $gb-text-secondary;
 	cursor: pointer;
-	transition: all $gb-transition-fast;
+	transition: color $gb-transition-fast, background-color $gb-transition-fast, border-color $gb-transition-fast, opacity $gb-transition-fast, transform $gb-transition-fast, box-shadow $gb-transition-fast;
 
 	&:hover {
 		background: $gb-surface-hover;
@@ -222,7 +219,7 @@ $gb-shadow-focus: 0 0 0 2px rgba($gb-accent, 0.4);
 	color: $gb-text-primary;
 	font-size: $gb-text-md;
 	font-family: $gb-font-sans;
-	transition: all $gb-transition-fast;
+	transition: color $gb-transition-fast, background-color $gb-transition-fast, border-color $gb-transition-fast, opacity $gb-transition-fast, transform $gb-transition-fast, box-shadow $gb-transition-fast;
 
 	&::placeholder {
 		color: $gb-text-muted;
@@ -257,7 +254,7 @@ $gb-shadow-focus: 0 0 0 2px rgba($gb-accent, 0.4);
 	border-radius: $gb-radius-sm;
 	color: $gb-text-secondary;
 	cursor: pointer;
-	transition: all $gb-transition-fast;
+	transition: color $gb-transition-fast, background-color $gb-transition-fast, border-color $gb-transition-fast, opacity $gb-transition-fast, transform $gb-transition-fast, box-shadow $gb-transition-fast;
 
 	&:hover {
 		background: $gb-surface-active;
@@ -326,7 +323,7 @@ $gb-shadow-focus: 0 0 0 2px rgba($gb-accent, 0.4);
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
 	cursor: pointer;
-	transition: all $gb-transition-fast;
+	transition: color $gb-transition-fast, background-color $gb-transition-fast, border-color $gb-transition-fast, opacity $gb-transition-fast, transform $gb-transition-fast, box-shadow $gb-transition-fast;
 
 	&:hover {
 		background: $gb-surface-hover;
@@ -430,7 +427,7 @@ $gb-shadow-focus: 0 0 0 2px rgba($gb-accent, 0.4);
 	border: 1px solid transparent;
 	border-radius: $gb-radius-lg;
 	cursor: pointer;
-	transition: all $gb-transition-default;
+	transition: color $gb-transition-default, background-color $gb-transition-default, border-color $gb-transition-default, opacity $gb-transition-default, transform $gb-transition-default, box-shadow $gb-transition-default;
 
 	&:hover {
 		background: $gb-surface-hover;
@@ -494,7 +491,7 @@ $gb-shadow-focus: 0 0 0 2px rgba($gb-accent, 0.4);
 	align-items: center;
 	justify-content: center;
 	color: $gb-text-secondary;
-	transition: all $gb-transition-default;
+	transition: color $gb-transition-default, background-color $gb-transition-default, border-color $gb-transition-default, opacity $gb-transition-default, transform $gb-transition-default, box-shadow $gb-transition-default;
 
 	svg {
 		width: 24px;

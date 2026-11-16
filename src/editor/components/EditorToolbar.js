@@ -111,20 +111,67 @@ const GambolLogo = () => (
 const EditorToolbar = ( { onTemplatesClick } ) => {
 	const [ devicePreview, setDevicePreview ] = useState( 'desktop' );
 
-	const { undo, redo } = useDispatch( 'core/editor' );
-	
-	const { hasUndo, hasRedo, isSaving, isPublishing, postTitle, previewLink, postId } = useSelect( ( select ) => {
+	const { undo, redo, savePost, editPost } = useDispatch( 'core/editor' );
+
+	const {
+		hasUndo,
+		hasRedo,
+		isSaving,
+		isPublishing,
+		postTitle,
+		previewLink,
+		postStatus,
+		isDirty,
+		isSaveable,
+		canPublish,
+		isListViewOpen,
+	} = useSelect( ( select ) => {
 		const editor = select( 'core/editor' );
+		const post = editor.getCurrentPost();
 		return {
 			hasUndo: editor.hasEditorUndo(),
 			hasRedo: editor.hasEditorRedo(),
-			isSaving: editor.isSavingPost(),
+			isSaving: editor.isSavingPost() && ! editor.isAutosavingPost(),
 			isPublishing: editor.isPublishingPost(),
 			postTitle: editor.getEditedPostAttribute( 'title' ) || __( 'Untitled', 'gambol-builder' ),
 			previewLink: editor.getEditedPostPreviewLink(),
-			postId: editor.getCurrentPostId(),
+			postStatus: editor.getEditedPostAttribute( 'status' ),
+			isDirty: editor.isEditedPostDirty(),
+			isSaveable: editor.isEditedPostSaveable(),
+			canPublish: !! post?._links?.[ 'wp:action-publish' ],
+			isListViewOpen: editor.isListViewOpened ? editor.isListViewOpened() : false,
 		};
 	}, [] );
+
+	const isLive = [ 'publish', 'future', 'private' ].includes( postStatus );
+	const busy = isSaving || isPublishing;
+
+	/**
+	 * Save draft / update.
+	 */
+	const handleSave = useCallback( () => {
+		if ( ! busy && isSaveable ) {
+			savePost();
+		}
+	}, [ busy, isSaveable, savePost ] );
+
+	/**
+	 * Publish (or submit for review when the user cannot publish).
+	 */
+	const handlePublish = useCallback( () => {
+		if ( busy || ! isSaveable ) {
+			return;
+		}
+		editPost( { status: canPublish ? 'publish' : 'pending' } );
+		savePost();
+	}, [ busy, isSaveable, canPublish, editPost, savePost ] );
+
+	const editorDispatch = useDispatch( 'core/editor' );
+	const toggleListView = useCallback( () => {
+		if ( editorDispatch.setIsListViewOpened ) {
+			editorDispatch.setIsListViewOpened( ! isListViewOpen );
+		}
+	}, [ editorDispatch, isListViewOpen ] );
 
 	/**
 	 * Open preview in new tab
@@ -139,9 +186,13 @@ const EditorToolbar = ( { onTemplatesClick } ) => {
 	 * Go back to admin dashboard
 	 */
 	const goToAdmin = useCallback( () => {
+		// eslint-disable-next-line no-alert
+		if ( isDirty && ! window.confirm( __( 'You have unsaved changes. Leave without saving?', 'gambol-builder' ) ) ) {
+			return;
+		}
 		const adminUrl = window.gambolBuilder?.adminUrl || '/wp-admin/';
 		window.location.href = adminUrl;
-	}, [] );
+	}, [ isDirty ] );
 
 	const { openGeneralSidebar } = useDispatch( 'core/edit-post' );
 
@@ -283,8 +334,10 @@ const EditorToolbar = ( { onTemplatesClick } ) => {
 				{/* Structure View Toggle */}
 				<Tooltip text={ __( 'Document Overview', 'gambol-builder' ) }>
 					<button
-						className="gambol-toolbar__action-btn"
-						onClick={ () => openGeneralSidebar( 'edit-post/document' ) }
+						className={ `gambol-toolbar__action-btn ${ isListViewOpen ? 'is-active' : '' }` }
+						onClick={ toggleListView }
+						aria-pressed={ isListViewOpen }
+						aria-label={ __( 'Document Overview', 'gambol-builder' ) }
 					>
 						{ ActionIcons.structure }
 					</button>
@@ -324,13 +377,44 @@ const EditorToolbar = ( { onTemplatesClick } ) => {
 				</Tooltip>
 
 				{/* Status Indicator */}
-				<div className="gambol-toolbar__status">
-					{ ( isSaving || isPublishing ) && (
+				<div className="gambol-toolbar__status" role="status" aria-live="polite">
+					{ busy && (
 						<span className="gambol-toolbar__saving">
-							{ __( 'Saving...', 'gambol-builder' ) }
+							{ __( 'Saving…', 'gambol-builder' ) }
 						</span>
 					) }
 				</div>
+
+				{/* Save / Publish */}
+				{ isLive ? (
+					<button
+						type="button"
+						className="gambol-toolbar__save-btn is-primary"
+						onClick={ handleSave }
+						disabled={ busy || ! isDirty || ! isSaveable }
+					>
+						{ __( 'Update', 'gambol-builder' ) }
+					</button>
+				) : (
+					<>
+						<button
+							type="button"
+							className="gambol-toolbar__save-btn"
+							onClick={ handleSave }
+							disabled={ busy || ! isDirty || ! isSaveable }
+						>
+							{ __( 'Save draft', 'gambol-builder' ) }
+						</button>
+						<button
+							type="button"
+							className="gambol-toolbar__save-btn is-primary"
+							onClick={ handlePublish }
+							disabled={ busy || ! isSaveable }
+						>
+							{ canPublish ? __( 'Publish', 'gambol-builder' ) : __( 'Submit for review', 'gambol-builder' ) }
+						</button>
+					</>
+				) }
 			</div>
 		</div>
 	);

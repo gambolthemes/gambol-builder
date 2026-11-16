@@ -71,10 +71,11 @@ class Rest_API {
 			)
 		);
 
-		// Get single demo.
+		// Get single demo. Reserved words are excluded so /demos/history,
+		// /demos/rollback and /demos/reset reach their own routes.
 		register_rest_route(
 			self::NAMESPACE,
-			'/demos/(?P<id>[\w-]+)',
+			'/demos/(?P<id>(?!history$|rollback$|reset$)[\w-]+)',
 			array(
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'get_demo' ),
@@ -294,41 +295,7 @@ class Rest_API {
 		$importer = Importer::get_instance();
 		$result = null;
 
-		switch ( $step ) {
-			case 'backup':
-				$result = $importer->create_backup(
-					array(
-						'pages'         => true,
-						'headers'       => true,
-						'footers'       => true,
-						'global_styles' => true,
-					)
-				);
-				break;
-
-			case 'pages':
-				$result = $this->call_private_method( $importer, 'import_pages', array( $demo_id ) );
-				break;
-
-			case 'headers':
-				$result = $this->call_private_method( $importer, 'import_headers', array( $demo_id ) );
-				break;
-
-			case 'footers':
-				$result = $this->call_private_method( $importer, 'import_footers', array( $demo_id ) );
-				break;
-
-			case 'global_styles':
-				$result = $this->call_private_method( $importer, 'import_global_styles', array( $demo_id ) );
-				break;
-
-			default:
-				return new \WP_Error(
-					'invalid_step',
-					__( 'Invalid import step.', 'gambol-builder' ),
-					array( 'status' => 400 )
-				);
-		}
+		$result = $importer->run_step( $demo_id, $step );
 
 		if ( is_wp_error( $result ) ) {
 			return $result;
@@ -341,21 +308,6 @@ class Rest_API {
 				'data'    => $result,
 			)
 		);
-	}
-
-	/**
-	 * Call private method via reflection.
-	 *
-	 * @param object $object Object instance.
-	 * @param string $method Method name.
-	 * @param array  $args   Method arguments.
-	 * @return mixed Method result.
-	 */
-	private function call_private_method( $object, $method, $args = array() ) {
-		$reflection = new \ReflectionClass( get_class( $object ) );
-		$method = $reflection->getMethod( $method );
-		$method->setAccessible( true );
-		return $method->invokeArgs( $object, $args );
 	}
 
 	/**

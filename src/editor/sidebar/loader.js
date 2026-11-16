@@ -10,7 +10,6 @@
 import { createRoot, render, unmountComponentAtNode } from '@wordpress/element';
 import { subscribe, select, dispatch } from '@wordpress/data';
 import { addFilter } from '@wordpress/hooks';
-import { getBlockTypes, unregisterBlockType } from '@wordpress/blocks';
 import domReady from '@wordpress/dom-ready';
 
 import GambolSidebar from './GambolSidebar';
@@ -58,9 +57,16 @@ const filterBlockCategories = ( categories ) => {
  * Filter blocks to only show allowed ones.
  */
 const filterBlockTypes = ( blockSettings, blockName ) => {
+	// Every Gambol block stays insertable (child blocks such as tab panels and
+	// accordion items are inserted programmatically and need it too).
+	if ( blockName.startsWith( 'gambol/' ) ) {
+		return blockSettings;
+	}
+
 	const allowedBlocks = getAllowedBlocks();
-	
-	// If block is not in allowed list, hide it from inserter
+
+	// Other blocks are only hidden from the inserter. They stay registered, so
+	// posts that already contain them keep rendering and editing normally.
 	if ( ! allowedBlocks.includes( blockName ) ) {
 		return {
 			...blockSettings,
@@ -74,49 +80,13 @@ const filterBlockTypes = ( blockSettings, blockName ) => {
 };
 
 /**
- * Unregister unwanted core blocks after they're registered.
- */
-const unregisterUnwantedBlocks = () => {
-	const allowedBlocks = getAllowedBlocks();
-	
-	// Wait for blocks to be registered
-	setTimeout( () => {
-		const allBlocks = getBlockTypes();
-		
-		allBlocks.forEach( ( block ) => {
-			// Keep allowed blocks
-			if ( allowedBlocks.includes( block.name ) ) {
-				return;
-			}
-			
-			// Unregister everything else
-			try {
-				unregisterBlockType( block.name );
-			} catch ( e ) {
-				// Block might already be unregistered or protected
-			}
-		} );
-	}, 100 );
-};
-
-/**
  * Apply all block filters.
  */
 const applyBlockFilters = () => {
-	// Filter block categories
 	addFilter(
 		'blocks.registerBlockType',
 		'gambol-builder/filter-blocks',
 		filterBlockTypes
-	);
-
-	// Filter categories  
-	addFilter(
-		'blocks.getBlockTypes',
-		'gambol-builder/filter-inserter',
-		( blockTypes ) => {
-			return blockTypes.filter( ( block ) => ALLOWED_BLOCKS.includes( block.name ) );
-		}
 	);
 };
 
@@ -200,7 +170,31 @@ const unmountSidebar = () => {
  * Hide the default Gutenberg block inserter and all default UI.
  * Adds comprehensive CSS to suppress all default inserter elements.
  */
+/**
+ * Expose the visible height of the WordPress admin bar as a CSS variable.
+ *
+ * Whether the bar shows in the editor differs between WordPress versions and
+ * fullscreen mode, so measure it instead of guessing from body classes.
+ */
+const trackAdminBarHeight = () => {
+	const bar = document.getElementById( 'wpadminbar' );
+	const update = () => {
+		let height = 0;
+		if ( bar && getComputedStyle( bar ).display !== 'none' ) {
+			const rect = bar.getBoundingClientRect();
+			height = Math.max( 0, Math.round( rect.bottom ) );
+		}
+		document.body.style.setProperty( '--gambol-adminbar-h', `${ height }px` );
+	};
+	update();
+	if ( bar && 'ResizeObserver' in window ) {
+		new window.ResizeObserver( update ).observe( bar );
+	}
+	window.addEventListener( 'resize', update );
+};
+
 const hideDefaultInserter = () => {
+	trackAdminBarHeight();
 	const styleId = 'gambol-hide-inserter';
 	
 	if ( document.getElementById( styleId ) ) {
@@ -229,7 +223,7 @@ const hideDefaultInserter = () => {
 		.gambol-editor-active .block-editor-inserter__menu,
 		.gambol-editor-active .editor-inserter-sidebar,
 		.gambol-editor-active .block-editor-inserter,
-		.gambol-editor-active .interface-interface-skeleton__secondary-sidebar {
+		.gambol-editor-active .interface-interface-skeleton__secondary-sidebar:not(:has(.editor-list-view-sidebar)) {
 			display: none !important;
 		}
 
@@ -277,7 +271,7 @@ const hideDefaultInserter = () => {
 		/* -----------------------------------------------------------------
 		   SLASH INSERTER (Hide the "/" command inserter)
 		   ----------------------------------------------------------------- */
-		.gambol-editor-active .components-autocomplete__popover,
+		.gambol-editor-active .components-autocomplete__popover:has(.block-editor-autocompleters__block),
 		.gambol-editor-active .block-editor-autocompleters__block {
 			display: none !important;
 		}
@@ -317,10 +311,22 @@ const hideDefaultInserter = () => {
 		/* -----------------------------------------------------------------
 		   HIDE WORDPRESS DEFAULT LEFT SIDEBAR (Secondary Sidebar)
 		   ----------------------------------------------------------------- */
-		.gambol-editor-active .interface-interface-skeleton__secondary-sidebar,
+		.gambol-editor-active .interface-interface-skeleton__secondary-sidebar:not(:has(.editor-list-view-sidebar)),
 		.gambol-editor-active .interface-interface-skeleton__left-sidebar,
 		.gambol-editor-active .editor-inserter-sidebar {
 			display: none !important;
+		}
+
+		/* List View (Document Overview) sits beside the Gambol sidebar. */
+		.gambol-editor-active .interface-interface-skeleton__secondary-sidebar:has(.editor-list-view-sidebar) {
+			margin-left: 280px;
+			margin-top: 50px;
+		}
+		.gambol-editor-active.gambol-sidebar-collapsed .interface-interface-skeleton__secondary-sidebar:has(.editor-list-view-sidebar) {
+			margin-left: 56px;
+		}
+		.gambol-editor-active .interface-interface-skeleton__body:has(.editor-list-view-sidebar) .interface-interface-skeleton__content {
+			margin-left: 0;
 		}
 
 		/* -----------------------------------------------------------------
@@ -504,10 +510,7 @@ const initSidebar = () => {
 
 		if ( isBlockEditor() ) {
 			editorReady = true;
-			
-			// Unregister unwanted blocks
-			unregisterUnwantedBlocks();
-			
+
 			// Small delay to ensure DOM is ready
 			requestAnimationFrame( () => {
 				mountSidebar();

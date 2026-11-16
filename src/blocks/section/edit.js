@@ -7,7 +7,7 @@
  * @package GambolBuilder
  */
 
-import { useState, useCallback } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import {
 	useBlockProps,
 	useInnerBlocksProps,
@@ -36,22 +36,19 @@ import {
 	TextInput,
 } from '../../components/inspector';
 
+import {
+	getWrapperStyles as buildWrapperStyles,
+	getInnerStyles as buildInnerStyles,
+	getOverlayStyles as buildOverlayStyles,
+	getClassNames,
+} from './styles';
+
 /**
  * Default template for new sections.
  */
 const TEMPLATE = [
 	[ 'gambol/container', {} ],
 ];
-
-/**
- * Box shadow presets mapping.
- */
-const BOX_SHADOW_VALUES = {
-	none: 'none',
-	soft: '0 2px 8px rgba(0, 0, 0, 0.08)',
-	medium: '0 4px 16px rgba(0, 0, 0, 0.12)',
-	strong: '0 8px 32px rgba(0, 0, 0, 0.18)',
-};
 
 /**
  * Section Edit Component.
@@ -103,156 +100,21 @@ export default function Edit( { attributes, setAttributes } ) {
 	const [ maxWidthUnitState, setMaxWidthUnitState ] = useState( maxWidthUnit || 'px' );
 	const [ minHeightUnitState, setMinHeightUnitState ] = useState( minHeightUnit || 'px' );
 
-	/**
-	 * Build wrapper styles for live preview.
-	 */
-	const getWrapperStyles = useCallback( () => {
-		const styles = {};
+	// Same builders as save.js, so the canvas matches the published page.
+	const previewAttributes = {
+		...attributes,
+		maxWidthUnit: maxWidthUnitState,
+		minHeightUnit: minHeightUnitState,
+	};
+	const getWrapperStyles = () => buildWrapperStyles( previewAttributes );
+	const getInnerStyles = () => buildInnerStyles( previewAttributes );
+	const overlayStyles = buildOverlayStyles( previewAttributes );
+	const getOverlayStyles = () =>
+		overlayStyles
+			? { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, pointerEvents: 'none', ...overlayStyles }
+			: null;
 
-		// Min height
-		if ( minHeight && minHeight > 0 ) {
-			styles.minHeight = `${ minHeight }${ minHeightUnitState }`;
-		}
-
-		// Vertical alignment (flex)
-		if ( minHeight > 0 || verticalAlign !== 'top' ) {
-			styles.display = 'flex';
-			styles.flexDirection = 'column';
-			switch ( verticalAlign ) {
-				case 'center':
-					styles.justifyContent = 'center';
-					break;
-				case 'bottom':
-					styles.justifyContent = 'flex-end';
-					break;
-				case 'stretch':
-					styles.alignItems = 'stretch';
-					break;
-				default:
-					styles.justifyContent = 'flex-start';
-			}
-		}
-
-		// Background
-		switch ( backgroundType ) {
-			case 'color':
-				if ( backgroundColor ) {
-					styles.backgroundColor = backgroundColor;
-				}
-				break;
-			case 'gradient':
-				if ( backgroundGradient ) {
-					styles.background = backgroundGradient;
-				}
-				break;
-			case 'image':
-				if ( backgroundImage?.url ) {
-					styles.backgroundImage = `url(${ backgroundImage.url })`;
-					styles.backgroundPosition = backgroundPosition || 'center center';
-					styles.backgroundSize = backgroundSize || 'cover';
-					styles.backgroundRepeat = 'no-repeat';
-				}
-				break;
-		}
-
-		// Border radius
-		if ( borderRadius > 0 ) {
-			styles.borderRadius = `${ borderRadius }px`;
-		}
-
-		// Box shadow
-		if ( boxShadow && boxShadow !== 'none' ) {
-			styles.boxShadow = BOX_SHADOW_VALUES[ boxShadow ] || 'none';
-		}
-
-		// Margin
-		if ( margin ) {
-			styles.marginTop = margin.top ? `${ margin.top }px` : undefined;
-			styles.marginRight = margin.right ? `${ margin.right }px` : undefined;
-			styles.marginBottom = margin.bottom ? `${ margin.bottom }px` : undefined;
-			styles.marginLeft = margin.left ? `${ margin.left }px` : undefined;
-		}
-
-		// Padding
-		if ( padding ) {
-			styles.paddingTop = `${ padding.top || 0 }px`;
-			styles.paddingRight = `${ padding.right || 0 }px`;
-			styles.paddingBottom = `${ padding.bottom || 0 }px`;
-			styles.paddingLeft = `${ padding.left || 0 }px`;
-		}
-
-		// Z-index
-		if ( zIndex && zIndex !== 0 ) {
-			styles.zIndex = zIndex;
-			styles.position = 'relative';
-		}
-
-		return styles;
-	}, [
-		minHeight, minHeightUnitState, verticalAlign,
-		backgroundType, backgroundColor, backgroundGradient, backgroundImage,
-		backgroundPosition, backgroundSize,
-		borderRadius, boxShadow, margin, padding, zIndex,
-	] );
-
-	/**
-	 * Build inner content styles.
-	 */
-	const getInnerStyles = useCallback( () => {
-		const styles = {};
-
-		// Max width for boxed layout
-		if ( layoutWidth === 'boxed' && maxWidth ) {
-			styles.maxWidth = `${ maxWidth }${ maxWidthUnitState }`;
-			styles.marginLeft = 'auto';
-			styles.marginRight = 'auto';
-			styles.width = '100%';
-		}
-
-		// Content gap
-		if ( contentGap > 0 ) {
-			styles.display = 'flex';
-			styles.flexDirection = 'column';
-			styles.gap = `${ contentGap }px`;
-		}
-
-		return styles;
-	}, [ layoutWidth, maxWidth, maxWidthUnitState, contentGap ] );
-
-	/**
-	 * Build overlay styles.
-	 */
-	const getOverlayStyles = useCallback( () => {
-		if ( ! overlayEnabled || backgroundType === 'none' ) {
-			return null;
-		}
-		return {
-			position: 'absolute',
-			top: 0,
-			left: 0,
-			right: 0,
-			bottom: 0,
-			backgroundColor: overlayColor || '#000000',
-			opacity: ( overlayOpacity || 50 ) / 100,
-			pointerEvents: 'none',
-			borderRadius: borderRadius > 0 ? `${ borderRadius }px` : undefined,
-		};
-	}, [ overlayEnabled, backgroundType, overlayColor, overlayOpacity, borderRadius ] );
-
-	// Build class names
-	const classNames = [ 'wp-block-gambol-section' ];
-	if ( layoutWidth ) {
-		classNames.push( `is-layout-${ layoutWidth }` );
-	}
-	if ( verticalAlign && verticalAlign !== 'top' ) {
-		classNames.push( `is-valign-${ verticalAlign }` );
-	}
-	if ( cssClasses ) {
-		classNames.push( cssClasses );
-	}
-	if ( hideOnDesktop ) classNames.push( 'gambol-hide-desktop' );
-	if ( hideOnTablet ) classNames.push( 'gambol-hide-tablet' );
-	if ( hideOnMobile ) classNames.push( 'gambol-hide-mobile' );
+	const classNames = [ 'wp-block-gambol-section', ...getClassNames( previewAttributes ) ];
 
 	// Block props
 	const blockProps = useBlockProps( {

@@ -51,7 +51,6 @@ class Hooks_Manager {
 	 * Constructor.
 	 */
 	private function __construct() {
-		$this->register_hook_locations();
 		$this->init();
 	}
 
@@ -60,7 +59,7 @@ class Hooks_Manager {
 	 *
 	 * @return void
 	 */
-	private function register_hook_locations() {
+	public function register_hook_locations() {
 		$this->hook_locations = array(
 			// Page structure hooks.
 			'before_page'          => array(
@@ -191,11 +190,15 @@ class Hooks_Manager {
 	 * @return void
 	 */
 	private function init() {
+		// Labels are translated, so locations register on init (WordPress 6.7+
+		// warns when a text domain loads earlier).
+		add_action( 'init', array( $this, 'register_hook_locations' ), 1 );
+
 		// Register all hooks.
 		add_action( 'init', array( $this, 'setup_hooks' ), 5 );
 
-		// Allow themes to register callbacks.
-		add_action( 'after_setup_theme', array( $this, 'process_theme_callbacks' ), 25 );
+		// Allow themes to register callbacks (needs the locations above).
+		add_action( 'init', array( $this, 'process_theme_callbacks' ), 6 );
 	}
 
 	/**

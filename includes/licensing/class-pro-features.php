@@ -58,7 +58,13 @@ class Pro_Features {
 	 * Constructor.
 	 */
 	private function __construct() {
-		$this->register_default_features();
+		// Feature labels are translated: build the list on init (WordPress
+		// 6.7+ warns when a text domain loads earlier).
+		if ( did_action( 'init' ) ) {
+			$this->register_default_features();
+		} else {
+			add_action( 'init', array( $this, 'register_default_features' ), 1 );
+		}
 		$this->init();
 	}
 
@@ -67,7 +73,7 @@ class Pro_Features {
 	 *
 	 * @return void
 	 */
-	private function register_default_features() {
+	public function register_default_features() {
 		$this->features = array(
 			// Pro Blocks.
 			'advanced-slider' => array(
@@ -368,6 +374,15 @@ class Pro_Features {
 	 */
 	public function gate_rest_endpoints( $result, $server, $request ) {
 		$route = $request->get_route();
+
+		// Visitor submissions of the free Form and Subscribe blocks must always
+		// work; only the builder features around them are Pro.
+		$always_open = array(
+			'/gambol-builder/v1/forms/submit',
+		);
+		if ( in_array( untrailingslashit( $route ), $always_open, true ) ) {
+			return $result;
+		}
 
 		// Check if route is Pro-only.
 		$pro_routes = array(

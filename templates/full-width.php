@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-get_header();
+gambol_template_header();
 ?>
 
 <?php
@@ -61,4 +61,4 @@ do_action( 'gambol_after_content' );
 ?>
 
 <?php
-get_footer();
+gambol_template_footer();

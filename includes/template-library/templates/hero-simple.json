@@ -1,9 +1,17 @@
 {
-  "id": "bundled-hero-simple",
-  "title": "Simple Hero Section",
-  "type": "section",
-  "categories": ["hero", "general"],
-  "thumbnail": "",
-  "tags": ["hero", "banner", "heading", "button"],
-  "content": "<!-- wp:gambol/section {\"backgroundType\":\"color\",\"backgroundColor\":\"#f8f9fa\",\"padding\":{\"top\":80,\"right\":20,\"bottom\":80,\"left\":20}} --><section class=\"wp-block-gambol-section\"><div class=\"wp-block-gambol-section__inner\"><!-- wp:gambol/container --><div class=\"wp-block-gambol-container\"><!-- wp:gambol/heading {\"level\":1,\"textAlign\":\"center\",\"content\":\"Welcome to Our Website\"} /--><!-- wp:gambol/text {\"textAlign\":\"center\",\"content\":\"A short description of your business or product goes here. Keep it brief and impactful.\"} /--><!-- wp:gambol/button {\"text\":\"Get Started\",\"url\":\"#\",\"align\":\"center\"} /--></div><!-- /wp:gambol/container --></div></section><!-- /wp:gambol/section -->"
+	"id": "bundled-hero-simple",
+	"title": "Simple Hero Section",
+	"type": "section",
+	"categories": [
+		"hero",
+		"general"
+	],
+	"thumbnail": "",
+	"tags": [
+		"hero",
+		"banner",
+		"heading",
+		"button"
+	],
+	"content": "<!-- wp:gambol/section {\"backgroundType\":\"color\",\"backgroundColor\":\"#f8f9fa\",\"padding\":{\"top\":96,\"right\":20,\"bottom\":96,\"left\":20}} -->\n<section class=\"wp-block-gambol-section alignfull is-layout-boxed has-f-8-f-9-fa-background-color has-background\" style=\"background-color:#f8f9fa;padding-top:96px;padding-right:20px;padding-bottom:96px;padding-left:20px\"><div class=\"wp-block-gambol-section__inner\" style=\"max-width:1200px;margin-left:auto;margin-right:auto;width:100%\"><!-- wp:gambol/heading {\"level\":1,\"textAlign\":\"center\"} -->\n<h1 class=\"wp-block-gambol-heading has-text-align-center\">Say what you do in one line</h1>\n<!-- /wp:gambol/heading -->\n\n<!-- wp:gambol/text {\"textAlign\":\"center\"} -->\n<p class=\"wp-block-gambol-text has-text-align-center\">One sentence on who it is for and why it is different.</p>\n<!-- /wp:gambol/text -->\n\n<!-- wp:gambol/button {\"url\":\"#contact\"} -->\n<div class=\"wp-block-gambol-button wp-block-gambol-button__wrapper has-text-align-center\"><a class=\"wp-block-gambol-button__link\" href=\"#contact\">Get in touch</a></div>\n<!-- /wp:gambol/button --></div></section>\n<!-- /wp:gambol/section -->"
 }

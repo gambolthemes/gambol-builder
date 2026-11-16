@@ -170,6 +170,101 @@
 	font-size: 16px;
 }
 
+// Frontend script states
+.wp-block-gambol-media-carousel.is-ready .wp-block-gambol-media-carousel__viewport {
+	touch-action: pan-y;
+}
+
+.wp-block-gambol-media-carousel__track {
+	&.is-dragging,
+	&.is-resizing {
+		transition: none;
+	}
+
+	&.is-dragging {
+		user-select: none;
+	}
+}
+
+.wp-block-gambol-media-carousel__arrow {
+	&[hidden] {
+		display: none;
+	}
+
+	&:disabled {
+		opacity: 0.4;
+		cursor: default;
+	}
+}
+
+.wp-block-gambol-media-carousel__play[hidden] {
+	display: none;
+}
+
+// Inline player injected when a video slide's play button is pressed.
+.wp-block-gambol-media-carousel__player {
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+	background-color: #000;
+
+	iframe,
+	video {
+		width: 100%;
+		height: 100%;
+		border: 0;
+		object-fit: contain;
+	}
+}
+
+.wp-block-gambol-media-carousel__arrow,
+.wp-block-gambol-media-carousel__dot,
+.wp-block-gambol-media-carousel__thumbnail,
+.wp-block-gambol-media-carousel__play,
+.wp-block-gambol-media-carousel__pause,
+.wp-block-gambol-media-carousel__viewport {
+	&:focus-visible {
+		outline: 2px solid var(--gb-colors-primary);
+		outline-offset: 2px;
+	}
+}
+
+.wp-block-gambol-media-carousel__pause {
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	z-index: 11;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	border: none;
+	border-radius: 50%;
+	background-color: rgba(0, 0, 0, 0.6);
+	color: #fff;
+	cursor: pointer;
+	transition: background-color var(--gb-transition-base);
+
+	&:hover {
+		background-color: rgba(0, 0, 0, 0.8);
+	}
+
+	&[hidden] {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wp-block-gambol-media-carousel__track,
+	.wp-block-gambol-media-carousel__arrow,
+	.wp-block-gambol-media-carousel__dot,
+	.wp-block-gambol-media-carousel__play {
+		transition: none;
+	}
+}
+
 // Type indicator (editor)
 .wp-block-gambol-media-carousel__type {
 	position: absolute;

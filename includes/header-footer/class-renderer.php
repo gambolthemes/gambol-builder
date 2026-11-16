@@ -86,6 +86,11 @@ class Renderer {
 		add_action( 'wp_body_open', array( $this, 'render_header' ), 5 );
 		add_action( 'wp_footer', array( $this, 'render_footer' ), 5 );
 
+		// Replace (not just add to) the theme's own header and footer.
+		add_action( 'get_header', array( $this, 'replace_theme_header' ), 1 );
+		add_action( 'get_footer', array( $this, 'replace_theme_footer' ), 1 );
+		add_filter( 'render_block_core/template-part', array( $this, 'filter_block_theme_part' ), 10, 2 );
+
 		// Enqueue assets.
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 
@@ -100,6 +105,14 @@ class Renderer {
 	 */
 	public function setup_cache() {
 		if ( $this->cache_initialized ) {
+			return;
+		}
+
+		// The Canvas page template has no header or footer at all.
+		if ( is_singular() && 'gambol-canvas.php' === get_page_template_slug() ) {
+			$this->header            = false;
+			$this->footer            = false;
+			$this->cache_initialized = true;
 			return;
 		}
 
@@ -125,7 +138,139 @@ class Renderer {
 			$this->footer = $this->get_matching_template( 'footer' ); // Use global matching.
 		}
 
+		/**
+		 * Filter whether the Gambol header/footer render on this request.
+		 *
+		 * @param bool   $render Whether to render.
+		 * @param string $type   header or footer.
+		 */
+		if ( $this->header && ! apply_filters( 'gambol_render_header', true, 'header' ) ) {
+			$this->header = false;
+		}
+		if ( $this->footer && ! apply_filters( 'gambol_render_footer', true, 'footer' ) ) {
+			$this->footer = false;
+		}
+
 		$this->cache_initialized = true;
+	}
+
+	/**
+	 * Header/footer builder settings.
+	 *
+	 * @return array
+	 */
+	private function get_settings() {
+		$settings = get_option( 'gambol_hf_settings', array() );
+		return wp_parse_args(
+			is_array( $settings ) ? $settings : array(),
+			array(
+				'disable_theme_header' => false,
+				'disable_theme_footer' => false,
+			)
+		);
+	}
+
+	/**
+	 * Whether the theme's own header/footer should be replaced on this request.
+	 *
+	 * True when a Gambol header/footer renders here, or when the site setting
+	 * hides the theme's one even without a replacement.
+	 *
+	 * @param string $type header or footer.
+	 * @return bool
+	 */
+	private function should_replace( $type ) {
+		$this->setup_cache();
+		$has      = 'header' === $type ? (bool) $this->header : (bool) $this->footer;
+		$settings = $this->get_settings();
+		$replace  = $has || ! empty( $settings[ 'disable_theme_' . $type ] );
+
+		/**
+		 * Filter whether Gambol replaces the theme's header or footer.
+		 *
+		 * @param bool   $replace Whether to replace.
+		 * @param string $type    header or footer.
+		 */
+		return (bool) apply_filters( 'gambol_replace_theme_' . $type, $replace, $type );
+	}
+
+	/**
+	 * Classic themes: print a minimal document head instead of the theme's
+	 * header.php. The Gambol header is printed by render_header() on
+	 * wp_body_open, which the shell calls.
+	 *
+	 * @param string|null $name Header name passed to get_header().
+	 * @return void
+	 */
+	public function replace_theme_header( $name ) {
+		if ( ! $this->should_replace( 'header' ) ) {
+			return;
+		}
+
+		require GAMBOL_BUILDER_PATH . 'templates/hf-header.php';
+
+		// Run the theme's header template into a discarded buffer so it neither
+		// prints nor calls wp_head() a second time.
+		$templates = array();
+		if ( $name ) {
+			$templates[] = 'header-' . $name . '.php';
+		}
+		$templates[] = 'header.php';
+
+		remove_all_actions( 'wp_head' );
+		remove_all_actions( 'wp_body_open' );
+		ob_start();
+		locate_template( $templates, true, false );
+		ob_end_clean();
+	}
+
+	/**
+	 * Classic themes: print the Gambol footer and close the document instead
+	 * of the theme's footer.php.
+	 *
+	 * @param string|null $name Footer name passed to get_footer().
+	 * @return void
+	 */
+	public function replace_theme_footer( $name ) {
+		if ( ! $this->should_replace( 'footer' ) ) {
+			return;
+		}
+
+		require GAMBOL_BUILDER_PATH . 'templates/hf-footer.php';
+
+		$templates = array();
+		if ( $name ) {
+			$templates[] = 'footer-' . $name . '.php';
+		}
+		$templates[] = 'footer.php';
+
+		remove_all_actions( 'wp_footer' );
+		ob_start();
+		locate_template( $templates, true, false );
+		ob_end_clean();
+	}
+
+	/**
+	 * Block themes: drop the theme's header/footer template part when Gambol
+	 * renders its own.
+	 *
+	 * @param string $content Rendered template part.
+	 * @param array  $block   Parsed block.
+	 * @return string
+	 */
+	public function filter_block_theme_part( $content, $block ) {
+		$attrs = isset( $block['attrs'] ) ? $block['attrs'] : array();
+		$area  = isset( $attrs['area'] ) ? $attrs['area'] : '';
+		$slug  = isset( $attrs['slug'] ) ? $attrs['slug'] : '';
+		$tag   = isset( $attrs['tagName'] ) ? $attrs['tagName'] : '';
+
+		foreach ( array( 'header', 'footer' ) as $type ) {
+			if ( $type === $area || $type === $slug || $type === $tag ) {
+				return $this->should_replace( $type ) ? '' : $content;
+			}
+		}
+
+		return $content;
 	}
 
 	/**
@@ -156,8 +301,14 @@ class Renderer {
 		$is_overridden = get_post_meta( $post_id, $override_key, true );
 		if ( '1' === $is_overridden ) {
 			$custom_key = '_gambol_custom_' . $type;
-			$custom_id = get_post_meta( $post_id, $custom_key, true );
-			return $custom_id ? absint( $custom_id ) : null;
+			$custom_id = absint( get_post_meta( $post_id, $custom_key, true ) );
+			// Only a published header/footer may be rendered as an override,
+			// never an arbitrary (possibly private) post ID.
+			$custom = $custom_id ? get_post( $custom_id ) : null;
+			if ( ! $custom || Post_Type::POST_TYPE !== $custom->post_type || 'publish' !== $custom->post_status ) {
+				return null;
+			}
+			return $custom_id;
 		}
 
 		return null;
@@ -197,14 +348,35 @@ class Renderer {
 			return false;
 		}
 
-		// Find the best matching template.
+		// The most specific matching rule wins (a front-page header beats an
+		// entire-site one); menu_order breaks ties.
+		$specificity = array(
+			'specific_pages' => 100,
+			'front_page'     => 90,
+			'404'            => 80,
+			'search'         => 80,
+			'singular_post'  => 70,
+			'singular_page'  => 70,
+			'blog'           => 60,
+			'archive'        => 60,
+			'global'         => 10,
+		);
+
+		$best       = false;
+		$best_score = -1;
 		foreach ( $posts as $post ) {
-			if ( $this->template_matches_current_page( $post ) ) {
-				return $post;
+			if ( ! $this->template_matches_current_page( $post ) ) {
+				continue;
+			}
+			$rule  = get_post_meta( $post->ID, '_gambol_hf_display_on', true );
+			$score = isset( $specificity[ $rule ] ) ? $specificity[ $rule ] : 0;
+			if ( $score > $best_score ) {
+				$best       = $post;
+				$best_score = $score;
 			}
 		}
 
-		return false;
+		return $best;
 	}
 
 	/**
@@ -381,14 +553,12 @@ class Renderer {
 			$attrs_string .= sprintf( ' %s="%s"', esc_attr( $attr ), esc_attr( $value ) );
 		}
 
-		// Get the content.
-		$content = apply_filters( 'the_content', $post->post_content );
-
-		// Apply block styles if needed.
-		if ( has_blocks( $post->post_content ) ) {
-			// Ensure block styles are enqueued.
-			do_action( 'enqueue_block_assets' );
-		}
+		// Render the blocks directly rather than through the_content, so other
+		// plugins' post-content filters (share buttons, related posts, ...) do
+		// not run inside the site header and footer.
+		$content = do_blocks( $post->post_content );
+		$content = do_shortcode( $content );
+		$content = wp_filter_content_tags( $content, 'gambol_hf' );
 
 		printf(
 			'<%1$s%2$s>%3$s</%1$s>',

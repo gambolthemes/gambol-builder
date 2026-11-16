@@ -126,6 +126,11 @@ const attributes = {
 		type: 'string',
 		default: '',
 	},
+	// Above-the-fold image (hero / LCP): load eagerly with high fetch priority.
+	priority: {
+		type: 'boolean',
+		default: false,
+	},
 };
 
 /**

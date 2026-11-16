@@ -4,13 +4,16 @@
  * @package GambolBuilder
  */
 
-import { useState, useCallback } from '@wordpress/element';
+import { useDispatch, useSelect } from '@wordpress/data';
+import { createBlock } from '@wordpress/blocks';
 import {
 	useBlockProps,
 	useInnerBlocksProps,
 	InspectorControls,
 } from '@wordpress/block-editor';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
+
+import { getAccordionVars, getAccordionClassName } from './save';
 
 import {
 	InspectorSidebar,
@@ -86,7 +89,7 @@ const generateId = () => `item-${ Math.random().toString( 36 ).substr( 2, 9 ) }`
 /**
  * Accordion Edit Component.
  */
-export default function Edit( { attributes, setAttributes } ) {
+export default function Edit( { attributes, setAttributes, clientId } ) {
 	const {
 		items,
 		allowMultiple,
@@ -111,160 +114,59 @@ export default function Edit( { attributes, setAttributes } ) {
 		cssClasses,
 	} = attributes;
 
-	const [ editingItemId, setEditingItemId ] = useState( null );
+	const { insertBlock } = useDispatch( 'core/block-editor' );
+	const itemCount = useSelect(
+		( select ) => select( 'core/block-editor' ).getBlockCount( clientId ),
+		[ clientId ]
+	);
 
-	// Toggle item open/closed
-	const toggleItem = useCallback( ( itemId ) => {
-		const newItems = items.map( ( item ) => {
-			if ( item.id === itemId ) {
-				return { ...item, isOpen: ! item.isOpen };
-			}
-			if ( ! allowMultiple ) {
-				return { ...item, isOpen: false };
-			}
-			return item;
-		} );
-		setAttributes( { items: newItems } );
-	}, [ items, allowMultiple, setAttributes ] );
-
-	// Add new item
-	const addItem = useCallback( () => {
-		const newItem = {
-			id: generateId(),
-			title: `Accordion Item ${ items.length + 1 }`,
-			isOpen: false,
-		};
-		setAttributes( { items: [ ...items, newItem ] } );
-	}, [ items, setAttributes ] );
-
-	// Remove item
-	const removeItem = useCallback( ( itemId ) => {
-		if ( items.length <= 1 ) return;
-		setAttributes( { items: items.filter( ( i ) => i.id !== itemId ) } );
-	}, [ items, setAttributes ] );
-
-	// Update item title
-	const updateItemTitle = useCallback( ( itemId, title ) => {
-		const newItems = items.map( ( i ) =>
-			i.id === itemId ? { ...i, title } : i
+	const addItem = () => {
+		insertBlock(
+			createBlock(
+				'gambol/accordion-item',
+				{
+					/* translators: %d: item number */
+					title: sprintf( __( 'Item %d', 'gambol-builder' ), itemCount + 1 ),
+				},
+				[ createBlock( 'core/paragraph' ) ]
+			),
+			itemCount,
+			clientId
 		);
-		setAttributes( { items: newItems } );
-	}, [ items, setAttributes ] );
-
-	// Move item
-	const moveItem = useCallback( ( itemId, direction ) => {
-		const index = items.findIndex( ( i ) => i.id === itemId );
-		if ( index === -1 ) return;
-		
-		const newIndex = direction === 'up' ? index - 1 : index + 1;
-		if ( newIndex < 0 || newIndex >= items.length ) return;
-		
-		const newItems = [ ...items ];
-		[ newItems[ index ], newItems[ newIndex ] ] = [ newItems[ newIndex ], newItems[ index ] ];
-		setAttributes( { items: newItems } );
-	}, [ items, setAttributes ] );
-
-	// Get icon component
-	const getIcon = ( isOpen ) => {
-		switch ( iconType ) {
-			case 'plus-minus':
-				return <PlusMinusIcon isOpen={ isOpen } />;
-			case 'arrow':
-				return <ArrowIcon isOpen={ isOpen } />;
-			default:
-				return <ChevronIcon isOpen={ isOpen } />;
-		}
 	};
 
-	// Build CSS custom properties
-	const cssVars = {
-		'--gambol-accordion-header-bg': headerBackgroundColor,
-		'--gambol-accordion-header-active-bg': headerActiveBackgroundColor,
-		'--gambol-accordion-header-color': headerTextColor,
-		'--gambol-accordion-header-padding': `${ headerPadding.top }px ${ headerPadding.right }px ${ headerPadding.bottom }px ${ headerPadding.left }px`,
-		'--gambol-accordion-header-font-size': `${ headerFontSize }px`,
-		'--gambol-accordion-header-font-weight': headerFontWeight,
-		'--gambol-accordion-icon-color': iconColor,
-		'--gambol-accordion-content-bg': contentBackgroundColor,
-		'--gambol-accordion-content-padding': `${ contentPadding.top }px ${ contentPadding.right }px ${ contentPadding.bottom }px ${ contentPadding.left }px`,
-		'--gambol-accordion-border': `${ borderWidth }px solid ${ borderColor }`,
-		'--gambol-accordion-radius': borderRadius,
-		'--gambol-accordion-gap': `${ itemGap }px`,
-		'--gambol-accordion-duration': `${ animationDuration }ms`,
-	};
-
-	// Build class names
-	const className = [
-		'gambol-accordion',
-		`gambol-accordion--icon-${ iconPosition }`,
-		cssClasses,
-	].filter( Boolean ).join( ' ' );
-
+	// Same builders as save.js.
 	const blockProps = useBlockProps( {
-		className,
-		style: cssVars,
+		className: getAccordionClassName( attributes ),
+		style: getAccordionVars( attributes ),
 		id: htmlId || undefined,
+	} );
+
+	// Items are inner blocks; new accordions start from the legacy `items` titles.
+	const innerBlocksProps = useInnerBlocksProps( blockProps, {
+		allowedBlocks: [ 'gambol/accordion-item' ],
+		template: ( items || [] ).map( ( item ) => [
+			'gambol/accordion-item',
+			{ itemId: item.id, title: item.title },
+			[ [ 'core/paragraph' ] ],
+		] ),
+		renderAppender: false,
 	} );
 
 	// Layout tab content
 	const layoutTab = (
 		<>
 			<Section title={ __( 'Items', 'gambol-builder' ) }>
-				<div className="gambol-accordion-editor">
-					{ items.map( ( item, index ) => (
-						<div key={ item.id } className="gambol-accordion-editor-item">
-							{ editingItemId === item.id ? (
-								<input
-									type="text"
-									value={ item.title }
-									onChange={ ( e ) => updateItemTitle( item.id, e.target.value ) }
-									onBlur={ () => setEditingItemId( null ) }
-									onKeyDown={ ( e ) => e.key === 'Enter' && setEditingItemId( null ) }
-									autoFocus
-									className="gambol-accordion-title-input"
-								/>
-							) : (
-								<span
-									className="gambol-accordion-title"
-									onClick={ () => setEditingItemId( item.id ) }
-								>
-									{ item.title }
-								</span>
-							) }
-							<div className="gambol-accordion-actions">
-								<button
-									type="button"
-									onClick={ () => moveItem( item.id, 'up' ) }
-									disabled={ index === 0 }
-								>
-									↑
-								</button>
-								<button
-									type="button"
-									onClick={ () => moveItem( item.id, 'down' ) }
-									disabled={ index === items.length - 1 }
-								>
-									↓
-								</button>
-								<button
-									type="button"
-									onClick={ () => removeItem( item.id ) }
-									disabled={ items.length <= 1 }
-									className="gambol-accordion-remove"
-								>
-									×
-								</button>
-							</div>
-						</div>
-					) ) }
-					<button
-						type="button"
-						className="gambol-btn gambol-btn--secondary gambol-btn--full"
-						onClick={ addItem }
-					>
-						{ __( '+ Add Item', 'gambol-builder' ) }
-					</button>
-				</div>
+				<p className="gambol-accordion-help">
+					{ __( 'Edit titles and content directly on the canvas. Use the block toolbar to move or remove an item.', 'gambol-builder' ) }
+				</p>
+				<button
+					type="button"
+					className="gambol-btn gambol-btn--secondary gambol-btn--full"
+					onClick={ addItem }
+				>
+					{ __( 'Add item', 'gambol-builder' ) }
+				</button>
 			</Section>
 
 			<Section title={ __( 'Behavior', 'gambol-builder' ) }>
@@ -446,48 +348,7 @@ export default function Edit( { attributes, setAttributes } ) {
 				/>
 			</InspectorControls>
 
-			<div { ...blockProps }>
-				{ items.map( ( item ) => (
-					<div
-						key={ item.id }
-						className={ `gambol-accordion-item ${ item.isOpen ? 'is-open' : '' }` }
-					>
-						<button
-							type="button"
-							className="gambol-accordion-item__header"
-							onClick={ () => toggleItem( item.id ) }
-							aria-expanded={ item.isOpen }
-							aria-controls={ `content-${ item.id }` }
-							id={ `header-${ item.id }` }
-						>
-							{ iconPosition === 'left' && (
-								<span className="gambol-accordion-item__icon">
-									{ getIcon( item.isOpen ) }
-								</span>
-							) }
-							<span className="gambol-accordion-item__title">
-								{ item.title }
-							</span>
-							{ iconPosition === 'right' && (
-								<span className="gambol-accordion-item__icon">
-									{ getIcon( item.isOpen ) }
-								</span>
-							) }
-						</button>
-						<div
-							className="gambol-accordion-item__body"
-							id={ `content-${ item.id }` }
-							role="region"
-							aria-labelledby={ `header-${ item.id }` }
-							hidden={ ! item.isOpen }
-						>
-							<div className="gambol-accordion-item__content">
-								<p>{ __( 'Accordion content goes here...', 'gambol-builder' ) }</p>
-							</div>
-						</div>
-					</div>
-				) ) }
-			</div>
+			<div { ...innerBlocksProps } />
 		</>
 	);
 }

@@ -96,7 +96,7 @@ $gb-radius-md: 6px;
 $gb-radius-lg: 8px;
 
 // Transitions
-$gb-transition: all 0.15s ease;
+$gb-transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 
 // ============================================
 // Sidebar Container Override
@@ -531,10 +531,8 @@ $gb-transition: all 0.15s ease;
     z-index: 99998;
     transition: left 0.25s ease;
 
-    // When WordPress admin bar is shown
-    .admin-bar & {
-        top: 0;
-    }
+    // Below the WordPress admin bar when it is visible; loader.js measures it.
+    top: var(--gambol-adminbar-h, 0px);
 
     .gambol-sidebar-collapsed & {
         left: 56px;
@@ -654,6 +652,53 @@ $gb-transition: all 0.15s ease;
     text-align: right;
 }
 
+.gambol-toolbar__action-btn.is-active {
+    color: $gb-text-primary;
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.gambol-toolbar__action-btn:focus-visible,
+.gambol-toolbar__save-btn:focus-visible {
+    outline: 2px solid $gb-primary;
+    outline-offset: 2px;
+}
+
+// Save draft / Publish / Update
+.gambol-toolbar__save-btn {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 $gb-spacing-md;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: $gb-radius-md;
+    background: transparent;
+    color: $gb-text-primary;
+    font-size: $gb-font-size-sm;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+
+    &:hover:not(:disabled) {
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    &.is-primary {
+        border-color: $gb-primary-dark;
+        background: $gb-primary;
+        color: #000;
+
+        &:hover:not(:disabled) {
+            background: $gb-primary-dark;
+        }
+    }
+
+    &:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+}
+
 .gambol-toolbar__templates-btn {
     display: flex;
     align-items: center;
@@ -753,10 +798,8 @@ $gb-transition: all 0.15s ease;
     flex-direction: column;
     overflow: hidden;
 
-    // When WordPress admin bar is shown
-    .admin-bar & {
-        top: 0;
-    }
+    // Below the WordPress admin bar when it is visible; loader.js measures it.
+    top: var(--gambol-adminbar-h, 0px);
 
     @media (max-width: 782px) {
         left: 0;
@@ -1071,7 +1114,7 @@ $gb-transition: all 0.15s ease;
     font-size: 12px;
     border-radius: 6px;
     cursor: pointer;
-    transition: all 0.15s;
+    transition: color 0.15s, background-color 0.15s, border-color 0.15s, opacity 0.15s, transform 0.15s, box-shadow 0.15s;
 
     &.is-active {
         background: #00d4aa;
@@ -1181,7 +1224,7 @@ $gb-transition: all 0.15s ease;
         font-weight: 600;
         border: none;
         cursor: pointer;
-        transition: all 0.15s;
+        transition: color 0.15s, background-color 0.15s, border-color 0.15s, opacity 0.15s, transform 0.15s, box-shadow 0.15s;
 
         &--preview {
             background: rgba( 255,255,255,0.15 );

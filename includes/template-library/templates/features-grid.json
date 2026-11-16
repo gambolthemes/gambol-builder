@@ -1,9 +1,17 @@
 {
-  "id": "bundled-features-grid",
-  "title": "Features Grid",
-  "type": "section",
-  "categories": ["features", "general"],
-  "thumbnail": "",
-  "tags": ["features", "icons", "grid", "services"],
-  "content": "<!-- wp:gambol/section {\"padding\":{\"top\":64,\"right\":20,\"bottom\":64,\"left\":20}} --><section class=\"wp-block-gambol-section\"><div class=\"wp-block-gambol-section__inner\"><!-- wp:gambol/container --><div class=\"wp-block-gambol-container\"><!-- wp:gambol/heading {\"level\":2,\"textAlign\":\"center\",\"content\":\"Our Features\"} /--><!-- wp:gambol/grid {\"columns\":3} --><div class=\"wp-block-gambol-grid\"><!-- wp:gambol/icon-box {\"title\":\"Fast Performance\",\"description\":\"Optimized for speed from the ground up.\"} /--><!-- wp:gambol/icon-box {\"title\":\"Easy to Use\",\"description\":\"Intuitive interface anyone can master.\"} /--><!-- wp:gambol/icon-box {\"title\":\"Fully Responsive\",\"description\":\"Looks great on every device and screen size.\"} /--></div><!-- /wp:gambol/grid --></div><!-- /wp:gambol/container --></div></section><!-- /wp:gambol/section -->"
+	"id": "bundled-features-grid",
+	"title": "Features Grid",
+	"type": "section",
+	"categories": [
+		"features",
+		"general"
+	],
+	"thumbnail": "",
+	"tags": [
+		"features",
+		"icons",
+		"grid",
+		"services"
+	],
+	"content": "<!-- wp:gambol/section {\"padding\":{\"top\":80,\"right\":20,\"bottom\":80,\"left\":20}} -->\n<section class=\"wp-block-gambol-section alignfull is-layout-boxed\" style=\"padding-top:80px;padding-right:20px;padding-bottom:80px;padding-left:20px\"><div class=\"wp-block-gambol-section__inner\" style=\"max-width:1200px;margin-left:auto;margin-right:auto;width:100%\"><!-- wp:gambol/heading {\"textAlign\":\"center\"} -->\n<h2 class=\"wp-block-gambol-heading has-text-align-center\">What you get</h2>\n<!-- /wp:gambol/heading -->\n\n<!-- wp:gambol/grid -->\n<div class=\"wp-block-gambol-grid\" style=\"display:grid;grid-template-columns:repeat(3, 1fr);gap:20px 20px;--grid-columns-tablet:2;--grid-columns-mobile:1\"><!-- wp:gambol/icon-box {\"title\":\"First feature\",\"description\":\"Describe what it does for the customer.\"} -->\n<div class=\"wp-block-gambol-icon-box layout-top align-center hover-none\"><div class=\"wp-block-gambol-icon-box__icon\" style=\"font-size:50px\">★</div><div class=\"wp-block-gambol-icon-box__content\"><h3 class=\"wp-block-gambol-icon-box__title\">First feature</h3><p class=\"wp-block-gambol-icon-box__description\">Describe what it does for the customer.</p></div></div>\n<!-- /wp:gambol/icon-box -->\n\n<!-- wp:gambol/icon-box {\"title\":\"Second feature\",\"description\":\"Describe what it does for the customer.\"} -->\n<div class=\"wp-block-gambol-icon-box layout-top align-center hover-none\"><div class=\"wp-block-gambol-icon-box__icon\" style=\"font-size:50px\">★</div><div class=\"wp-block-gambol-icon-box__content\"><h3 class=\"wp-block-gambol-icon-box__title\">Second feature</h3><p class=\"wp-block-gambol-icon-box__description\">Describe what it does for the customer.</p></div></div>\n<!-- /wp:gambol/icon-box -->\n\n<!-- wp:gambol/icon-box {\"title\":\"Third feature\",\"description\":\"Describe what it does for the customer.\"} -->\n<div class=\"wp-block-gambol-icon-box layout-top align-center hover-none\"><div class=\"wp-block-gambol-icon-box__icon\" style=\"font-size:50px\">★</div><div class=\"wp-block-gambol-icon-box__content\"><h3 class=\"wp-block-gambol-icon-box__title\">Third feature</h3><p class=\"wp-block-gambol-icon-box__description\">Describe what it does for the customer.</p></div></div>\n<!-- /wp:gambol/icon-box --></div>\n<!-- /wp:gambol/grid --></div></section>\n<!-- /wp:gambol/section -->"
 }

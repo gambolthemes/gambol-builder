@@ -33,6 +33,7 @@ export default function save( { attributes } ) {
 		margin,
 		htmlId,
 		cssClasses,
+		priority,
 	} = attributes;
 
 	// Don't render if no image
@@ -82,7 +83,8 @@ export default function save( { attributes } ) {
 				alt={ alt }
 				style={ imageStyles }
 				className="gambol-image__img"
-				loading="lazy"
+				loading={ priority ? 'eager' : 'lazy' }
+				fetchpriority={ priority ? 'high' : undefined }
 			/>
 			{ hasOverlay && (
 				<span
