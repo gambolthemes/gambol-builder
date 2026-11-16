@@ -84,6 +84,7 @@ export default function Edit( { attributes, setAttributes } ) {
 		margin,
 		htmlId,
 		cssClasses,
+		priority,
 	} = attributes;
 
 	// Handle image selection
@@ -349,6 +350,14 @@ export default function Edit( { attributes, setAttributes } ) {
 	// Advanced tab content
 	const advancedTab = (
 		<>
+			<Section title={ __( 'Loading', 'gambol-builder' ) }>
+				<Toggle
+					label={ __( 'Above the fold (load first)', 'gambol-builder' ) }
+					checked={ !! priority }
+					onChange={ ( value ) => setAttributes( { priority: value } ) }
+				/>
+			</Section>
+
 			<Section title={ __( 'Attributes', 'gambol-builder' ) }>
 				<TextInput
 					label={ __( 'HTML ID', 'gambol-builder' ) }

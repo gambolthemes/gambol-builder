@@ -12,6 +12,7 @@ import { __ } from '@wordpress/i18n';
 
 import Edit from './edit';
 import save from './save';
+import getDeprecated from './deprecated';
 import './style.scss';
 
 /**
@@ -34,7 +35,7 @@ const icon = (
 /**
  * Register the Section block.
  */
-registerBlockType( 'gambol/section', {
+const settings = {
 	apiVersion: 3,
 	title: __( 'Section', 'gambol-builder' ),
 	description: __( 'A full-width container for building page sections.', 'gambol-builder' ),
@@ -242,4 +243,8 @@ registerBlockType( 'gambol/section', {
 	},
 	edit: Edit,
 	save,
-} );
+};
+
+settings.deprecated = getDeprecated( settings );
+
+registerBlockType( 'gambol/section', settings );

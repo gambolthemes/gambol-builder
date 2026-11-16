@@ -111,6 +111,7 @@ class Admin_Page {
 					'stepHeaders'    => __( 'Importing headers...', 'gambol-builder' ),
 					'stepFooters'    => __( 'Importing footers...', 'gambol-builder' ),
 					'stepStyles'     => __( 'Importing global styles...', 'gambol-builder' ),
+					'stepFinalize'   => __( 'Setting the front page and menu...', 'gambol-builder' ),
 					'complete'       => __( 'Import complete!', 'gambol-builder' ),
 					'rollbackDone'   => __( 'Rollback complete!', 'gambol-builder' ),
 					'resetDone'      => __( 'Reset complete!', 'gambol-builder' ),
@@ -401,6 +402,8 @@ class Admin_Page {
 					if (options.headers) steps.push({ key: 'headers', label: config.strings.stepHeaders });
 					if (options.footers) steps.push({ key: 'footers', label: config.strings.stepFooters });
 					if (options.global_styles) steps.push({ key: 'global_styles', label: config.strings.stepStyles });
+					// Always last: front page, menu and the history that makes rollback possible.
+					steps.push({ key: 'finalize', label: config.strings.stepFinalize || config.strings.complete });
 
 					runImportSteps(steps, 0);
 				}

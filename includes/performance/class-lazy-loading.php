@@ -119,11 +119,19 @@ class Lazy_Loading {
 	 * @return string Modified image tag.
 	 */
 	private function process_image_tag( $matches ) {
+		static $seen = 0;
+
 		$img_tag = $matches[0];
 		$src = $matches[1];
 
-		// Skip if already has loading attribute.
-		if ( strpos( $img_tag, 'loading=' ) !== false ) {
+		// The first content image is usually the largest contentful paint:
+		// never delay it.
+		if ( 0 === $seen++ ) {
+			return $img_tag;
+		}
+
+		// Skip if already has loading attribute or is marked as a priority image.
+		if ( strpos( $img_tag, 'loading=' ) !== false || strpos( $img_tag, 'fetchpriority=' ) !== false ) {
 			return $img_tag;
 		}
 
@@ -157,7 +165,8 @@ class Lazy_Loading {
 			$lazy_img = str_replace( '<img', '<img class="gambol-lazy"', $lazy_img );
 		}
 
-		return $lazy_img;
+		// Without JavaScript the real image is shown instead.
+		return $lazy_img . '<noscript>' . $img_tag . '</noscript>';
 	}
 
 	/**
@@ -194,8 +203,13 @@ class Lazy_Loading {
 	 * @return array Modified attributes.
 	 */
 	public function add_lazy_loading_to_attachment( $attr, $attachment, $size ) {
-		// Skip if already has loading attribute.
-		if ( isset( $attr['loading'] ) ) {
+		// Skip if already has loading attribute, or is a priority (LCP) image.
+		if ( isset( $attr['loading'] ) || isset( $attr['fetchpriority'] ) ) {
+			return $attr;
+		}
+
+		// WordPress 6.3+ decides per image (eager above the fold, lazy below).
+		if ( function_exists( 'wp_get_loading_optimization_attributes' ) ) {
 			return $attr;
 		}
 
@@ -262,6 +276,11 @@ class Lazy_Loading {
 	 * @return string Loading value.
 	 */
 	public function enable_native_lazy_loading( $value, $image, $context ) {
+		// Core returns false for images it keeps eager (the LCP candidate):
+		// keep that decision.
+		if ( false === $value || false !== strpos( (string) $image, 'fetchpriority="high"' ) ) {
+			return false;
+		}
 		return 'lazy';
 	}
 
@@ -299,8 +318,20 @@ class Lazy_Loading {
 			return $img_tag;
 		}
 
-		// Try to get attachment ID from URL.
-		$attachment_id = attachment_url_to_postid( $src );
+		// Only local uploads can be looked up; cache each lookup (one query per URL).
+		static $ids     = array();
+		static $uploads = null;
+		if ( null === $uploads ) {
+			$dir     = wp_get_upload_dir();
+			$uploads = isset( $dir['baseurl'] ) ? set_url_scheme( $dir['baseurl'] ) : '';
+		}
+		if ( ! $uploads || 0 !== strpos( set_url_scheme( $src ), $uploads ) ) {
+			return $img_tag;
+		}
+		if ( ! array_key_exists( $src, $ids ) ) {
+			$ids[ $src ] = attachment_url_to_postid( $src );
+		}
+		$attachment_id = $ids[ $src ];
 
 		if ( $attachment_id ) {
 			$image_data = wp_get_attachment_image_src( $attachment_id, 'full' );

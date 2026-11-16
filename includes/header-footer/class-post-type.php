@@ -100,6 +100,23 @@ class Post_Type {
 			'query_var'           => false,
 			'rewrite'             => false,
 			'capability_type'     => 'post',
+			// Headers and footers render on every page: site managers only
+			// (same mapping WordPress core uses for wp_template).
+			'capabilities'        => array(
+				'create_posts'           => 'edit_theme_options',
+				'delete_posts'           => 'edit_theme_options',
+				'delete_others_posts'    => 'edit_theme_options',
+				'delete_private_posts'   => 'edit_theme_options',
+				'delete_published_posts' => 'edit_theme_options',
+				'edit_posts'             => 'edit_theme_options',
+				'edit_others_posts'      => 'edit_theme_options',
+				'edit_private_posts'     => 'edit_theme_options',
+				'edit_published_posts'   => 'edit_theme_options',
+				'publish_posts'          => 'edit_theme_options',
+				'read'                   => 'edit_theme_options',
+				'read_private_posts'     => 'edit_theme_options',
+			),
+			'map_meta_cap'        => true,
 			'has_archive'         => false,
 			'hierarchical'        => false,
 			'supports'            => array( 'title', 'editor', 'revisions' ),

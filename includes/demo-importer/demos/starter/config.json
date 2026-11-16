@@ -4,6 +4,8 @@
 	"description": "A clean starter demo with essential pages and header/footer layouts.",
 	"preview_url": "",
 	"categories": ["business", "starter"],
+	"front_page": "Home",
+	"menu": ["Home", "About Us", "Contact"],
 	"contents": {
 		"pages": true,
 		"headers": true,

@@ -95,7 +95,7 @@
 	border: none;
 	border-bottom: 2px solid transparent;
 	cursor: pointer;
-	transition: all $transition-base;
+	transition: color $transition-base, background-color $transition-base, border-color $transition-base, opacity $transition-base, transform $transition-base, box-shadow $transition-base;
 
 	&:hover {
 		color: $gambol-text-secondary;
@@ -226,7 +226,7 @@
 	border: none;
 	border-right: 1px solid $gambol-border;
 	cursor: pointer;
-	transition: all $transition-base;
+	transition: color $transition-base, background-color $transition-base, border-color $transition-base, opacity $transition-base, transform $transition-base, box-shadow $transition-base;
 
 	&:last-child {
 		border-right: none;
@@ -346,7 +346,7 @@
 	border: 1px solid $gambol-border;
 	border-radius: $radius-full;
 	cursor: pointer;
-	transition: all $transition-base;
+	transition: color $transition-base, background-color $transition-base, border-color $transition-base, opacity $transition-base, transform $transition-base, box-shadow $transition-base;
 
 	&.is-on {
 		background: $gambol-accent;
@@ -437,7 +437,7 @@
 	color: $gambol-text-secondary;
 	border-radius: $radius-sm;
 	cursor: pointer;
-	transition: all $transition-fast;
+	transition: color $transition-fast, background-color $transition-fast, border-color $transition-fast, opacity $transition-fast, transform $transition-fast, box-shadow $transition-fast;
 
 	&:hover {
 		color: $gambol-text-primary;
@@ -473,7 +473,7 @@
 	border: 2px solid transparent;
 	border-radius: $radius-md;
 	cursor: pointer;
-	transition: all $transition-fast;
+	transition: color $transition-fast, background-color $transition-fast, border-color $transition-fast, opacity $transition-fast, transform $transition-fast, box-shadow $transition-fast;
 
 	&:hover {
 		transform: scale(1.1);
@@ -559,7 +559,7 @@
 	border: 1px solid $gambol-border;
 	border-radius: $radius-md;
 	cursor: pointer;
-	transition: all $transition-base;
+	transition: color $transition-base, background-color $transition-base, border-color $transition-base, opacity $transition-base, transform $transition-base, box-shadow $transition-base;
 
 	&:hover {
 		color: $gambol-text-secondary;
@@ -663,7 +663,7 @@
 	border: 1px solid $gambol-border;
 	border-radius: $radius-md;
 	cursor: pointer;
-	transition: all $transition-base;
+	transition: color $transition-base, background-color $transition-base, border-color $transition-base, opacity $transition-base, transform $transition-base, box-shadow $transition-base;
 
 	&:hover {
 		color: $gambol-text-secondary;
@@ -739,7 +739,7 @@
 	border: 1px solid $gambol-border;
 	border-radius: $radius-md;
 	cursor: pointer;
-	transition: all $transition-base;
+	transition: color $transition-base, background-color $transition-base, border-color $transition-base, opacity $transition-base, transform $transition-base, box-shadow $transition-base;
 
 	&:hover {
 		border-color: $gambol-border-light;
@@ -819,7 +819,7 @@
 	border: none;
 	border-radius: $radius-md;
 	cursor: pointer;
-	transition: all $transition-base;
+	transition: color $transition-base, background-color $transition-base, border-color $transition-base, opacity $transition-base, transform $transition-base, box-shadow $transition-base;
 
 	&:hover {
 		color: $gambol-text-secondary;
@@ -856,7 +856,7 @@
 	background: transparent;
 	border: none;
 	cursor: pointer;
-	transition: all $transition-fast;
+	transition: color $transition-fast, background-color $transition-fast, border-color $transition-fast, opacity $transition-fast, transform $transition-fast, box-shadow $transition-fast;
 
 	&:hover {
 		color: $gambol-text-secondary;

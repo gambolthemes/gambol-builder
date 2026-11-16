@@ -89,7 +89,8 @@ class Popup_Manager {
 	 * @return bool
 	 */
 	public function check_permissions() {
-		return current_user_can( 'edit_posts' );
+		// Popups are site-wide content: site managers only.
+		return current_user_can( 'edit_theme_options' );
 	}
 
 	/**
@@ -128,12 +129,22 @@ class Popup_Manager {
 			return new \WP_Error( 'missing_title', __( 'Title required.', 'gambol-builder' ), array( 'status' => 400 ) );
 		}
 
-		$id = wp_insert_post( array(
-			'post_type'    => 'gambol_popup',
-			'post_status'  => 'publish',
-			'post_title'   => sanitize_text_field( $data['title'] ),
-			'post_content' => wp_kses_post( $data['content'] ?? '' ),
-		) );
+		$content = (string) ( $data['content'] ?? '' );
+		if ( ! current_user_can( 'unfiltered_html' ) ) {
+			$content = wp_kses_post( $content );
+		}
+
+		$id = wp_insert_post(
+			wp_slash(
+				array(
+					'post_type'    => 'gambol_popup',
+					'post_status'  => 'publish',
+					'post_title'   => sanitize_text_field( $data['title'] ),
+					'post_content' => $content,
+				)
+			),
+			true
+		);
 
 		if ( is_wp_error( $id ) ) {
 			return $id;

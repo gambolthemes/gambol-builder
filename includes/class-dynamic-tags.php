@@ -77,6 +77,16 @@ class Dynamic_Tags {
 			function( $matches ) use ( $tags ) {
 				$tag = $matches[1];
 				if ( isset( $tags[ $tag ] ) ) {
+					// Per-visitor values must never be stored in a page cache and
+					// served to someone else.
+					if ( 0 === strpos( $tag, 'current_user_' ) && is_user_logged_in() ) {
+						if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+							define( 'DONOTCACHEPAGE', true );
+						}
+						if ( ! headers_sent() ) {
+							nocache_headers();
+						}
+					}
 					$value = is_callable( $tags[ $tag ] ) ? call_user_func( $tags[ $tag ] ) : $tags[ $tag ];
 					return esc_html( (string) $value );
 				}

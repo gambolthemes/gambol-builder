@@ -21,7 +21,7 @@
 	font-size: 16px;
 	font-weight: 500;
 	cursor: pointer;
-	transition: all 0.2s ease;
+	transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 	
 	&:hover {
 		opacity: 0.9;
@@ -102,7 +102,7 @@
 	z-index: 99999;
 	opacity: 0;
 	visibility: hidden;
-	transition: all 0.3s ease;
+	transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 	
 	.wp-block-gambol-popup.is-open & {
 		display: flex;
@@ -142,7 +142,7 @@
 	line-height: 1;
 	color: var(--gb-colors-gray-600);
 	cursor: pointer;
-	transition: all 0.2s ease;
+	transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 	z-index: 10;
 	
 	&:hover {
@@ -168,7 +168,7 @@
 	.popup-content {
 		transform: scale(0.7);
 		opacity: 0;
-		transition: all 0.3s ease;
+		transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 	}
 	
 	&.is-open .popup-content {
@@ -181,7 +181,7 @@
 	.popup-content {
 		transform: translateY(-50px);
 		opacity: 0;
-		transition: all 0.3s ease;
+		transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 	}
 	
 	&.is-open .popup-content {

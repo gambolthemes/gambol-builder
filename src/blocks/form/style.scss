@@ -59,7 +59,7 @@
 		font-size: 16px;
 		font-weight: 600;
 		cursor: pointer;
-		transition: all 0.3s ease;
+		transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, opacity 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 		
 		&:hover {
 			opacity: 0.9;
@@ -154,4 +154,41 @@
 	to {
 		transform: rotate(360deg);
 	}
+}
+
+/* Submission feedback (added by src/frontend/forms.js). */
+.gambol-form-status {
+	margin-top: 12px;
+	font-size: 15px;
+	line-height: 1.5;
+}
+
+.gambol-form-status:empty {
+	display: none;
+}
+
+.gambol-form-status.is-success {
+	color: #0a6b3d;
+}
+
+.gambol-form-status.is-error,
+.gambol-form-error {
+	color: #b42318;
+}
+
+.gambol-form-error {
+	display: block;
+	margin-top: 4px;
+	font-size: 14px;
+}
+
+.wp-block-gambol-form [aria-invalid="true"],
+.wp-block-gambol-subscribe [aria-invalid="true"] {
+	border-color: #b42318;
+}
+
+.wp-block-gambol-form [aria-busy="true"],
+.wp-block-gambol-subscribe [aria-busy="true"] {
+	cursor: progress;
+	opacity: 0.7;
 }

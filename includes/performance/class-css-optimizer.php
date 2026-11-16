@@ -219,10 +219,26 @@ class CSS_Optimizer {
 	 * @return void
 	 */
 	public function remove_block_library() {
+		// Block themes style their whole layout with these: never remove them there.
+		if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
+			return;
+		}
+
+		// Only drop core block CSS where the page has no core blocks.
+		if ( ! is_singular() ) {
+			return;
+		}
+		$post = get_queried_object();
+		if ( ! $post instanceof \WP_Post || preg_match( '/<!--\s+wp:(?!gambol\/)[a-z]/', $post->post_content ) ) {
+			return;
+		}
+
 		wp_dequeue_style( 'wp-block-library' );
 		wp_dequeue_style( 'wp-block-library-theme' );
-		wp_dequeue_style( 'wc-blocks-style' ); // WooCommerce blocks.
-		wp_dequeue_style( 'global-styles' ); // Global styles (FSE).
+		if ( ! function_exists( 'is_woocommerce' ) || ! is_woocommerce() ) {
+			wp_dequeue_style( 'wc-blocks-style' ); // WooCommerce blocks.
+		}
+		// global-styles (theme.json presets) is kept: themes and plugins rely on it.
 	}
 
 	/**

@@ -57,6 +57,22 @@ function safe_include( $file ) {
 	return false;
 }
 
+/**
+ * Resolve asset tokens in bundled block markup (templates and demos).
+ *
+ * Bundled JSON references plugin images as {{GAMBOL_ASSETS}}/path so the
+ * markup does not depend on where the plugin is installed.
+ *
+ * @param string $content Block markup.
+ * @return string Markup with tokens replaced by absolute URLs.
+ */
+function resolve_asset_tokens( $content ) {
+	if ( ! is_string( $content ) || false === strpos( $content, '{{GAMBOL_ASSETS}}' ) ) {
+		return (string) $content;
+	}
+	return str_replace( '{{GAMBOL_ASSETS}}', untrailingslashit( GAMBOL_BUILDER_URL . 'assets' ), $content );
+}
+
 // Include Global Styles.
 safe_include( GAMBOL_BUILDER_PATH . 'includes/class-global-styles.php' );
 
@@ -65,6 +81,11 @@ safe_include( GAMBOL_BUILDER_PATH . 'includes/class-admin-page.php' );
 
 // Include Dynamic Blocks (server-side rendering).
 safe_include( GAMBOL_BUILDER_PATH . 'includes/blocks/class-dynamic-blocks.php' );
+safe_include( GAMBOL_BUILDER_PATH . 'includes/blocks/class-site-blocks.php' );
+safe_include( GAMBOL_BUILDER_PATH . 'includes/blocks/class-woo-blocks.php' );
+
+// Include Forms (submission handling, entries, email).
+safe_include( GAMBOL_BUILDER_PATH . 'includes/forms/class-forms.php' );
 
 // Include Header Footer Builder (optional module).
 if ( safe_include( GAMBOL_BUILDER_PATH . 'includes/header-footer/class-loader.php' ) ) {
@@ -265,7 +286,11 @@ function get_allowed_block_types() {
  * @return array Filtered block types.
  */
 function filter_allowed_block_types( $allowed_block_types, $context ) {
-	return get_allowed_block_types();
+	// Most Gambol blocks are registered in JavaScript only, so a PHP allow-list
+	// would block them from being inserted. The editor script hides core blocks
+	// from the inserter instead (src/editor/sidebar/loader.js), and blocks that
+	// already exist in a post keep working. Respect what other code decided.
+	return $allowed_block_types;
 }
 
 /**
@@ -491,14 +516,51 @@ add_filter( 'render_block', __NAMESPACE__ . '\inject_animation_attributes', 10, 
  * @return bool True if Gambol blocks are present.
  */
 function has_gambol_blocks() {
-	global $post;
-
-	if ( ! $post || ! isset( $post->post_content ) ) {
-		return false;
+	static $result = null;
+	if ( null !== $result ) {
+		return $result;
 	}
 
-	// Check for any Gambol block.
-	return strpos( $post->post_content, '<!-- wp:gambol/' ) !== false;
+	$uses_gambol = static function ( $content ) {
+		return is_string( $content ) && (
+			false !== strpos( $content, '<!-- wp:gambol/' )
+			// Reusable blocks / synced patterns may hold Gambol blocks.
+			|| false !== strpos( $content, '<!-- wp:block ' )
+		);
+	};
+
+	// A Gambol header or footer renders on this page.
+	if ( class_exists( '\GambolBuilder\HeaderFooter\Renderer' ) ) {
+		$renderer = \GambolBuilder\HeaderFooter\Renderer::get_instance();
+		if ( $renderer->has_header() || $renderer->has_footer() ) {
+			$result = true;
+			return $result;
+		}
+	}
+
+	// The queried post, or any post in an archive/blog loop.
+	global $wp_query;
+	$posts = array();
+	if ( is_singular() ) {
+		$posts[] = get_queried_object();
+	} elseif ( $wp_query instanceof \WP_Query && ! empty( $wp_query->posts ) ) {
+		$posts = $wp_query->posts;
+	}
+
+	foreach ( $posts as $item ) {
+		if ( $item instanceof \WP_Post && $uses_gambol( $item->post_content ) ) {
+			$result = true;
+			return $result;
+		}
+	}
+
+	/**
+	 * Filter whether the Gambol frontend assets load on this request.
+	 *
+	 * @param bool $result Whether Gambol blocks are present.
+	 */
+	$result = (bool) apply_filters( 'gambol_builder_has_blocks', false );
+	return $result;
 }
 
 /**

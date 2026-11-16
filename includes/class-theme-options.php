@@ -272,12 +272,18 @@ class Theme_Options {
 		}
 
 		// Inline CSS.
-		$css = '#gambol-back-to-top{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--gb-colors-primary,#00d4aa);color:#000;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.2);transition:opacity .2s,transform .2s}#gambol-back-to-top[hidden]{display:none}#gambol-back-to-top.is-visible{display:flex}#gambol-back-to-top:hover{transform:translateY(-2px)}';
-		wp_add_inline_style( 'gambol-builder-style', $css );
+		$css = '#gambol-back-to-top{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--gb-colors-primary,#00d4aa);color:#000;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.2);transition:opacity .2s,transform .2s}#gambol-back-to-top[hidden]{display:none}#gambol-back-to-top:hover{transform:translateY(-2px)}#gambol-back-to-top:focus-visible{outline:2px solid currentColor;outline-offset:3px}@media (prefers-reduced-motion:reduce){#gambol-back-to-top{transition:none}#gambol-back-to-top:hover{transform:none}}';
 
-		// Inline JS.
-		$js = '(function(){var btn=document.getElementById("gambol-back-to-top");if(!btn)return;window.addEventListener("scroll",function(){btn.hidden=window.scrollY<300;},{ passive:true });btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"});});})();';
-		wp_add_inline_script( 'gambol-builder-frontend', $js );
+		// Own handles: the button is on every page, while the builder's style
+		// and script only load on pages that use Gambol blocks.
+		wp_register_style( 'gambol-back-to-top', false, array(), GAMBOL_BUILDER_VERSION );
+		wp_enqueue_style( 'gambol-back-to-top' );
+		wp_add_inline_style( 'gambol-back-to-top', $css );
+
+		$js = '(function(){var btn=document.getElementById("gambol-back-to-top");if(!btn)return;var still=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;var update=function(){btn.hidden=window.scrollY<300;};window.addEventListener("scroll",update,{passive:true});update();btn.addEventListener("click",function(){window.scrollTo({top:0,behavior:still?"auto":"smooth"});var t=document.querySelector("a[href],button,input,[tabindex]");if(t&&t!==btn&&t.focus){t.focus({preventScroll:true});}});})();';
+		wp_register_script( 'gambol-back-to-top', false, array(), GAMBOL_BUILDER_VERSION, true );
+		wp_enqueue_script( 'gambol-back-to-top' );
+		wp_add_inline_script( 'gambol-back-to-top', $js );
 	}
 }
 

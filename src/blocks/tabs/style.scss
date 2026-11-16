@@ -94,7 +94,7 @@
 	border: none;
 	border-radius: var(--gambol-tab-radius, 4px 4px 0 0);
 	cursor: pointer;
-	transition: all 0.2s ease;
+	transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 	white-space: nowrap;
 
 	&:hover {
@@ -129,14 +129,16 @@
 .gambol-tabs__panel,
 .gambol-tab-panel {
 	padding: var(--gambol-content-padding, 24px);
+}
 
-	&:not(.is-active):not([hidden="false"]) {
-		display: none;
-	}
-
-	&.is-active,
-	&[hidden="false"] {
-		display: block;
+// Panels are only hidden once the script has paired them with their tabs,
+// so without JavaScript every panel's content stays readable.
+.gambol-tabs.is-ready {
+	.gambol-tabs__panel,
+	.gambol-tab-panel {
+		&[hidden] {
+			display: none;
+		}
 	}
 }
 
@@ -236,7 +238,7 @@
 		border: none;
 		border-radius: 3px;
 		cursor: pointer;
-		transition: all 0.15s ease;
+		transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 
 		&:hover:not(:disabled) {
 			color: #fff;

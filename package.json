@@ -13,7 +13,8 @@
 		"lint:css": "wp-scripts lint-style",
 		"lint": "npm run lint:js && npm run lint:css",
 		"format": "wp-scripts format",
-		"packages-update": "wp-scripts packages-update"
+		"packages-update": "wp-scripts packages-update",
+		"build:library": "jest -c tools/library/jest.config.js"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^27.0.0"

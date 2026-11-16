@@ -107,3 +107,16 @@
 	overflow: hidden;
 	will-change: background-position;
 }
+
+/* Overlay (section with a colour/gradient/image/video background). */
+.wp-block-gambol-section__overlay {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+}
+
+.wp-block-gambol-section.has-overlay > .wp-block-gambol-section__inner {
+	position: relative;
+	z-index: 1;
+}

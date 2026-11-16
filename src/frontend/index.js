@@ -11,6 +11,8 @@
  */
 
 import { initSticky } from './sticky';
+import './forms';
+import './interactive';
 
 ( function() {
 	'use strict';
@@ -110,40 +112,80 @@ import { initSticky } from './sticky';
 	 */
 	function initAccordions() {
 		const accordions = document.querySelectorAll( '.gambol-accordion' );
-		
+
 		accordions.forEach( function( accordion ) {
+			if ( accordion.dataset.gambolAccordionReady ) {
+				return;
+			}
 			const allowMultiple = accordion.dataset.allowMultiple === 'true';
-			const headers = accordion.querySelectorAll( '.gambol-accordion-item__header' );
+			const defaultOpen = accordion.dataset.defaultOpen || 'first';
+			const items = Array.from( accordion.children ).filter( function( el ) {
+				return el.classList.contains( 'gambol-accordion-item' );
+			} );
+			const headers = items
+				.map( function( item ) {
+					return item.querySelector( '.gambol-accordion-item__header' );
+				} )
+				.filter( Boolean );
 
-			headers.forEach( function( header ) {
+			const setOpen = function( item, open ) {
+				const header = item.querySelector( '.gambol-accordion-item__header' );
+				const body = item.querySelector( '.gambol-accordion-item__body' );
+				item.classList.toggle( 'is-open', open );
+				if ( header ) {
+					header.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
+				}
+				if ( body ) {
+					body.hidden = ! open;
+				}
+			};
+
+			// Initial state: the saved markup is fully open (readable without JS).
+			items.forEach( function( item, index ) {
+				let open = false;
+				if ( defaultOpen === 'all' && allowMultiple ) {
+					open = true;
+				} else if ( defaultOpen === 'first' ) {
+					open = index === 0;
+				}
+				setOpen( item, open );
+			} );
+
+			headers.forEach( function( header, index ) {
 				header.addEventListener( 'click', function() {
-					const item = this.closest( '.gambol-accordion-item' );
-					const isOpen = item.classList.contains( 'is-open' );
-					const body = item.querySelector( '.gambol-accordion-item__body' );
-
-					// Close others if not allowing multiple
-					if ( ! allowMultiple && ! isOpen ) {
-						accordion.querySelectorAll( '.gambol-accordion-item.is-open' ).forEach( function( openItem ) {
-							openItem.classList.remove( 'is-open' );
-							openItem.querySelector( '.gambol-accordion-item__header' ).setAttribute( 'aria-expanded', 'false' );
-							openItem.querySelector( '.gambol-accordion-item__body' ).hidden = true;
+					const item = header.closest( '.gambol-accordion-item' );
+					const willOpen = ! item.classList.contains( 'is-open' );
+					if ( willOpen && ! allowMultiple ) {
+						items.forEach( function( other ) {
+							if ( other !== item ) {
+								setOpen( other, false );
+							}
 						} );
 					}
-
-					// Toggle current item
-					item.classList.toggle( 'is-open' );
-					this.setAttribute( 'aria-expanded', ! isOpen );
-					body.hidden = isOpen;
+					setOpen( item, willOpen );
 				} );
 
-				// Keyboard support
+				// Arrow keys move between headers (WAI-ARIA accordion pattern).
 				header.addEventListener( 'keydown', function( e ) {
-					if ( e.key === 'Enter' || e.key === ' ' ) {
+					let next = null;
+					if ( e.key === 'ArrowDown' ) {
+						next = ( index + 1 ) % headers.length;
+					} else if ( e.key === 'ArrowUp' ) {
+						next = ( index - 1 + headers.length ) % headers.length;
+					} else if ( e.key === 'Home' ) {
+						next = 0;
+					} else if ( e.key === 'End' ) {
+						next = headers.length - 1;
+					}
+					if ( null !== next ) {
 						e.preventDefault();
-						this.click();
+						headers[ next ].focus();
 					}
 				} );
 			} );
+
+			accordion.dataset.gambolAccordionReady = '1';
+			accordion.classList.add( 'is-ready' );
 		} );
 	}
 
@@ -158,68 +200,101 @@ import { initSticky } from './sticky';
 		const tabContainers = document.querySelectorAll( '.gambol-tabs' );
 
 		tabContainers.forEach( function( container ) {
-			const tabButtons = container.querySelectorAll( '.gambol-tabs__button' );
-			const tabPanels = container.querySelectorAll( '.gambol-tabs__panel' );
+			if ( container.dataset.gambolTabsReady ) {
+				return;
+			}
+			const nav = container.querySelector( '.gambol-tabs__nav' );
+			const content = container.querySelector( '.gambol-tabs__content' );
+			if ( ! nav || ! content ) {
+				return;
+			}
+
+			// Saved markup: buttons are .gambol-tabs__tab, panels are .gambol-tab-panel.
+			const tabButtons = Array.from( nav.querySelectorAll( '.gambol-tabs__tab, .gambol-tabs__button' ) );
+			const tabPanels = Array.from( content.children ).filter( function( el ) {
+				return el.matches( '.gambol-tab-panel, .gambol-tabs__panel' );
+			} );
+			if ( ! tabButtons.length || ! tabPanels.length ) {
+				return;
+			}
+
+			// Pair each button with its panel: by aria-controls, else by position.
+			const panelFor = function( button, index ) {
+				const id = button.getAttribute( 'aria-controls' );
+				const byId = id ? content.querySelector( '#' + CSS.escape( id ) ) : null;
+				return byId || tabPanels[ index ] || null;
+			};
+
+			tabButtons.forEach( function( button, index ) {
+				const panel = panelFor( button, index );
+				if ( ! panel ) {
+					return;
+				}
+				if ( ! button.id ) {
+					button.id = 'gambol-tab-' + Math.random().toString( 36 ).slice( 2, 9 );
+				}
+				if ( ! panel.id ) {
+					panel.id = 'gambol-tabpanel-' + Math.random().toString( 36 ).slice( 2, 9 );
+				}
+				button.setAttribute( 'aria-controls', panel.id );
+				panel.setAttribute( 'role', 'tabpanel' );
+				panel.setAttribute( 'aria-labelledby', button.id );
+				panel.setAttribute( 'tabindex', '0' );
+			} );
+
+			const activate = function( index, moveFocus ) {
+				tabButtons.forEach( function( button, i ) {
+					const selected = i === index;
+					const panel = panelFor( button, i );
+					button.classList.toggle( 'is-active', selected );
+					button.setAttribute( 'aria-selected', selected ? 'true' : 'false' );
+					button.setAttribute( 'tabindex', selected ? '0' : '-1' );
+					if ( panel ) {
+						panel.classList.toggle( 'is-active', selected );
+						panel.hidden = ! selected;
+					}
+				} );
+				if ( moveFocus ) {
+					tabButtons[ index ].focus();
+				}
+			};
 
 			tabButtons.forEach( function( button, index ) {
 				button.addEventListener( 'click', function() {
-					// Deactivate all tabs
-					tabButtons.forEach( function( btn ) {
-						btn.classList.remove( 'is-active' );
-						btn.setAttribute( 'aria-selected', 'false' );
-						btn.setAttribute( 'tabindex', '-1' );
-					} );
-
-					tabPanels.forEach( function( panel ) {
-						panel.classList.remove( 'is-active' );
-						panel.hidden = true;
-					} );
-
-					// Activate clicked tab
-					this.classList.add( 'is-active' );
-					this.setAttribute( 'aria-selected', 'true' );
-					this.setAttribute( 'tabindex', '0' );
-
-					const panelId = this.getAttribute( 'aria-controls' );
-					const panel = document.getElementById( panelId );
-					if ( panel ) {
-						panel.classList.add( 'is-active' );
-						panel.hidden = false;
-					}
+					activate( index, false );
 				} );
 
-				// Keyboard navigation
 				button.addEventListener( 'keydown', function( e ) {
-					const currentIndex = Array.from( tabButtons ).indexOf( this );
-					let newIndex = currentIndex;
-
+					const last = tabButtons.length - 1;
+					let next = null;
 					switch ( e.key ) {
 						case 'ArrowLeft':
 						case 'ArrowUp':
-							e.preventDefault();
-							newIndex = currentIndex > 0 ? currentIndex - 1 : tabButtons.length - 1;
+							next = index > 0 ? index - 1 : last;
 							break;
 						case 'ArrowRight':
 						case 'ArrowDown':
-							e.preventDefault();
-							newIndex = currentIndex < tabButtons.length - 1 ? currentIndex + 1 : 0;
+							next = index < last ? index + 1 : 0;
 							break;
 						case 'Home':
-							e.preventDefault();
-							newIndex = 0;
+							next = 0;
 							break;
 						case 'End':
-							e.preventDefault();
-							newIndex = tabButtons.length - 1;
+							next = last;
 							break;
 						default:
 							return;
 					}
-
-					tabButtons[ newIndex ].click();
-					tabButtons[ newIndex ].focus();
+					e.preventDefault();
+					activate( next, true );
 				} );
 			} );
+
+			const initial = parseInt( container.getAttribute( 'data-active-tab' ), 10 );
+			activate( initial >= 0 && initial < tabButtons.length ? initial : 0, false );
+
+			container.dataset.gambolTabsReady = '1';
+			container.classList.add( 'is-ready' );
 		} );
 	}
 
